@@ -1,20 +1,14 @@
 {
     "version": 2,
     "name": "sonnenhof-management-ui",
-    "buildCommand": "npm run build -- --configuration production",
-    "outputDirectory": "dist/sonnenhof-management-ui",
-    "installCommand": "npm ci",
-    "framework": null,
-    "routes": [
+    "builds": [
         {
-            "src": "/(.*)",
-            "dest": "/index.html"
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": { "distDir": "dist/sonnenhof-management-ui" }
         }
     ],
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
+    "routes": [
+        { "src": "/(.*)", "dest": "/index.html" }
     ]
 }
