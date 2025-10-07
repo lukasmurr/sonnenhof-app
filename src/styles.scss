@@ -1,13 +1,13 @@
 @use '@angular/material' as mat;
 
-$sonnenhof-primary: mat.define-palette($green-palette, 800);
-$sonnenhof-accent: mat.define-palette($orange-palette, 400);
+// Use the built-in palettes directly and construct a theme using the v20 theming API.
+$sonnenhof-primary: mat.$green-palette;
+$sonnenhof-tertiary: mat.$orange-palette; // previously called "accent"
 
-$sonnenhof-theme: mat.define-light-theme((
+$sonnenhof-theme: mat.define-theme((
   color: (
     primary: $sonnenhof-primary,
-    accent: $sonnenhof-accent,
-    warn: mat.define-palette(mat.$red-palette),
+    tertiary: $sonnenhof-tertiary,
   )
 ));
 

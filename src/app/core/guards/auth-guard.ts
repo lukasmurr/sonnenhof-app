@@ -1,4 +1,5 @@
 import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../auth/auth';
 
 // core/guards/auth.guard.ts
 export class AuthGuard implements CanActivate {
