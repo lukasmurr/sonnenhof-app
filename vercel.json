@@ -1,0 +1,21 @@
+{
+    "version": 2,
+    "name": "sonnenhof-management-ui",
+    "buildCommand": "npm run build -- --configuration production",
+    "outputDirectory": "dist/sonnenhof-management-ui",
+    "installCommand": "npm ci",
+    "framework": null,
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
+        }
+    ],
+    "functions": {},
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
