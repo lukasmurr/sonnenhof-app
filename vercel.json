@@ -8,7 +8,7 @@
                 "config": { "distDir": "dist/sonnenhof-management-ui/browser" }
             }
     ],
-    "routes": [
-        { "src": "/(.*)", "dest": "/index.html" }
-    ]
+        "routes": [
+            { "src": "^/(?!.*\\.[^/]+$)(.*)", "dest": "/index.html" }
+        ]
 }
