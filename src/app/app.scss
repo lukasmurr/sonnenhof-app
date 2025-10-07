@@ -1,0 +1,137 @@
+.app-toolbar {
+    background: #fff;
+    color: #163c13;
+    box-shadow: 0 2px 4px rgba(79, 91, 85, 0.07);
+    height: 64px;
+    border-radius: 0 0 18px 18px;
+
+    .toolbar-logo {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        .toolbar-logo-icon {
+            font-size: 2.4rem;
+            margin-right: 12px;
+            color: #388e3c; // Grün Corporate
+        }
+
+        .toolbar-title {
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.7px;
+            color: #388e3c;
+        }
+    }
+
+    .spacer {
+        flex: 1 1 auto;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.08rem;
+
+        .user-avatar {
+            font-size: 2.2rem;
+            color: #ff9800;
+        }
+
+        .user-name {
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-right: 8px;
+        }
+    }
+}
+
+.main-container {
+    height: 100vh;
+}
+
+.main-sidenav {
+    background: #f6faf5;
+    width: 230px;
+    border-radius: 0 24px 24px 0;
+    padding: 20px 0 6px 0;
+    box-shadow: 2px 0 8px rgba(40, 50, 32, 0.05);
+    display: flex;
+    flex-direction: column;
+
+    .sidemenu-title {
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.91rem;
+        margin-left: 18px;
+        margin-bottom: 22px;
+        letter-spacing: 1.8px;
+        color: #b4bcb3;
+    }
+
+    .sidemenu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+
+        .area-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-size: 1.13rem;
+            font-weight: 600;
+            transition: background .12s, color .13s;
+
+            &.metzgerei {
+                color: #e53935;
+
+                &:hover,
+                &.active-butchery {
+                    background: rgba(229, 57, 53, 0.09);
+                }
+            }
+
+            &.buero {
+                color: #1976d2;
+
+                &:hover,
+                &.active-office {
+                    background: rgba(25, 118, 210, 0.09);
+                }
+            }
+
+            &.landwirtschaft {
+                color: #43a047;
+
+                &:hover,
+                &.active-farming {
+                    background: rgba(67, 160, 71, 0.10);
+                }
+            }
+
+            mat-icon {
+                margin-right: 11px;
+            }
+        }
+    }
+
+    .sidemenu-footer {
+        margin-top: auto;
+        text-align: center;
+        font-size: 0.86rem;
+        color: #adb5bd;
+        padding-top: 24px;
+    }
+}
+
+.main-content {
+    background: #f7f9f7;
+    height: 100vh;
+    padding: 40px 28px 40px 28px;
+    border-radius: 24px 0 0 0;
+    overflow: auto;
+    min-width: 0;
+}
