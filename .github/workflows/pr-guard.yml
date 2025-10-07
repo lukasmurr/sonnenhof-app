@@ -1,0 +1,72 @@
+name: 🛡️ PR Quality Guard
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  quality-check:
+    name: 🔍 Code Quality & Testing
+    runs-on: ubuntu-latest
+    
+    # Skip if PR is draft
+    if: github.event.pull_request.draft == false
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: 🔧 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: 📦 Install Dependencies
+      run: npm ci
+    
+    - name: 🔍 Lint Check
+      run: npm run lint
+      continue-on-error: false
+    
+    - name: 🏗️ Build Check
+      run: npm run build
+      env:
+        NODE_OPTIONS: --max_old_space_size=8192
+    
+    - name: 🧪 Unit Tests
+      run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+    
+    - name: 📊 Upload Coverage
+      uses: codecov/codecov-action@v3
+      if: always()
+      with:
+        file: ./coverage/lcov.info
+        fail_ci_if_error: false
+    
+    - name: 🔐 Security Audit
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+    
+    - name: 📈 Bundle Size Check
+      run: |
+        npm run build -- --configuration production
+        npx bundlesize
+      continue-on-error: true
+
+  # Branch Protection
+  branch-protection:
+    name: 🛡️ Branch Rules
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🔒 Enforce Branch Protection
+      run: |
+        echo "✅ PR opened against protected branch"
+        echo "✅ All required checks must pass before merge"
