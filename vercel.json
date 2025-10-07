@@ -2,11 +2,11 @@
     "version": 2,
     "name": "sonnenhof-management-ui",
     "builds": [
-        {
-            "src": "package.json",
-            "use": "@vercel/static-build",
-            "config": { "distDir": "dist/sonnenhof-management-ui" }
-        }
+            {
+                "src": "package.json",
+                "use": "@vercel/static-build",
+                "config": { "distDir": "dist/sonnenhof-management-ui/browser" }
+            }
     ],
     "routes": [
         { "src": "/(.*)", "dest": "/index.html" }
