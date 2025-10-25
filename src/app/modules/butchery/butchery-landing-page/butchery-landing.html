@@ -1,0 +1,53 @@
+<div class="butchery-wrapper">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="headline">Metzgerei Management</h1>
+        <div class="spacer"></div>
+    </div>
+
+    <p class="section-description">Verwalten Sie Ihre Metzgerei-Prozesse und Bestände</p>
+
+    <div class="card-grid">
+        <!-- Produktion Card -->
+        <mat-card class="section-card production" (click)="navigateToSection('production')">
+            <div class="card-icon"><mat-icon>build</mat-icon></div>
+            <mat-card-title>Produktion</mat-card-title>
+            <mat-card-content>
+                Produktionsprozesse, Rezepte und Chargenverfolgung.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Bestände Card -->
+        <mat-card class="section-card inventory" (click)="navigateToSection('inventory')">
+            <div class="card-icon"><mat-icon>inventory_2</mat-icon></div>
+            <mat-card-title>Bestände</mat-card-title>
+            <mat-card-content>
+                Rohstoffe, Fertigprodukte und Lagerbestände.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Qualität Card -->
+        <mat-card class="section-card quality" (click)="navigateToSection('quality')">
+            <div class="card-icon"><mat-icon>verified</mat-icon></div>
+            <mat-card-title>Qualität</mat-card-title>
+            <mat-card-content>
+                Qualitätskontrolle, Zertifizierungen und Prüfungen.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Verkauf Card -->
+        <mat-card class="section-card sales" (click)="navigateToSection('sales')">
+            <div class="card-icon"><mat-icon>point_of_sale</mat-icon></div>
+            <mat-card-title>Verkauf</mat-card-title>
+            <mat-card-content>
+                Verkaufsübersicht, Kunden und Bestellungen.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+    </div>
+</div>

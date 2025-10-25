@@ -1,0 +1,173 @@
+.farming-wrapper {
+    min-height: 100vh;
+    padding: 48px 24px;
+    background: linear-gradient(135deg, #f1f8e9 0%, #c5e1a5 100%);
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .back-button {
+            color: #689f38;
+            font-size: 28px;
+
+            &:hover {
+                background-color: rgba(104, 159, 56, 0.1);
+            }
+        }
+
+        .spacer {
+            width: 40px;
+        }
+    }
+
+    .headline {
+        flex: 1;
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #689f38;
+        letter-spacing: 1px;
+        font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+        margin: 0;
+    }
+
+    .section-description {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 48px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.section-card {
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(104, 159, 56, 0.1);
+    transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px;
+    background: white;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #43a047 0%, #689f38 100%);
+    }
+
+    .card-icon {
+        margin: 20px 0 16px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #43a047 0%, #689f38 100%);
+
+        mat-icon {
+            font-size: 32px;
+            color: white;
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    mat-card-title {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #689f38;
+    }
+
+    mat-card-content {
+        text-align: center;
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .action-button {
+        background: linear-gradient(135deg, #43a047 0%, #689f38 100%);
+        color: white;
+        border-radius: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+
+        &:hover {
+            background: linear-gradient(135deg, #2e7d32 0%, #558b2f 100%);
+        }
+    }
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 24px rgba(104, 159, 56, 0.2);
+    }
+
+    &.fields {
+        &::before {
+            background: linear-gradient(90deg, #2e7d32 0%, #1b5e20 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        }
+    }
+
+    &.animals {
+        &::before {
+            background: linear-gradient(90deg, #43a047 0%, #2e7d32 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+        }
+    }
+
+    &.harvest {
+        &::before {
+            background: linear-gradient(90deg, #558b2f 0%, #43a047 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #558b2f 0%, #43a047 100%);
+        }
+    }
+
+    &.equipment {
+        &::before {
+            background: linear-gradient(90deg, #7cb342 0%, #558b2f 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
+        }
+    }
+}

@@ -1,27 +1,45 @@
 .app-toolbar {
-    background: #fff;
-    color: #163c13;
-    box-shadow: 0 2px 4px rgba(79, 91, 85, 0.07);
+    background: linear-gradient(90deg, #5b5b5b 0%, #8c8c8c 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     height: 64px;
-    border-radius: 0 0 18px 18px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 100;
+    margin: 0;
 
     .toolbar-logo {
         display: flex;
         align-items: center;
         cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 6px 10px;
+        border-radius: 8px;
+        margin: 0;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
 
         .toolbar-logo-icon {
-            font-size: 2.4rem;
-            margin-right: 12px;
-            color: #388e3c; // Grün Corporate
+            font-size: 2.2rem;
+            margin-right: 10px;
+            color: #ecf0f1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         .toolbar-title {
             font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
-            font-weight: 600;
-            font-size: 1.4rem;
-            letter-spacing: 0.7px;
-            color: #388e3c;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            color: #ecf0f1;
+            text-transform: capitalize;
+            margin: 0;
         }
     }
 
@@ -29,21 +47,69 @@
         flex: 1 1 auto;
     }
 
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 1.08rem;
+    .toolbar-button {
+        color: rgba(255, 255, 255, 0.8);
+        transition: all 0.2s ease;
+        margin: 0;
 
-        .user-avatar {
-            font-size: 2.2rem;
-            color: #ff9800;
+        &:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .user-name {
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            margin-right: 8px;
+        mat-icon {
+            font-size: 1.3rem;
+        }
+    }
+
+    .user-menu-container {
+        display: flex;
+        align-items: center;
+        margin: 0;
+
+        .user-menu-trigger {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            background-color: rgba(255, 255, 255, 0.08);
+            margin: 0;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: #fff;
+            }
+
+            .user-avatar {
+                font-size: 1.6rem;
+                width: 1.6rem;
+                height: 1.6rem;
+                color: #3498db;
+                margin: 0;
+            }
+
+            .user-name {
+                font-weight: 500;
+                font-size: 0.9rem;
+                letter-spacing: 0.2px;
+                white-space: nowrap;
+                margin: 0;
+            }
+
+            .dropdown-icon {
+                font-size: 1rem;
+                width: 1rem;
+                height: 1rem;
+                transition: transform 0.2s ease;
+                margin: 0;
+            }
+
+            &[aria-expanded="true"] .dropdown-icon {
+                transform: rotate(180deg);
+            }
         }
     }
 }

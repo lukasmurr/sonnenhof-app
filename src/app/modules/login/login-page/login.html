@@ -1,0 +1,89 @@
+<div class="login-wrapper">
+    <div class="login-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <mat-icon class="logo-icon">spa</mat-icon>
+            <h1 class="logo-title">Sonnenhof</h1>
+            <p class="logo-subtitle">Management System</p>
+        </div>
+
+        <!-- Login Card -->
+        <mat-card class="login-card">
+            <mat-card-header>
+                <mat-card-title>Anmelden</mat-card-title>
+                <mat-card-subtitle>Melden Sie sich mit Ihren Anmeldedaten an</mat-card-subtitle>
+            </mat-card-header>
+
+            <!-- Error Message -->
+            <div class="error-message" *ngIf="loginError()">
+                <mat-icon>error_outline</mat-icon>
+                <span>{{ loginError() }}</span>
+            </div>
+
+            <!-- Login Form -->
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+                <!-- Email Field -->
+                <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Email</mat-label>
+                    <input matInput 
+                           type="email" 
+                           formControlName="email"
+                           placeholder="beispiel@sonnenhof.de">
+                    <mat-icon matPrefix>email</mat-icon>
+                    <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                        {{ getEmailError() }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password Field -->
+                <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Passwort</mat-label>
+                    <input matInput 
+                           [type]="hidePassword() ? 'password' : 'text'" 
+                           formControlName="password"
+                           placeholder="Ihr Passwort">
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+                        <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                        {{ getPasswordError() }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="form-options">
+                    <mat-checkbox formControlName="rememberMe">
+                        <span>Anmeldedaten merken</span>
+                    </mat-checkbox>
+                    <button type="button" class="forgot-password-link" (click)="forgotPassword()">
+                        Passwort vergessen?
+                    </button>
+                </div>
+
+                <!-- Submit Button -->
+                <button mat-raised-button 
+                        color="primary" 
+                        type="submit"
+                        class="login-button"
+                        [disabled]="loginForm.invalid || isLoading()">
+                    <mat-icon *ngIf="!isLoading()">login</mat-icon>
+                    <mat-spinner *ngIf="isLoading()" diameter="20"></mat-spinner>
+                    <span>{{ isLoading() ? 'Wird angemeldet...' : 'Anmelden' }}</span>
+                </button>
+            </form>
+
+            <!-- Demo Credentials Info -->
+            <div class="demo-credentials">
+                <p><strong>Demo-Anmeldedaten:</strong></p>
+                <p>Email: <code>demo@sonnenhof.de</code></p>
+                <p>Passwort: <code>password123</code></p>
+            </div>
+        </mat-card>
+
+        <!-- Footer -->
+        <div class="login-footer">
+            <p>&copy; 2025 Sonnenhof Management. Alle Rechte vorbehalten.</p>
+        </div>
+    </div>
+</div>

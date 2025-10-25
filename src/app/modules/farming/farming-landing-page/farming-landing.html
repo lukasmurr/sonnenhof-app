@@ -1,0 +1,53 @@
+<div class="farming-wrapper">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="headline">Landwirtschaft Management</h1>
+        <div class="spacer"></div>
+    </div>
+
+    <p class="section-description">Verwalten Sie Ihre landwirtschaftlichen Ressourcen und Prozesse</p>
+
+    <div class="card-grid">
+        <!-- Felder Card -->
+        <mat-card class="section-card fields" (click)="navigateToSection('fields')">
+            <div class="card-icon"><mat-icon>landscape</mat-icon></div>
+            <mat-card-title>Felder</mat-card-title>
+            <mat-card-content>
+                Feldverwaltung, Parzellen und Bewirtschaftung.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Tiere Card -->
+        <mat-card class="section-card animals" (click)="navigateToSection('animals')">
+            <div class="card-icon"><mat-icon>pets</mat-icon></div>
+            <mat-card-title>Tiere</mat-card-title>
+            <mat-card-content>
+                Viehbestand, Gesundheit und Zucht.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Ernte Card -->
+        <mat-card class="section-card harvest" (click)="navigateToSection('harvest')">
+            <div class="card-icon"><mat-icon>grain</mat-icon></div>
+            <mat-card-title>Ernte</mat-card-title>
+            <mat-card-content>
+                Ernteplanung, Ertrag und Lagerung.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Geräte Card -->
+        <mat-card class="section-card equipment" (click)="navigateToSection('equipment')">
+            <div class="card-icon"><mat-icon>build_circle</mat-icon></div>
+            <mat-card-title>Geräte</mat-card-title>
+            <mat-card-content>
+                Maschinenverwaltung, Wartung und Reparaturen.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="app-toolbar">
   <!-- Logo/Brand + Home -->
-  <div class="toolbar-logo" routerLink="/home">
+  <div class="toolbar-logo" (click)="navigateHome()">
     <mat-icon class="toolbar-logo-icon">spa</mat-icon>
     <span class="toolbar-title">Sonnenhof</span>
   </div>
@@ -8,15 +8,37 @@
   <!-- Flex Spacer -->
   <span class="spacer"></span>
 
-  <!-- Settings Icon -->
-  <button mat-icon-button aria-label="Settings" routerLink="/settings">
+  <!-- Settings Icon Button -->
+  <button mat-icon-button 
+          (click)="navigateSettings()" 
+          class="toolbar-button"
+          matTooltip="Einstellungen">
     <mat-icon>settings</mat-icon>
   </button>
 
   <!-- User Menu -->
-  <div class="user-info">
-    <mat-icon class="user-avatar">account_circle</mat-icon>
-    <span class="user-name">Max Mustermann</span>
+  <div class="user-menu-container">
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
+      <mat-icon class="user-avatar">account_circle</mat-icon>
+      <span class="user-name">Max Mustermann</span>
+      <mat-icon class="dropdown-icon">expand_more</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu" class="user-menu">
+      <button mat-menu-item (click)="profile()">
+        <mat-icon>person</mat-icon>
+        <span>Profil anzeigen</span>
+      </button>
+      <button mat-menu-item routerLink="/settings">
+        <mat-icon>security</mat-icon>
+        <span>Sicherheit</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Abmelden</span>
+      </button>
+    </mat-menu>
   </div>
 </mat-toolbar>
 

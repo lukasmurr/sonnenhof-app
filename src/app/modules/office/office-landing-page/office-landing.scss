@@ -1,0 +1,183 @@
+.office-wrapper {
+    min-height: 100vh;
+    padding: 48px 24px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .back-button {
+            color: #1565c0;
+            font-size: 28px;
+
+            &:hover {
+                background-color: rgba(21, 101, 192, 0.1);
+            }
+        }
+
+        .spacer {
+            width: 40px;
+        }
+    }
+
+    .headline {
+        flex: 1;
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #1565c0;
+        letter-spacing: 1px;
+        font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+        margin: 0;
+    }
+
+    .section-description {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 48px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.section-card {
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(21, 101, 192, 0.1);
+    transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px;
+    background: white;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #1976d2 0%, #1565c0 100%);
+    }
+
+    .card-icon {
+        margin: 20px 0 16px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+
+        mat-icon {
+            font-size: 32px;
+            color: white;
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    mat-card-title {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1565c0;
+    }
+
+    mat-card-content {
+        text-align: center;
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .action-button {
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        color: white;
+        border-radius: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+
+        &:hover {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+        }
+    }
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 24px rgba(21, 101, 192, 0.2);
+    }
+
+    &.admin {
+        &::before {
+            background: linear-gradient(90deg, #1565c0 0%, #0d47a1 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+        }
+    }
+
+    &.documents {
+        &::before {
+            background: linear-gradient(90deg, #1976d2 0%, #1565c0 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        }
+    }
+
+    &.calendar {
+        &::before {
+            background: linear-gradient(90deg, #1e88e5 0%, #1976d2 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #1e88e5 0%, #1976d2 100%);
+        }
+    }
+
+    &.contacts {
+        &::before {
+            background: linear-gradient(90deg, #2196f3 0%, #1e88e5 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #2196f3 0%, #1e88e5 100%);
+        }
+    }
+
+    &.tuev {
+        &::before {
+            background: linear-gradient(90deg, #0d47a1 0%, #1565c0 100%);
+        }
+
+        .card-icon {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+        }
+    }
+}
