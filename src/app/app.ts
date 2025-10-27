@@ -1,13 +1,14 @@
-import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterOutlet, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 import { AuthService } from './core/services/auth.service';
 
 @Component({
@@ -30,21 +31,31 @@ export class App {
   protected readonly title = signal('sonnenhof-management-ui');
   private router = inject(Router);
   private authService = inject(AuthService);
+  protected showToolbar = signal(false);
 
-  navigateHome() {
+  constructor() {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        // Toolbar wird nicht auf Login-Seite angezeigt
+        this.showToolbar.set(event.url !== '/login');
+      });
+  }
+
+  public navigateHome(): void {
     this.router.navigate(['/landing']);
   }
 
-  navigateSettings() {
+  public navigateSettings(): void {
     this.router.navigate(['/settings']);
   }
 
-  logout() {
+  public logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  profile() {
+  public profile(): void {
     console.log('Profile opened');
   }
 }

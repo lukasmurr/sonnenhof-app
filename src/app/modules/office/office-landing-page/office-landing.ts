@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-office-landing',
@@ -15,11 +15,11 @@ import { MatButtonModule } from '@angular/material/button';
 export class OfficeLanding {
     constructor(private router: Router) { }
 
-    navigateToSection(section: string) {
+    public navigateToSection(section: string): void {
         this.router.navigate(['/office', section]);
     }
 
-    goBack() {
+    public goBack(): void {
         this.router.navigate(['/landing']);
     }
 }

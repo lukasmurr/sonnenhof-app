@@ -1,14 +1,14 @@
-import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -29,12 +29,12 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./login.scss']
 })
 export class Login {
-  loginForm!: FormGroup;
-  hidePassword = signal(true);
-  isLoading = signal(false);
-  loginError = signal<string | null>(null);
-  private returnUrl: string = '/landing';
+  public loginForm!: FormGroup;
+  public hidePassword = signal(true);
+  public isLoading = signal(false);
+  public loginError = signal<string | null>(null);
 
+  private readonly returnUrl: string = '/landing';
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -59,11 +59,11 @@ export class Login {
     });
   }
 
-  togglePasswordVisibility(): void {
+  public togglePasswordVisibility(): void {
     this.hidePassword.update(value => !value);
   }
 
-  onLogin(): void {
+  public onLogin(): void {
     if (this.loginForm.invalid) {
       this.loginError.set('Bitte füllen Sie alle Felder korrekt aus.');
       return;
@@ -92,11 +92,11 @@ export class Login {
     }, 1500);
   }
 
-  forgotPassword(): void {
+  public forgotPassword(): void {
     console.log('Passwort vergessen - Seite würde hier implementiert');
   }
 
-  getEmailError(): string {
+  public getEmailError(): string {
     const emailControl = this.loginForm.get('email');
     if (emailControl?.hasError('required')) {
       return 'Email ist erforderlich.';
@@ -107,7 +107,7 @@ export class Login {
     return '';
   }
 
-  getPasswordError(): string {
+  public getPasswordError(): string {
     const passwordControl = this.loginForm.get('password');
     if (passwordControl?.hasError('required')) {
       return 'Passwort ist erforderlich.';

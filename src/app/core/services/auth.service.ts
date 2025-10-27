@@ -5,7 +5,7 @@ import { Injectable, signal } from '@angular/core';
 })
 export class AuthService {
   private isAuthenticatedSignal = signal<boolean>(this.checkAuthStatus());
-  
+
   get isAuthenticated() {
     return this.isAuthenticatedSignal.asReadonly();
   }
@@ -26,7 +26,7 @@ export class AuthService {
     this.isAuthenticatedSignal.set(this.checkAuthStatus());
   }
 
-  login(email: string, password: string): boolean {
+  public login(email: string, password: string): boolean {
     // Demo credentials
     if (email === 'demo@sonnenhof.de' && password === 'password123') {
       localStorage.setItem('isLoggedIn', 'true');
@@ -38,21 +38,21 @@ export class AuthService {
     return false;
   }
 
-  logout(): void {
+  public logout(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('loginTimestamp');
     this.updateAuthStatus();
   }
 
-  getCurrentUser(): string | null {
+  public getCurrentUser(): string | null {
     if (typeof window !== 'undefined' && localStorage) {
       return localStorage.getItem('userEmail');
     }
     return null;
   }
 
-  isUserLoggedIn(): boolean {
+  public isUserLoggedIn(): boolean {
     return this.isAuthenticatedSignal();
   }
 }

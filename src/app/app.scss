@@ -1,13 +1,17 @@
 .app-toolbar {
-    background: linear-gradient(90deg, #5b5b5b 0%, #8c8c8c 100%);
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    height: 64px;
-    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: #2c3e50;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    height: 70px;
+    padding: 0 24px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    position: relative;
+    gap: 16px;
+    position: sticky;
+    top: 0;
     z-index: 100;
     margin: 0;
 
@@ -15,32 +19,41 @@
         display: flex;
         align-items: center;
         cursor: pointer;
-        transition: all 0.2s ease;
-        padding: 6px 10px;
-        border-radius: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 8px 12px;
+        border-radius: 12px;
         margin: 0;
-        gap: 8px;
+        gap: 10px;
 
         &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: scale(1.02);
+            background-color: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
         }
 
         .toolbar-logo-image {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
+            transition: all 0.3s ease;
+
+            &:hover {
+                filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+            }
         }
 
         .toolbar-title {
             font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
             font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: 0.5px;
-            color: #ecf0f1;
+            font-size: 1.35rem;
+            letter-spacing: 0.6px;
+            color: #2c3e50;
             text-transform: capitalize;
             margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     }
 
@@ -49,17 +62,18 @@
     }
 
     .toolbar-button {
-        color: rgba(255, 255, 255, 0.8);
-        transition: all 0.2s ease;
+        color: rgba(44, 62, 80, 0.7);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         margin: 0;
 
         &:hover {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
+            color: #667eea;
+            background-color: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
         }
 
         mat-icon {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
         }
     }
 
@@ -71,40 +85,47 @@
         .user-menu-trigger {
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.85);
-            padding: 4px 10px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            background-color: rgba(255, 255, 255, 0.08);
+            gap: 8px;
+            color: rgba(44, 62, 80, 0.85);
+            padding: 6px 14px;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: rgba(102, 126, 234, 0.08);
+            border: 1px solid rgba(102, 126, 234, 0.15);
             margin: 0;
 
             &:hover {
-                background-color: rgba(255, 255, 255, 0.15);
-                color: #fff;
+                background-color: rgba(102, 126, 234, 0.15);
+                color: #2c3e50;
+                border-color: rgba(102, 126, 234, 0.3);
+                transform: translateY(-2px);
             }
 
             .user-avatar {
-                font-size: 1.6rem;
-                width: 1.6rem;
-                height: 1.6rem;
-                color: #3498db;
+                font-size: 1.8rem;
+                width: 1.8rem;
+                height: 1.8rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
                 margin: 0;
             }
 
             .user-name {
-                font-weight: 500;
-                font-size: 0.9rem;
-                letter-spacing: 0.2px;
+                font-weight: 600;
+                font-size: 0.95rem;
+                letter-spacing: 0.3px;
                 white-space: nowrap;
                 margin: 0;
+                color: #2c3e50;
             }
 
             .dropdown-icon {
-                font-size: 1rem;
-                width: 1rem;
-                height: 1rem;
-                transition: transform 0.2s ease;
+                font-size: 1.1rem;
+                width: 1.1rem;
+                height: 1.1rem;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 margin: 0;
             }
 

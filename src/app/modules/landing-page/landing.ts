@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class Landing {
   constructor(private router: Router) { }
 
-  navigate(area: string) {
+  public navigate(area: string): void {
     if (area === 'butchery') this.router.navigate(['/butchery']);
     else if (area === 'office') this.router.navigate(['/office']);
     else if (area === 'farming') this.router.navigate(['/farming']);

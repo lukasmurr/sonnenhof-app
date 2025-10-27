@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="app-toolbar">
+<mat-toolbar *ngIf="showToolbar()" color="primary" class="app-toolbar">
   <!-- Logo/Brand + Home -->
   <div class="toolbar-logo" (click)="navigateHome()">
     <img src="assets/favicon.ico" alt="Sonnenhof Logo" class="toolbar-logo-image">
@@ -9,10 +9,7 @@
   <span class="spacer"></span>
 
   <!-- Settings Icon Button -->
-  <button mat-icon-button 
-          (click)="navigateSettings()" 
-          class="toolbar-button"
-          matTooltip="Einstellungen">
+  <button mat-icon-button (click)="navigateSettings()" class="toolbar-button" matTooltip="Einstellungen">
     <mat-icon>settings</mat-icon>
   </button>
 
