@@ -12,3 +12,35 @@ $sonnenhof-theme: mat.define-theme((
 ));
 
 @include mat.all-component-themes($sonnenhof-theme);
+
+// Global Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+router-outlet + * {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

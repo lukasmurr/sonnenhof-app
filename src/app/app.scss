@@ -86,29 +86,21 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: rgba(44, 62, 80, 0.85);
-            padding: 6px 14px;
-            border-radius: 10px;
+            color: rgba(44, 62, 80, 0.7);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: rgba(102, 126, 234, 0.08);
-            border: 1px solid rgba(102, 126, 234, 0.15);
             margin: 0;
 
             &:hover {
-                background-color: rgba(102, 126, 234, 0.15);
-                color: #2c3e50;
-                border-color: rgba(102, 126, 234, 0.3);
+                color: #667eea;
+                background-color: rgba(102, 126, 234, 0.1);
                 transform: translateY(-2px);
             }
 
             .user-avatar {
-                font-size: 1.8rem;
-                width: 1.8rem;
-                height: 1.8rem;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                font-size: 1.4rem;
+                width: auto;
+                height: auto;
+                color: rgba(44, 62, 80, 0.7);
                 margin: 0;
             }
 
