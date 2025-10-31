@@ -1,20 +1,23 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, from, interval } from 'rxjs';
 import { switchMap, map, startWith } from 'rxjs/operators';
 import { Vehicle, TuevAppointment, TuevStatus } from '../models';
 import { CouchDbService } from './pouchdb.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class TuevService {
+export class TuevService implements OnDestroy {
     private vehicles$ = new BehaviorSubject<Vehicle[]>([]);
     private appointments$ = new BehaviorSubject<TuevAppointment[]>([]);
     private tuevStatuses$ = new BehaviorSubject<TuevStatus[]>([]);
+    private notificationIntervalId: any;
 
-    constructor(private couchDbService: CouchDbService) {
+    constructor(private couchDbService: CouchDbService, private notificationService: NotificationService) {
         console.log('TÜV Service initialized');
         this.initializeData();
+        this.startNotificationCheck();
     }
 
     private initializeData(): void {
@@ -31,9 +34,92 @@ export class TuevService {
             (appointments: any[]) => {
                 this.appointments$.next(appointments);
                 this.updateTuevStatuses();
+                this.checkAndNotifyAppointments(appointments);
             },
             (err) => console.error('Error loading appointments:', err)
         );
+    }
+
+    /**
+     * Starte tägliche Benachrichtigungsprüfung (um 08:00 Uhr morgens)
+     */
+    private startNotificationCheck(): void {
+        // Prüfe alle 24 Stunden um 08:00 Uhr
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(8, 0, 0, 0);
+
+        const timeUntilNextCheck = tomorrow.getTime() - now.getTime();
+
+        // Erste Prüfung planen
+        setTimeout(() => {
+            this.checkAndNotifyAppointments(this.appointments$.value);
+            // Dann täglich wiederholen
+            this.notificationIntervalId = setInterval(() => {
+                this.checkAndNotifyAppointments(this.appointments$.value);
+            }, 24 * 60 * 60 * 1000); // Alle 24 Stunden
+        }, timeUntilNextCheck);
+    }
+
+    /**
+     * Prüfe Termine und sende Benachrichtigungen
+     * - 1 Monat (30 Tage) vorher
+     * - 1 Woche (7 Tage) vorher
+     * - Täglich ab 3 Tage vorher
+     */
+    private checkAndNotifyAppointments(appointments: TuevAppointment[]): void {
+        appointments.forEach(appointment => {
+            if (appointment.status !== 'pending') {
+                return; // Nur offene Termine
+            }
+
+            const appointmentDate = new Date(appointment.appointmentDate);
+            const { days } = this.notificationService.getTimeUntil(appointmentDate);
+
+            const vehicleName = appointment.vehicleName || 'Fahrzeug';
+
+            // 30 Tage vorher - einmalig
+            if (days === 30) {
+                this.notificationService.sendNotification({
+                    title: '📅 TÜV Termin in einem Monat',
+                    body: `${vehicleName} benötigt TÜV-Untersuchung in 30 Tagen`,
+                    tag: `tuev-30d-${appointment._id}`,
+                    priority: 'normal'
+                });
+            }
+
+            // 7 Tage vorher - einmalig
+            if (days === 7) {
+                this.notificationService.sendNotification({
+                    title: '⚠️ TÜV Termin in einer Woche',
+                    body: `${vehicleName} benötigt TÜV-Untersuchung in 7 Tagen`,
+                    tag: `tuev-7d-${appointment._id}`,
+                    priority: 'high'
+                });
+            }
+
+            // 3 Tage vorher bis zum Tag selbst - täglich
+            if (days <= 3 && days >= 0) {
+                const dayText = days === 0 ? 'Heute' : `in ${days} Tag${days === 1 ? '' : 'en'}`;
+                this.notificationService.sendNotification({
+                    title: '🚨 TÜV Termin ' + dayText,
+                    body: `${vehicleName} - TÜV-Untersuchung ${dayText} fällig!`,
+                    tag: `tuev-urgent-${appointment._id}`,
+                    priority: 'high'
+                });
+            }
+
+            // Überfällig
+            if (days < 0) {
+                this.notificationService.sendNotification({
+                    title: '❌ TÜV ÜBERFÄLLIG',
+                    body: `${vehicleName} - TÜV-Untersuchung ist ${Math.abs(days)} Tag${Math.abs(days) === 1 ? '' : 'e'} überfällig!`,
+                    tag: `tuev-overdue-${appointment._id}`,
+                    priority: 'high'
+                });
+            }
+        });
     }
 
     // ===== Vehicle Management =====
@@ -206,5 +292,14 @@ export class TuevService {
     public refreshData(): Promise<void> {
         // Keine Mock-Daten mehr notwendig, CouchDB aktualisiert live
         return Promise.resolve();
+    }
+
+    /**
+     * Cleanup beim Destroy des Services
+     */
+    ngOnDestroy(): void {
+        if (this.notificationIntervalId) {
+            clearInterval(this.notificationIntervalId);
+        }
     }
 }
