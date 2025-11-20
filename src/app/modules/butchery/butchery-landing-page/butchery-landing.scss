@@ -131,7 +131,7 @@
         box-shadow: 0 8px 24px rgba(198, 40, 40, 0.2);
     }
 
-    &.production {
+    &.products {
         &::before {
             background: linear-gradient(90deg, #d32f2f 0%, #b71c1c 100%);
         }
@@ -141,27 +141,7 @@
         }
     }
 
-    &.inventory {
-        &::before {
-            background: linear-gradient(90deg, #e53935 0%, #c62828 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
-        }
-    }
-
-    &.quality {
-        &::before {
-            background: linear-gradient(90deg, #f44336 0%, #e53935 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
-        }
-    }
-
-    &.sales {
+    &.orders {
         &::before {
             background: linear-gradient(90deg, #ef5350 0%, #e53935 100%);
         }

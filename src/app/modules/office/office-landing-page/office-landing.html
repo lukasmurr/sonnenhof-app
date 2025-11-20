@@ -10,52 +10,42 @@
     <p class="section-description">Verwalten Sie Ihre Büroprozesse und Verwaltungsaufgaben</p>
 
     <div class="card-grid">
-        <!-- Verwaltung Card -->
-        <mat-card class="section-card admin" (click)="navigateToSection('administration')">
-            <div class="card-icon"><mat-icon>admin_panel_settings</mat-icon></div>
-            <mat-card-title>Verwaltung</mat-card-title>
-            <mat-card-content>
-                Allgemeine Verwaltung und Systemeinstellungen.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
-
-        <!-- Dokumente Card -->
-        <mat-card class="section-card documents" (click)="navigateToSection('documents')">
-            <div class="card-icon"><mat-icon>description</mat-icon></div>
-            <mat-card-title>Dokumente</mat-card-title>
-            <mat-card-content>
-                Dokumentenverwaltung und Archiv.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
-
-        <!-- Termine Card -->
-        <mat-card class="section-card calendar" (click)="navigateToSection('calendar')">
-            <div class="card-icon"><mat-icon>event</mat-icon></div>
-            <mat-card-title>Termine</mat-card-title>
-            <mat-card-content>
-                Kalender, Meetings und Veranstaltungen.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
-
-        <!-- Kontakte Card -->
-        <mat-card class="section-card contacts" (click)="navigateToSection('contacts')">
-            <div class="card-icon"><mat-icon>contacts</mat-icon></div>
-            <mat-card-title>Kontakte</mat-card-title>
-            <mat-card-content>
-                Kundenstammdaten und Geschäftskontakte.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
-
         <!-- TÜV Card -->
         <mat-card class="section-card tuev" (click)="navigateToSection('tuev')">
             <div class="card-icon"><mat-icon>verified_user</mat-icon></div>
             <mat-card-title>TÜV</mat-card-title>
             <mat-card-content>
                 TÜV Termine und Prüfungen.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Märkte Card -->
+        <mat-card class="section-card markets" (click)="navigateToSection('markets')">
+            <div class="card-icon"><mat-icon>storefront</mat-icon></div>
+            <mat-card-title>Märkte</mat-card-title>
+            <mat-card-content>
+                Marktübersicht und Planung.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Mitarbeiter Card -->
+        <mat-card class="section-card employees" (click)="navigateToSection('employees')">
+            <div class="card-icon"><mat-icon>people</mat-icon></div>
+            <mat-card-title>Mitarbeiter</mat-card-title>
+            <mat-card-content>
+                Mitarbeiterverwaltung und Kontaktdaten.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
+        <!-- Urlaubsplanung Card -->
+        <mat-card class="section-card vacation" (click)="navigateToSection('vacation')">
+            <div class="card-icon"><mat-icon>date_range</mat-icon></div>
+            <mat-card-title>Urlaubsplanung</mat-card-title>
+            <mat-card-content>
+                Urlaubsübersicht und Planung.
             </mat-card-content>
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>

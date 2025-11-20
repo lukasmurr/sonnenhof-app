@@ -1,0 +1,113 @@
+<h2 mat-dialog-title>{{ data.order ? 'Bestellung bearbeiten' : 'Neue Bestellung' }}</h2>
+<mat-dialog-content>
+    <form [formGroup]="form" class="order-form">
+        
+        <!-- Customer Section -->
+        <h3>Kundeninformationen</h3>
+        <mat-form-field appearance="outline">
+            <mat-label>Kunde (Name)</mat-label>
+            <input matInput formControlName="customerName" placeholder="Max Mustermann">
+            <mat-error *ngIf="form.get('customerName')?.hasError('required')">
+                Name ist erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <div style="display: flex; gap: 1rem;">
+            <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>E-Mail</mat-label>
+                <input matInput formControlName="customerEmail" placeholder="max@beispiel.de">
+                <mat-error *ngIf="form.get('customerEmail')?.hasError('email')">
+                    Ungültige E-Mail Adresse
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>Telefon</mat-label>
+                <input matInput formControlName="customerPhone" placeholder="0123 456789">
+            </mat-form-field>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+            <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>Markt</mat-label>
+                <mat-select formControlName="market">
+                    <mat-option *ngFor="let market of markets" [value]="market.name">
+                        {{ market.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('market')?.hasError('required')">
+                    Markt ist erforderlich
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>Bestelldatum</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="orderDate">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="form.get('orderDate')?.hasError('required')">
+                    Datum ist erforderlich
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+        
+        <!-- Items Section -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+            <h3>Produkte</h3>
+            <button mat-stroked-button color="primary" type="button" (click)="addItem()">
+                <mat-icon>add</mat-icon> Produkt hinzufügen
+            </button>
+        </div>
+
+        <div formArrayName="items">
+            <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
+                <div style="flex: 2;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Produkt</mat-label>
+                        <mat-select formControlName="product" [compareWith]="compareProducts">
+                            <mat-option *ngFor="let product of products" [value]="product">
+                                {{ product.name }} ({{ product.puNumber }})
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="item.get('product')?.hasError('required')">
+                            Erforderlich
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div style="flex: 1;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Menge</mat-label>
+                        <input matInput type="number" formControlName="quantity" placeholder="0">
+                        <span matSuffix *ngIf="getUnit(i)">{{ getUnit(i) }}</span>
+                        <mat-error *ngIf="item.get('quantity')?.hasError('required')">
+                            Erforderlich
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div style="flex: 2;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Bemerkung</mat-label>
+                        <input matInput formControlName="notes" placeholder="z.B. Vakuumieren">
+                    </mat-form-field>
+                </div>
+
+                <div class="item-actions">
+                    <button mat-icon-button color="warn" type="button" (click)="removeItem(i)" [disabled]="items.length === 1">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Abbrechen</button>
+    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSave()">
+        Speichern
+    </button>
+</mat-dialog-actions>

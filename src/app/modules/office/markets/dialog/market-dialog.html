@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ data.market ? 'Markt bearbeiten' : 'Neuer Markt' }}</h2>
+<mat-dialog-content>
+    <form [formGroup]="form" class="market-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" placeholder="z.B. Wochenmarkt Stadtplatz">
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+                Name ist erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="address" placeholder="Musterstraße 1, 12345 Musterstadt">
+            <mat-error *ngIf="form.get('address')?.hasError('required')">
+                Adresse ist erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Tag</mat-label>
+            <mat-select formControlName="day">
+                <mat-option *ngFor="let day of days" [value]="day">
+                    {{ day }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('day')?.hasError('required')">
+                Tag ist erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <div style="display: flex; gap: 1rem;">
+            <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>Startzeit</mat-label>
+                <input matInput type="time" formControlName="startTime">
+                <mat-error *ngIf="form.get('startTime')?.hasError('required')">
+                    Erforderlich
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>Endzeit</mat-label>
+                <input matInput type="time" formControlName="endTime">
+                <mat-error *ngIf="form.get('endTime')?.hasError('required')">
+                    Erforderlich
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Auto</mat-label>
+            <mat-select formControlName="car">
+                <mat-option value="5">Auto 5</mat-option>
+                <mat-option value="6">Auto 6</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('car')?.hasError('required')">
+                Auto ist erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="hasGrillTrailer">Grillhänger vorhanden</mat-checkbox>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Abbrechen</button>
+    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSave()">
+        Speichern
+    </button>
+</mat-dialog-actions>
