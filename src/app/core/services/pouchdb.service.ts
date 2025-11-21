@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 declare const PouchDB: any;
 
@@ -16,23 +17,38 @@ export class CouchDbService {
 
     private initializeDatabase(): void {
         this.db = new PouchDB('sonnenhof_db');
-        const remoteUrl = 'http://admin:admin@localhost:5984/sonnenhof_db';
 
-        this.db.sync(remoteUrl, {
+        this.db.sync(environment.couchdb.remoteUrl, {
             live: true,
-            retry: true
+            retry: true,
+            ajax: {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                timeout: 30000
+            }
         })
             .on('complete', () => {
                 console.log('CouchDB Sync complete');
                 this.dbInitialized$.next(true);
+            })
+            .on('change', (info: any) => {
+                console.log('CouchDB Sync change:', info);
+            })
+            .on('paused', () => {
+                console.log('CouchDB Sync paused (caught up)');
+            })
+            .on('active', () => {
+                console.log('CouchDB Sync active (syncing)');
+            })
+            .on('denied', (err: any) => {
+                console.error('CouchDB Sync denied:', err);
             })
             .on('error', (err: any) => {
                 console.warn('CouchDB Sync error (working offline):', err);
                 this.dbInitialized$.next(true);
             });
     }
-
-    // ===== CRUD Operationen =====
 
     public addDoc(doc: any): Promise<any> {
         if (!doc._id) {
@@ -58,20 +74,20 @@ export class CouchDbService {
         });
     }
 
-    // ===== Query Operationen =====
-
     public getAllDocs(type?: string): Promise<any> {
         if (type) {
             return this.db.allDocs({ include_docs: true })
                 .then((result: any) => {
                     return result.rows
                         .map((row: any) => row.doc)
-                        .filter((doc: any) => doc.type === type);
+                        .filter((doc: any) => doc.type === type && !doc._id.startsWith('_design'));
                 });
         }
         return this.db.allDocs({ include_docs: true })
             .then((result: any) => {
-                return result.rows.map((row: any) => row.doc);
+                return result.rows
+                    .map((row: any) => row.doc)
+                    .filter((doc: any) => !doc._id.startsWith('_design')); // Filter Design Docs
             });
     }
 
@@ -87,8 +103,6 @@ export class CouchDbService {
                     .map((row: any) => row.doc);
             });
     }
-
-    // ===== Watch Operationen (Live Updates) =====
 
     public watchDocs(type?: string): Observable<any[]> {
         return new Observable((subscriber) => {
@@ -123,8 +137,6 @@ export class CouchDbService {
         });
     }
 
-    // ===== Utility Funktionen =====
-
     public generateId(): string {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }
@@ -137,6 +149,34 @@ export class CouchDbService {
         return this.db.destroy().then(() => {
             this.db = new PouchDB('sonnenhof_db');
             this.dbInitialized$.next(true);
+        });
+    }
+
+    public async checkRemoteConnection(): Promise<boolean> {
+        try {
+            const remoteDb = new PouchDB('https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db', {
+                ajax: {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                    }
+                }
+            });
+            await remoteDb.info();
+            return true;
+        } catch (err) {
+            console.error('Remote connection check failed:', err);
+            return false;
+        }
+    }
+
+    public async manualSync(): Promise<any> {
+        const remoteUrl = 'https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db';
+        return this.db.sync(remoteUrl, {
+            ajax: {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            }
         });
     }
 }

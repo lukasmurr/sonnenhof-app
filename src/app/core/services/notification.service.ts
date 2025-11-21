@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
 export interface NotificationConfig {
-  title: string;
-  body?: string;
-  icon?: string;
-  badge?: string;
-  tag?: string;
-  priority?: 'low' | 'normal' | 'high';
+    title: string;
+    body?: string;
+    icon?: string;
+    badge?: string;
+    tag?: string;
+    priority?: 'low' | 'normal' | 'high';
 }
 
 @Injectable({
@@ -19,7 +19,7 @@ export class NotificationService {
         this.requestPermission();
     }
 
-    requestPermission(): void {
+    public requestPermission(): void {
         if ('Notification' in window) {
             if (Notification.permission === 'default') {
                 Notification.requestPermission().then(permission => {
@@ -29,7 +29,7 @@ export class NotificationService {
         }
     }
 
-    sendNotification(config: NotificationConfig): void {
+    public sendNotification(config: NotificationConfig): void {
         if (Notification.permission !== 'granted') {
             return;
         }
@@ -54,10 +54,7 @@ export class NotificationService {
         };
     }
 
-    /**
-     * Geplante Benachrichtigung - wird zu bestimmten Zeiten gesendet
-     */
-    scheduleNotification(config: NotificationConfig, delayMs: number, id: string): void {
+    public scheduleNotification(config: NotificationConfig, delayMs: number, id: string): void {
         // Alte Zeitpläne löschen
         if (this.notificationQueue.has(id)) {
             clearTimeout(this.notificationQueue.get(id));
@@ -71,10 +68,7 @@ export class NotificationService {
         this.notificationQueue.set(id, timeout);
     }
 
-    /**
-     * Wiederholte Benachrichtigungen
-     */
-    scheduleRecurringNotification(
+    public scheduleRecurringNotification(
         config: NotificationConfig,
         intervalMs: number,
         maxTimes: number,
@@ -95,46 +89,34 @@ export class NotificationService {
         this.notificationQueue.set(id, interval as any);
     }
 
-    /**
-     * Benachrichtigung stornieren
-     */
-    cancelScheduled(id: string): void {
+    public cancelScheduled(id: string): void {
         if (this.notificationQueue.has(id)) {
             clearTimeout(this.notificationQueue.get(id));
             this.notificationQueue.delete(id);
         }
     }
 
-    /**
-     * Alle geplanten Benachrichtigungen stornieren
-     */
-    cancelAll(): void {
+    public cancelAll(): void {
         this.notificationQueue.forEach(timeout => clearTimeout(timeout));
         this.notificationQueue.clear();
     }
 
-    /**
-     * Berechne Zeit bis zu einem Datum
-     */
-    getTimeUntil(futureDate: Date): { days: number; ms: number } {
+    public getTimeUntil(futureDate: Date): { days: number; ms: number } {
         const now = new Date();
         const diff = futureDate.getTime() - now.getTime();
         const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
         return { days, ms: diff };
     }
 
-    /**
-     * Überprüfe ob eine Benachrichtigung heute gesendet werden sollte
-     */
-    shouldNotifyToday(appointmentDate: Date, daysUntil: number): boolean {
+    public shouldNotifyToday(appointmentDate: Date, daysUntil: number): boolean {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const appointment = new Date(appointmentDate);
         const appointmentDay = new Date(appointment.getFullYear(), appointment.getMonth(), appointment.getDate());
-        
+
         // Berechne den Tag, an dem die Benachrichtigung sein sollte
         const notificationDay = new Date(appointmentDay.getTime() - daysUntil * 24 * 60 * 60 * 1000);
-        
+
         return today.getTime() === notificationDay.getTime();
     }
 }
