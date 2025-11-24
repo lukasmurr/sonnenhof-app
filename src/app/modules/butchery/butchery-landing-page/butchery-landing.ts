@@ -13,7 +13,9 @@ import { Router } from '@angular/router';
     styleUrls: ['./butchery-landing.scss']
 })
 export class ButcheryLanding {
-    constructor(private router: Router) { }
+    constructor(private router: Router) {
+        console.log((window as any).process?.env?.COUCHDB_REMOTE_URL);
+    }
 
     public navigateToSection(section: string): void {
         this.router.navigate(['/butchery', section]);
