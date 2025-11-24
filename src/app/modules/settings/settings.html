@@ -61,15 +61,15 @@
                                 <div>
                                     <button mat-menu-item (click)="openUserDialog(user)">
                                         <mat-icon>edit</mat-icon>
-                                        <span>Bearbeiten</span>
+                                        <!-- <span>Bearbeiten</span> ToDo:tooltip -->
                                     </button>
                                     <button mat-menu-item (click)="toggleLock(user)">
                                         <mat-icon>{{user.isLocked ? 'lock_open' : 'lock'}}</mat-icon>
-                                        <span>{{user.isLocked ? 'Entsperren' : 'Sperren'}}</span>
+                                        <!-- <span>{{user.isLocked ? 'Entsperren' : 'Sperren'}}</span> -->
                                     </button>
                                     <button mat-menu-item (click)="deleteUser(user)" class="delete-item">
                                         <mat-icon color="warn">delete</mat-icon>
-                                        <span>Löschen</span>
+                                        <!-- <span>Löschen</span> -->
                                     </button>
                                 </div>
                             </td>
