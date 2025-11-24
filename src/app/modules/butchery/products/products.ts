@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
 import { ProductDialogComponent } from './dialog/product-dialog';
@@ -36,13 +37,18 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
     constructor(
         private productService: ProductService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) {
         this.dataSource = new MatTableDataSource<Product>([]);
     }
 
     ngOnInit(): void {
         this.loadProducts();
+    }
+
+    goBack(): void {
+        this.router.navigate(['/butchery']);
     }
 
     ngAfterViewInit() {

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { MarketService } from '../../../core/services/market.service';
 import { Market } from '../../../core/models/market.model';
 import { MarketDialogComponent } from './dialog/market-dialog';
@@ -36,13 +37,18 @@ export class MarketsComponent implements OnInit, AfterViewInit {
 
     constructor(
         private marketService: MarketService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) {
         this.dataSource = new MatTableDataSource<Market>([]);
     }
 
     ngOnInit(): void {
         this.loadMarkets();
+    }
+
+    goBack(): void {
+        this.router.navigate(['/office']);
     }
 
     ngAfterViewInit() {

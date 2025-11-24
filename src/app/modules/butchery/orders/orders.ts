@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
 import { OrderDialogComponent } from './dialog/order-dialog';
@@ -36,13 +37,18 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
     constructor(
         private orderService: OrderService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) {
         this.dataSource = new MatTableDataSource<Order>([]);
     }
 
     ngOnInit(): void {
         this.loadOrders();
+    }
+
+    goBack(): void {
+        this.router.navigate(['/butchery']);
     }
 
     ngAfterViewInit() {

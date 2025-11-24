@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { Vacation } from '../../../core/models/vacation.model';
 import { VacationService } from '../../../core/services/vacation.service';
 import { VacationDialogComponent } from './dialog/vacation-dialog';
@@ -48,7 +49,8 @@ export class VacationPlanningComponent implements OnInit {
 
     constructor(
         private vacationService: VacationService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) {
         this.dataSource = new MatTableDataSource<Vacation>([]);
     }
@@ -60,6 +62,10 @@ export class VacationPlanningComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.generateCalendar();
         });
+    }
+
+    goBack(): void {
+        this.router.navigate(['/office']);
     }
 
     // Calendar Methods

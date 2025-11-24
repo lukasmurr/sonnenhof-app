@@ -1,6 +1,11 @@
 <div class="vacation-container">
     <div class="header">
-        <h1>Urlaubsplanung</h1>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button mat-icon-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Urlaubsplanung</h1>
+        </div>
         <button mat-fab color="primary" (click)="openVacationDialog()" aria-label="Neuen Urlaub hinzufügen">
             <mat-icon>add</mat-icon>
         </button>

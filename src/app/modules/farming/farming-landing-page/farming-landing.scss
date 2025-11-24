@@ -1,7 +1,6 @@
 .farming-wrapper {
     min-height: 100%;
     padding: 48px 24px;
-    background: linear-gradient(135deg, #f1f8e9 0%, #c5e1a5 100%);
 
     .header {
         display: flex;
@@ -11,15 +10,6 @@
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
-
-        .back-button {
-            color: #689f38;
-            font-size: 28px;
-
-            &:hover {
-                background-color: rgba(104, 159, 56, 0.1);
-            }
-        }
 
         .spacer {
             width: 40px;
@@ -31,7 +21,7 @@
         text-align: center;
         font-size: 2.5rem;
         font-weight: 600;
-        color: #689f38;
+        color: #3F51B5; // Theme Primary
         letter-spacing: 1px;
         font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
         margin: 0;
@@ -58,7 +48,7 @@
 
 .section-card {
     border-radius: 16px !important;
-    box-shadow: 0 2px 12px rgba(104, 159, 56, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
     cursor: pointer;
     display: flex;
@@ -76,7 +66,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #43a047 0%, #689f38 100%);
+        background: #3F51B5; // Theme Primary
     }
 
     .card-icon {
@@ -87,7 +77,7 @@
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #43a047 0%, #689f38 100%);
+        background: #3F51B5; // Theme Primary
 
         mat-icon {
             font-size: 32px;
@@ -102,7 +92,7 @@
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 8px;
-        color: #689f38;
+        color: #3F51B5; // Theme Primary
     }
 
     mat-card-content {
@@ -114,7 +104,7 @@
     }
 
     .action-button {
-        background: linear-gradient(135deg, #43a047 0%, #689f38 100%);
+        background: #3F51B5; // Theme Primary
         color: white;
         border-radius: 8px;
         text-transform: uppercase;
@@ -122,52 +112,12 @@
         font-weight: 500;
 
         &:hover {
-            background: linear-gradient(135deg, #2e7d32 0%, #558b2f 100%);
+            background: #303f9f; // Darker Primary
         }
     }
 
     &:hover {
         transform: translateY(-8px);
-        box-shadow: 0 8px 24px rgba(104, 159, 56, 0.2);
-    }
-
-    &.fields {
-        &::before {
-            background: linear-gradient(90deg, #2e7d32 0%, #1b5e20 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
-        }
-    }
-
-    &.animals {
-        &::before {
-            background: linear-gradient(90deg, #43a047 0%, #2e7d32 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
-        }
-    }
-
-    &.harvest {
-        &::before {
-            background: linear-gradient(90deg, #558b2f 0%, #43a047 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #558b2f 0%, #43a047 100%);
-        }
-    }
-
-    &.equipment {
-        &::before {
-            background: linear-gradient(90deg, #7cb342 0%, #558b2f 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
-        }
+        box-shadow: 0 8px 24px rgba(63, 81, 181, 0.2);
     }
 }

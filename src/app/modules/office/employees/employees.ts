@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeeDialogComponent } from './dialog/employee-dialog';
@@ -33,7 +34,8 @@ export class EmployeesComponent implements OnInit {
 
     constructor(
         private employeeService: EmployeeService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private router: Router
     ) {
         this.dataSource = new MatTableDataSource<Employee>([]);
     }
@@ -43,6 +45,10 @@ export class EmployeesComponent implements OnInit {
             this.dataSource.data = employees;
             this.dataSource.sort = this.sort;
         });
+    }
+
+    goBack(): void {
+        this.router.navigate(['/office']);
     }
 
     ngAfterViewInit() {

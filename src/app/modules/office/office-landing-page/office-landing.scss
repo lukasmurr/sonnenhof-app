@@ -1,7 +1,6 @@
 .office-wrapper {
     min-height: 100%;
     padding: 48px 24px;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
 
     .header {
         display: flex;
@@ -13,11 +12,11 @@
         margin-right: auto;
 
         .back-button {
-            color: #1565c0;
+            color: #3F51B5; // Theme Primary
             font-size: 28px;
 
             &:hover {
-                background-color: rgba(21, 101, 192, 0.1);
+                background-color: rgba(63, 81, 181, 0.1);
             }
         }
 
@@ -31,7 +30,7 @@
         text-align: center;
         font-size: 2.5rem;
         font-weight: 600;
-        color: #1565c0;
+        color: #3F51B5; // Theme Primary
         letter-spacing: 1px;
         font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
         margin: 0;
@@ -58,7 +57,7 @@
 
 .section-card {
     border-radius: 16px !important;
-    box-shadow: 0 2px 12px rgba(21, 101, 192, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
     cursor: pointer;
     display: flex;
@@ -76,7 +75,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #1976d2 0%, #1565c0 100%);
+        background: #3F51B5; // Theme Primary
     }
 
     .card-icon {
@@ -87,7 +86,7 @@
         width: 56px;
         height: 56px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        background: #3F51B5; // Theme Primary
 
         mat-icon {
             font-size: 32px;
@@ -102,7 +101,7 @@
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 8px;
-        color: #1565c0;
+        color: #3F51B5; // Theme Primary
     }
 
     mat-card-content {
@@ -114,7 +113,7 @@
     }
 
     .action-button {
-        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        background: #3F51B5; // Theme Primary
         color: white;
         border-radius: 8px;
         text-transform: uppercase;
@@ -122,52 +121,12 @@
         font-weight: 500;
 
         &:hover {
-            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+            background: #303f9f; // Darker Primary
         }
     }
 
     &:hover {
         transform: translateY(-8px);
-        box-shadow: 0 8px 24px rgba(21, 101, 192, 0.2);
-    }
-
-    &.tuev {
-        &::before {
-            background: linear-gradient(90deg, #0d47a1 0%, #1565c0 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
-        }
-    }
-
-    &.markets {
-        &::before {
-            background: linear-gradient(90deg, #0288d1 0%, #0277bd 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #0288d1 0%, #0277bd 100%);
-        }
-    }
-
-    &.employees {
-        &::before {
-            background: linear-gradient(90deg, #7b1fa2 0%, #6a1b9a 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%);
-        }
-    }
-
-    &.vacation {
-        &::before {
-            background: linear-gradient(90deg, #f57c00 0%, #e65100 100%);
-        }
-
-        .card-icon {
-            background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
-        }
+        box-shadow: 0 8px 24px rgba(63, 81, 181, 0.2);
     }
 }
