@@ -37,10 +37,6 @@ export class AuthService {
           localStorage.setItem('userName', user.name);
           localStorage.setItem('userRole', user.role);
           this.updateAuthStatus();
-        } else if (email === 'admin@sonnenhof.de') {
-          // Restore fallback admin name
-          localStorage.setItem('userName', 'Administrator');
-          this.updateAuthStatus();
         }
       }
     }
@@ -82,18 +78,6 @@ export class AuthService {
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', user.name);
       localStorage.setItem('userRole', user.role);
-      localStorage.setItem('loginTimestamp', new Date().toISOString());
-      this.updateAuthStatus();
-      return true;
-    }
-
-    // Fallback for initial setup if no users exist yet (Demo Admin)
-    // Remove this once you have created your first admin user!
-    if (email === 'admin@sonnenhof.de' && password === 'adminadmin') {
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userName', 'Administrator');
-      localStorage.setItem('userRole', 'admin');
       localStorage.setItem('loginTimestamp', new Date().toISOString());
       this.updateAuthStatus();
       return true;
