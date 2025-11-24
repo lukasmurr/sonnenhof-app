@@ -1,0 +1,93 @@
+.settings-wrapper {
+    min-height: 100%;
+    padding: 24px;
+    background: #f5f5f5;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .back-button {
+            color: #3F51B5;
+            font-size: 28px;
+
+            &:hover {
+                background-color: rgba(63, 81, 181, 0.1);
+            }
+        }
+
+        .spacer {
+            width: 40px;
+        }
+    }
+
+    .headline {
+        flex: 1;
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #3F51B5;
+        letter-spacing: 1px;
+        font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+        margin: 0;
+    }
+
+    .settings-content {
+        max-width: 1200px;
+        margin: 0 auto;
+
+        .settings-card {
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+
+            mat-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+
+                .header-actions {
+                    margin-left: auto;
+                }
+            }
+
+            .table-container {
+                overflow-x: auto;
+                
+                table {
+                    width: 100%;
+                    
+                    th.mat-header-cell {
+                        font-weight: 600;
+                        color: #3F51B5;
+                        font-size: 1rem;
+                    }
+
+                    td.mat-cell {
+                        font-size: 0.95rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.status-active {
+    color: #4caf50;
+    font-weight: 500;
+}
+
+.status-locked {
+    color: #f44336;
+    font-weight: 500;
+}
+
+.delete-item {
+    color: #f44336;
+}

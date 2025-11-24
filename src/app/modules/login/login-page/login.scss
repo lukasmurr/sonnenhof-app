@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f5f5f5;
     padding: 20px;
 }
 
@@ -18,7 +18,7 @@
 
 .logo-section {
     text-align: center;
-    color: white;
+    color: #3F51B5;
     animation: fadeInDown 0.6s ease-out;
 
     .logo-image {
@@ -26,7 +26,7 @@
         height: 80px;
         margin-bottom: 12px;
         object-fit: contain;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     }
 
     .logo-title {
@@ -34,7 +34,6 @@
         font-weight: 700;
         letter-spacing: 1px;
         margin: 8px 0 4px 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .logo-subtitle {
@@ -43,6 +42,7 @@
         letter-spacing: 0.5px;
         opacity: 0.9;
         margin: 0;
+        color: #666;
     }
 }
 
@@ -104,35 +104,6 @@
             }
         }
 
-        .form-options {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            margin-top: 8px;
-
-            mat-checkbox ::ng-deep .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background {
-                background-color: #667eea;
-                border-color: #667eea;
-            }
-
-            .forgot-password-link {
-                background: none;
-                border: none;
-                color: #667eea;
-                cursor: pointer;
-                font-size: 0.9rem;
-                font-weight: 500;
-                padding: 0;
-                transition: color 0.2s ease;
-
-                &:hover {
-                    color: #764ba2;
-                    text-decoration: underline;
-                }
-            }
-        }
-
         .login-button {
             padding: 12px 24px !important;
             font-size: 1rem !important;
@@ -140,8 +111,6 @@
             text-transform: uppercase !important;
             letter-spacing: 0.5px !important;
             border-radius: 8px !important;
-            margin-top: 12px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -168,45 +137,6 @@
                 height: 1.2rem;
             }
         }
-    }
-
-    .demo-credentials {
-        margin-top: 24px;
-        padding: 16px;
-        background-color: #f0f4ff;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        color: #555;
-        border-left: 3px solid #667eea;
-
-        p {
-            margin: 4px 0;
-
-            &:first-child {
-                font-weight: 600;
-                color: #333;
-                margin-bottom: 8px;
-            }
-
-            code {
-                background-color: #e8ecff;
-                padding: 2px 6px;
-                border-radius: 4px;
-                font-family: 'Courier New', monospace;
-                color: #667eea;
-                font-weight: 500;
-            }
-        }
-    }
-}
-
-.login-footer {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.85rem;
-
-    p {
-        margin: 0;
     }
 }
 

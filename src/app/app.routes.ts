@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -128,11 +129,11 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     
-    // Settings & Agriculture
+    // Settings
     {
         path: 'settings',
-        canActivate: [authGuard],
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
+        canActivate: [authGuard, adminGuard],
+        loadComponent: () => import('./modules/settings/settings').then(m => m.SettingsComponent)
     },
     {
         path: 'agriculture',

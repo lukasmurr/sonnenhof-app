@@ -46,7 +46,7 @@ export class Login {
     this.initializeForm();
 
     // If already logged in, redirect to landing
-    if (this.authService.isUserLoggedIn()) {
+    if (this.authService.isAuthenticated()) {
       this.router.navigate([this.returnUrl]);
     }
   }
@@ -63,7 +63,7 @@ export class Login {
     this.hidePassword.update(value => !value);
   }
 
-  public onLogin(): void {
+  public async onLogin(): Promise<void> {
     if (this.loginForm.invalid) {
       this.loginError.set('Bitte füllen Sie alle Felder korrekt aus.');
       return;
@@ -72,28 +72,28 @@ export class Login {
     this.isLoading.set(true);
     this.loginError.set(null);
 
-    // Simuliere Login-Prozess (in Produktion würde hier ein API-Call stattfinden)
-    setTimeout(() => {
+    try {
       const { email, password, rememberMe } = this.loginForm.value;
 
       // Verwende AuthService für Login
-      if (this.authService.login(email, password)) {
+      const success = await this.authService.login(email, password);
+      
+      if (success) {
         // Optionaler "Remember Me" Feature
         if (rememberMe) {
           localStorage.setItem('rememberEmail', email);
         }
 
-        this.isLoading.set(false);
         this.router.navigate([this.returnUrl]);
       } else {
-        this.isLoading.set(false);
         this.loginError.set('Email oder Passwort ist falsch.');
       }
-    }, 1500);
-  }
-
-  public forgotPassword(): void {
-    console.log('Passwort vergessen - Seite würde hier implementiert');
+    } catch (error) {
+      console.error('Login error:', error);
+      this.loginError.set('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   public getEmailError(): string {

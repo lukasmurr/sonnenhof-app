@@ -4,7 +4,7 @@
         <div class="logo-section">
             <img src="assets/favicon.ico" alt="Sonnenhof Logo" class="logo-image">
             <h1 class="logo-title">Sonnenhof</h1>
-            <p class="logo-subtitle">Management System</p>
+            <p class="logo-subtitle">Management App</p>
         </div>
 
         <!-- Login Card -->
@@ -46,14 +46,11 @@
                     </mat-error>
                 </mat-form-field>
 
-                <!-- Remember Me & Forgot Password -->
+                <!-- Remember Me -->
                 <div class="form-options">
-                    <mat-checkbox formControlName="rememberMe">
+                    <mat-checkbox formControlName="rememberMe" color="primary">
                         <span>Anmeldedaten merken</span>
                     </mat-checkbox>
-                    <button type="button" class="forgot-password-link" (click)="forgotPassword()">
-                        Passwort vergessen?
-                    </button>
                 </div>
 
                 <!-- Submit Button -->
@@ -64,18 +61,6 @@
                     <span>{{ isLoading() ? 'Wird angemeldet...' : 'Anmelden' }}</span>
                 </button>
             </form>
-
-            <!-- Demo Credentials Info -->
-            <div class="demo-credentials">
-                <p><strong>Demo-Anmeldedaten:</strong></p>
-                <p>Email: <code>demo@sonnenhof.de</code></p>
-                <p>Passwort: <code>password123</code></p>
-            </div>
         </mat-card>
-
-        <!-- Footer -->
-        <div class="login-footer">
-            <p>&copy; 2025 Sonnenhof Management. Alle Rechte vorbehalten.</p>
-        </div>
     </div>
 </div>

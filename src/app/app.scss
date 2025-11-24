@@ -64,6 +64,24 @@
     }
 }
 
+.user-info-item {
+    padding: 12px 16px;
+    outline: none;
+    cursor: default;
+    
+    .user-name {
+        font-weight: 500;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .user-email {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 4px;
+    }
+}
+
 .main-container {
     height: 100vh;
 }

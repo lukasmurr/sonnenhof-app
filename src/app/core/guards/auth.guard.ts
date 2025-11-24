@@ -12,7 +12,7 @@ export class AuthGuard {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authService.isUserLoggedIn()) {
+    if (this.authService.isAuthenticated()) {
       return true;
     }
 
@@ -26,7 +26,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isUserLoggedIn()) {
+  if (authService.isAuthenticated()) {
     return true;
   }
 

@@ -8,7 +8,7 @@
   <span class="spacer"></span>
 
   <!-- Settings Icon Button -->
-  <button mat-icon-button (click)="navigateSettings()" class="toolbar-button" color="accent" matTooltip="Einstellungen">
+  <button *ngIf="authService.isAdmin()" mat-icon-button (click)="navigateSettings()" class="toolbar-button" color="accent" matTooltip="Einstellungen">
     <mat-icon>settings</mat-icon>
   </button>
 
@@ -19,11 +19,16 @@
     </button>
 
     <mat-menu #userMenu="matMenu" class="user-menu">
-      <button mat-menu-item (click)="profile()">
-        <mat-icon>person</mat-icon>
-        <span>Profil anzeigen</span>
+      <div class="user-info-item" (click)="$event.stopPropagation()">
+        <div class="user-name">{{ authService.userName() }}</div>
+        <div class="user-email">{{ authService.getCurrentUser() }}</div>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="openChangePasswordDialog()">
+        <mat-icon>lock_reset</mat-icon>
+        <span>Passwort ändern</span>
       </button>
-      <button mat-menu-item routerLink="/settings">
+      <button *ngIf="authService.isAdmin()" mat-menu-item routerLink="/settings">
         <mat-icon>security</mat-icon>
         <span>Sicherheit</span>
       </button>
