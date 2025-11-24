@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-butchery-landing',
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
 })
 export class ButcheryLanding {
     constructor(private router: Router) {
-        console.log((window as any).process?.env?.COUCHDB_REMOTE_URL);
+        console.log('CouchDB URL:', environment.couchdb.remoteUrl);
     }
 
     public navigateToSection(section: string): void {
