@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -14,6 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from './core/services/auth.service';
+import { CouchDbService } from './core/services/pouchdb.service';
 import { UserService } from './core/services/user.service';
 import { ChangePasswordDialogComponent } from './modules/settings/change-password-dialog/change-password-dialog';
 
@@ -42,9 +44,11 @@ export class App {
   private router = inject(Router);
   public authService = inject(AuthService);
   private userService = inject(UserService);
+  private couchDbService = inject(CouchDbService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   protected showToolbar = signal(false);
+  public syncStatus = toSignal(this.couchDbService.syncStatus$);
 
   constructor() {
     this.router.events

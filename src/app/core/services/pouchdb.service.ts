@@ -10,6 +10,7 @@ declare const PouchDB: any;
 export class CouchDbService {
     private db!: any;
     private dbInitialized$ = new BehaviorSubject<boolean>(false);
+    public syncStatus$ = new BehaviorSubject<'online' | 'offline' | 'syncing'>('offline');
 
     constructor() {
         this.initializeDatabase();
@@ -34,19 +35,28 @@ export class CouchDbService {
             })
             .on('change', (info: any) => {
                 console.log('CouchDB Sync change:', info);
+                this.syncStatus$.next('syncing');
             })
-            .on('paused', () => {
+            .on('paused', (err: any) => {
                 console.log('CouchDB Sync paused (caught up)');
+                if (err) {
+                    this.syncStatus$.next('offline');
+                } else {
+                    this.syncStatus$.next('online');
+                }
             })
             .on('active', () => {
                 console.log('CouchDB Sync active (syncing)');
+                this.syncStatus$.next('syncing');
             })
             .on('denied', (err: any) => {
                 console.error('CouchDB Sync denied:', err);
+                this.syncStatus$.next('offline');
             })
             .on('error', (err: any) => {
                 console.warn('CouchDB Sync error (working offline):', err);
                 this.dbInitialized$.next(true);
+                this.syncStatus$.next('offline');
             });
     }
 
