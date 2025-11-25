@@ -20,8 +20,7 @@
   </div>
 
   <div class="toolbar-right">
-    <button *ngIf="authService.isAdmin()" mat-icon-button (click)="navigateSettings()" class="toolbar-button"
-      matTooltip="Einstellungen">
+    <button *ngIf="authService.isAdmin()" mat-icon-button (click)="navigateSettings()" class="toolbar-button">
       <mat-icon>settings</mat-icon>
     </button>
 

@@ -74,7 +74,6 @@ export class AuthService {
     const user = await this.userService.verifyCredentials(email, password);
     
     if (user) {
-      user.role = "admin";
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', user.name);
