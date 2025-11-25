@@ -68,7 +68,7 @@
     padding: 12px 16px;
     outline: none;
     cursor: default;
-    
+
     .user-name {
         font-weight: 500;
         font-size: 1rem;
@@ -147,4 +147,31 @@
     border-radius: 24px 0 0 0;
     overflow: auto;
     min-width: 0;
+}
+
+.app-sidenav-container {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    background-color: transparent;
+}
+
+.app-sidenav {
+    width: 280px;
+
+    .sidenav-header {
+        padding: 24px 16px;
+        background-color: #fff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+        h3 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.menu-button {
+    margin-right: 8px;
 }

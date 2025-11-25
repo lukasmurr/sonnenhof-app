@@ -1,4 +1,9 @@
 <mat-toolbar *ngIf="showToolbar()" class="app-toolbar">
+  <!-- Menu Button -->
+  <button mat-icon-button (click)="toggleSidenav(sidenav, $event)" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <!-- Logo/Brand + Home -->
   <div class="toolbar-logo" (click)="navigateHome()">
     <img src="assets/favicon.ico" alt="Sonnenhof Logo" class="toolbar-logo-image">
@@ -8,7 +13,8 @@
   <span class="spacer"></span>
 
   <!-- Settings Icon Button -->
-  <button *ngIf="authService.isAdmin()" mat-icon-button (click)="navigateSettings()" class="toolbar-button" color="accent" matTooltip="Einstellungen">
+  <button *ngIf="authService.isAdmin()" mat-icon-button (click)="navigateSettings()" class="toolbar-button"
+    color="accent" matTooltip="Einstellungen">
     <mat-icon>settings</mat-icon>
   </button>
 
@@ -41,4 +47,65 @@
   </div>
 </mat-toolbar>
 
-<router-outlet />
+<mat-sidenav-container class="app-sidenav-container" [hasBackdrop]="true">
+  <mat-sidenav #sidenav mode="over" class="app-sidenav">
+    <mat-nav-list>
+      <div mat-subheader>Metzgerei</div>
+      <a mat-list-item (click)="navigateAndClose('butchery/products', sidenav)">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Produkte</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('butchery/orders', sidenav)">
+        <mat-icon matListItemIcon>shopping_cart</mat-icon>
+        <span matListItemTitle>Bestellungen</span>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <div mat-subheader>Büro</div>
+      <a mat-list-item (click)="navigateAndClose('office/tuev', sidenav)">
+        <mat-icon matListItemIcon>fact_check</mat-icon>
+        <span matListItemTitle>TÜV</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('office/markets', sidenav)">
+        <mat-icon matListItemIcon>store</mat-icon>
+        <span matListItemTitle>Märkte</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('office/employees', sidenav)">
+        <mat-icon matListItemIcon>badge</mat-icon>
+        <span matListItemTitle>Mitarbeiter</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('office/vacation', sidenav)">
+        <mat-icon matListItemIcon>beach_access</mat-icon>
+        <span matListItemTitle>Urlaub</span>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <div mat-subheader>Landwirtschaft</div>
+      <a mat-list-item (click)="navigateAndClose('farming', sidenav)">
+        <mat-icon matListItemIcon>agriculture</mat-icon>
+        <span matListItemTitle>Übersicht</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('farming/fields', sidenav)">
+        <mat-icon matListItemIcon>landscape</mat-icon>
+        <span matListItemTitle>Felder</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('farming/animals', sidenav)">
+        <mat-icon matListItemIcon>pets</mat-icon>
+        <span matListItemTitle>Tiere</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('farming/harvest', sidenav)">
+        <mat-icon matListItemIcon>grass</mat-icon>
+        <span matListItemTitle>Ernte</span>
+      </a>
+      <a mat-list-item (click)="navigateAndClose('farming/equipment', sidenav)">
+        <mat-icon matListItemIcon>handyman</mat-icon>
+        <span matListItemTitle>Geräte</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

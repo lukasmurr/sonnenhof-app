@@ -2,13 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from './core/services/auth.service';
@@ -28,7 +30,9 @@ import { ChangePasswordDialogComponent } from './modules/settings/change-passwor
     MatDividerModule,
     MatTooltipModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSidenavModule,
+    MatListModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -86,5 +90,16 @@ export class App {
         }
       }
     });
+  }
+
+  public navigateAndClose(path: string, sidenav: any): void {
+    this.router.navigate([path]);
+    sidenav.close();
+  }
+
+  public toggleSidenav(sidenav: any, event: Event): void {
+    sidenav.toggle();
+    // Remove focus from the button to prevent the "selected" look
+    (event.currentTarget as HTMLElement).blur();
   }
 }
