@@ -55,7 +55,7 @@ export class App {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         // Toolbar wird nicht auf Login-Seite angezeigt
-        this.showToolbar.set(event.url !== '/login');
+        this.showToolbar.set(!event.urlAfterRedirects.includes('/login'));
       });
   }
 

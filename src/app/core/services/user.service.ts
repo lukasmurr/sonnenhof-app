@@ -40,7 +40,11 @@ export class UserService {
 
     async verifyCredentials(email: string, password: string): Promise<User | null> {
         const users = await this.dbService.getAllDocs('user');
-        const user = users.find((u: User) => u.email === email && u.password === password && !u.isLocked);
+        const user = users.find((u: User) => 
+            u.email.toLowerCase() === email.toLowerCase() && 
+            u.password === password && 
+            !u.isLocked
+        );
         return user || null;
     }
 
