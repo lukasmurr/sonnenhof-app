@@ -1,33 +1,26 @@
 <div class="landing-wrapper">
-
     <h1 class="headline">Willkommen in der Sonnenhof App</h1>
 
     <div class="card-grid">
-        <!-- Metzgerei Card -->
-        <mat-card class="landing-card metzgerei" (click)="navigate('butchery')">
-            <div class="card-icon"><mat-icon>restaurant_menu</mat-icon></div>
+        <mat-card class="landing-card" (click)="navigate('butchery')" color="primary">
+            <div class="card-icon">
+                <img src="assets/icons/pig.svg" alt="Metzgerei">
+            </div>
             <mat-card-title>Metzgerei</mat-card-title>
-            <mat-card-content>
-                Produktion, Bestände, Qualität.
-            </mat-card-content>
         </mat-card>
 
-        <!-- Büro Card -->
-        <mat-card class="landing-card buero" (click)="navigate('office')">
-            <div class="card-icon"><mat-icon>work_outline</mat-icon></div>
+        <mat-card class="landing-card" (click)="navigate('office')">
+            <div class="card-icon">
+                <img src="assets/icons/office.svg" alt="Büro">
+            </div>
             <mat-card-title>Büro</mat-card-title>
-            <mat-card-content>
-                Verwaltung, Dokumente, Termine.
-            </mat-card-content>
         </mat-card>
 
-        <!-- Landwirtschaft Card -->
-        <mat-card class="landing-card landwirtschaft" (click)="navigate('farming')">
-            <div class="card-icon"><mat-icon>agriculture</mat-icon></div>
+        <mat-card class="landing-card" (click)="navigate('farming')">
+            <div class="card-icon">
+                <img src="assets/icons/traktor.svg" alt="Landwirtschaft">
+            </div>
             <mat-card-title>Landwirtschaft</mat-card-title>
-            <mat-card-content>
-                Felder, Tiere, Ernte.
-            </mat-card-content>
         </mat-card>
     </div>
 </div>

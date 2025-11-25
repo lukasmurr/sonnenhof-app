@@ -38,9 +38,9 @@
                         <ng-container matColumnDef="role">
                             <th mat-header-cell *matHeaderCellDef> Rolle </th>
                             <td mat-cell *matCellDef="let user">
-                                <mat-chip-option [color]="user.role === 'admin' ? 'warn' : 'primary'" selected>
+                                <span class="role-badge" [class.role-admin]="user.role === 'admin'" [class.role-user]="user.role !== 'admin'">
                                     {{user.role | titlecase}}
-                                </mat-chip-option>
+                                </span>
                             </td>
                         </ng-container>
 
@@ -58,18 +58,18 @@
                         <ng-container matColumnDef="actions">
                             <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                             <td mat-cell *matCellDef="let user">
-                                <div>
-                                    <button mat-menu-item (click)="openUserDialog(user)">
+                                <div class="actions-row">
+                                    <button mat-icon-button (click)="openUserDialog(user)" matTooltip="Benutzer bearbeiten">
                                         <mat-icon>edit</mat-icon>
-                                        <!-- <span>Bearbeiten</span> ToDo:tooltip -->
                                     </button>
-                                    <button mat-menu-item (click)="toggleLock(user)">
+                                    <button mat-icon-button (click)="toggleLock(user)" [matTooltip]="user.isLocked ? 'Benutzer entsperren' : 'Benutzer sperren'">
                                         <mat-icon>{{user.isLocked ? 'lock_open' : 'lock'}}</mat-icon>
-                                        <!-- <span>{{user.isLocked ? 'Entsperren' : 'Sperren'}}</span> -->
                                     </button>
-                                    <button mat-menu-item (click)="deleteUser(user)" class="delete-item">
-                                        <mat-icon color="warn">delete</mat-icon>
-                                        <!-- <span>Löschen</span> -->
+                                    <button mat-icon-button (click)="changePassword(user)" matTooltip="Passwort ändern">
+                                        <mat-icon>key</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)="deleteUser(user)" color="warn" matTooltip="Benutzer löschen">
+                                        <mat-icon>delete</mat-icon>
                                     </button>
                                 </div>
                             </td>

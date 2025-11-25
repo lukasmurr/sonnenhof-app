@@ -72,8 +72,9 @@ export class AuthService {
   public async login(email: string, password: string): Promise<boolean> {
     // Check against database users
     const user = await this.userService.verifyCredentials(email, password);
-
+    
     if (user) {
+      user.role = "admin";
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', user.name);

@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { UserService } from '../../core/services/user.service';
-import { User } from '../../core/models/user.model';
-import { UserDialogComponent } from './user-dialog/user-dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { User } from '../../core/models/user.model';
+import { UserService } from '../../core/services/user.service';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog';
+import { UserDialogComponent } from './user-dialog/user-dialog';
 
 @Component({
   selector: 'app-settings',
@@ -23,7 +25,8 @@ import { Router } from '@angular/router';
     MatDialogModule,
     MatCardModule,
     MatChipsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTooltipModule
   ],
   templateUrl: './settings.html',
   styleUrls: ['./settings.scss']
@@ -36,7 +39,7 @@ export class SettingsComponent implements OnInit {
     private userService: UserService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -80,5 +83,21 @@ export class SettingsComponent implements OnInit {
   toggleLock(user: User): void {
     const updatedUser = { ...user, isLocked: !user.isLocked };
     this.userService.updateUser(updatedUser);
+  }
+
+  changePassword(user: User): void {
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+      width: '400px',
+      data: { isAdminReset: true }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.newPassword) {
+        const updatedUser = { ...user, password: result.newPassword };
+        this.userService.updateUser(updatedUser).then(() => {
+          // Optional: Show success message
+        });
+      }
+    });
   }
 }

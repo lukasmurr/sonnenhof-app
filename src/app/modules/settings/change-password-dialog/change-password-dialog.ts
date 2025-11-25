@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,10 +18,10 @@ import { MatInputModule } from '@angular/material/input';
         MatInputModule
     ],
     template: `
-    <h2 mat-dialog-title>Passwort ändern</h2>
+    <h2 mat-dialog-title>{{ data?.isAdminReset ? 'Passwort zurücksetzen' : 'Passwort ändern' }}</h2>
     <mat-dialog-content>
       <form [formGroup]="passwordForm" class="password-form">
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!data?.isAdminReset">
           <mat-label>Aktuelles Passwort</mat-label>
           <input matInput formControlName="currentPassword" type="password">
           <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">
@@ -52,7 +52,7 @@ import { MatInputModule } from '@angular/material/input';
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">Abbrechen</button>
       <button mat-raised-button color="primary" (click)="onSave()" [disabled]="passwordForm.invalid">
-        Ändern
+        {{ data?.isAdminReset ? 'Speichern' : 'Ändern' }}
       </button>
     </mat-dialog-actions>
   `,
@@ -66,10 +66,11 @@ export class ChangePasswordDialogComponent {
 
     constructor(
         private fb: FormBuilder,
-        public dialogRef: MatDialogRef<ChangePasswordDialogComponent>
+        public dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
+        @Optional() @Inject(MAT_DIALOG_DATA) public data: { isAdminReset: boolean } | null
     ) {
         this.passwordForm = this.fb.group({
-            currentPassword: ['', Validators.required],
+            currentPassword: [this.data?.isAdminReset ? '' : '', this.data?.isAdminReset ? [] : [Validators.required]],
             newPassword: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', Validators.required]
         }, { validators: this.passwordMatchValidator });

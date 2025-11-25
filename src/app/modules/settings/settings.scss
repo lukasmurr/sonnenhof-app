@@ -63,9 +63,47 @@
                     td.mat-cell {
                         font-size: 0.95rem;
                     }
+
+                    .mat-column-actions {
+                        width: 1%;
+                        white-space: nowrap;
+                        padding-right: 0;
+                    }
+
+                    th.mat-column-actions {
+                        text-align: left;
+                    }
+
+                    td.mat-column-actions {
+                        text-align: right;
+
+                        .actions-row {
+                            display: flex;
+                            justify-content: flex-end;
+                            gap: 4px;
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+.role-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+    
+    &.role-admin {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+    
+    &.role-user {
+        background-color: #e3f2fd;
+        color: #1565c0;
     }
 }
 
