@@ -18,6 +18,7 @@ export class CouchDbService {
 
     private initializeDatabase(): void {
         this.db = new PouchDB('sonnenhof_db');
+        console.log("remoteUrl:", environment.couchdb.remoteUrl);
 
         const remoteUrl = environment.couchdb.remoteUrl;
         if (!remoteUrl) {
