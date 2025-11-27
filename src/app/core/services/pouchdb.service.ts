@@ -26,7 +26,8 @@ export class CouchDbService {
                 headers: {
                     'ngrok-skip-browser-warning': 'true'
                 },
-                timeout: 30000
+                timeout: 30000,
+                withCredentials: false
             }
         })
             .on('complete', () => {
@@ -149,5 +150,46 @@ export class CouchDbService {
 
     public generateId(): string {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    public isInitialized(): Observable<boolean> {
+        return this.dbInitialized$.asObservable();
+    }
+
+    public clearDatabase(): Promise<void> {
+        return this.db.destroy().then(() => {
+            this.db = new PouchDB('sonnenhof_db');
+            this.dbInitialized$.next(true);
+        });
+    }
+
+    public async checkRemoteConnection(): Promise<boolean> {
+        try {
+            const remoteDb = new PouchDB('https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db', {
+                ajax: {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    withCredentials: false
+                }
+            });
+            await remoteDb.info();
+            return true;
+        } catch (err) {
+            console.error('Remote connection check failed:', err);
+            return false;
+        }
+    }
+
+    public async manualSync(): Promise<any> {
+        const remoteUrl = 'https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db';
+        return this.db.sync(remoteUrl, {
+            ajax: {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                withCredentials: false
+            }
+        });
     }
 }
