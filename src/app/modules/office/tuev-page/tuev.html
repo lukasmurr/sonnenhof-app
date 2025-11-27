@@ -152,80 +152,8 @@
                         </div>
 
                         <div *ngIf="upcomingAppointments.length > 0" class="table-container">
-                            <table mat-table [dataSource]="upcomingAppointments" class="full-width-table">
-                                <!-- Fahrzeug -->
-                                <ng-container matColumnDef="vehicleName">
-                                    <th mat-header-cell *matHeaderCellDef>Fahrzeug</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.vehicleName }}</td>
-                                </ng-container>
-
-                                <!-- Datum -->
-                                <ng-container matColumnDef="date">
-                                    <th mat-header-cell *matHeaderCellDef>Datum</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.appointmentDate | date: 'dd.MM.yyyy
-                                        HH:mm' }}</td>
-                                </ng-container>
-
-                                <!-- Status -->
-                                <ng-container matColumnDef="status">
-                                    <th mat-header-cell *matHeaderCellDef>Status</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <mat-chip [ngClass]="getStatusBadgeClass(element.status)">
-                                            {{ element.status }}
-                                        </mat-chip>
-                                    </td>
-                                </ng-container>
-
-                                <!-- Prüfer -->
-                                <ng-container matColumnDef="inspector">
-                                    <th mat-header-cell *matHeaderCellDef>Prüfer</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.inspector || '-' }}</td>
-                                </ng-container>
-
-                                <!-- Bestanden -->
-                                <ng-container matColumnDef="passed">
-                                    <th mat-header-cell *matHeaderCellDef>Bestanden</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <mat-icon *ngIf="element.passedInspection"
-                                            class="icon-success">check_circle</mat-icon>
-                                        <mat-icon *ngIf="!element.passedInspection" class="icon-warning">cancel</mat-icon>
-                                    </td>
-                                </ng-container>
-
-                                <!-- Aktionen -->
-                                <ng-container matColumnDef="actions">
-                                    <th mat-header-cell *matHeaderCellDef>Aktionen</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <div class="actions-row">
-                                            <button mat-icon-button (click)="toggleAppointmentForm(element)" title="Bearbeiten">
-                                                <mat-icon>edit</mat-icon>
-                                            </button>
-                                            <button mat-icon-button color="warn" (click)="deleteAppointment(element._id!)"
-                                                title="Löschen">
-                                                <mat-icon>delete</mat-icon>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </ng-container>
-
-                                <tr mat-header-row *matHeaderRowDef="appointmentDisplayColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: appointmentDisplayColumns;"></tr>
-                            </table>
-                        </div>
-
-                        <div *ngIf="upcomingAppointments.length === 0 && !showAppointmentForm" class="empty-state">
-                            <mat-icon>event_note</mat-icon>
-                            <p>Keine anstehenden Termine gefunden</p>
-                        </div>
-
-                        <!-- Überfällige Termine -->
-                        <div *ngIf="overdueAppointments.length > 0" class="overdue-section">
-                            <h3 class="overdue-title">
-                                <mat-icon class="warning-icon">warning</mat-icon>
-                                Überfällige Termine ({{ overdueAppointments.length }})
-                            </h3>
-                            <div class="table-container">
-                                <table mat-table [dataSource]="overdueAppointments" class="full-width-table overdue-table">
+                            <div class="table-scroll-wrapper">
+                                <table mat-table [dataSource]="upcomingAppointments" class="full-width-table">
                                     <!-- Fahrzeug -->
                                     <ng-container matColumnDef="vehicleName">
                                         <th mat-header-cell *matHeaderCellDef>Fahrzeug</th>
@@ -284,6 +212,82 @@
                                     <tr mat-header-row *matHeaderRowDef="appointmentDisplayColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: appointmentDisplayColumns;"></tr>
                                 </table>
+                            </div>
+                        </div>
+
+                        <div *ngIf="upcomingAppointments.length === 0 && !showAppointmentForm" class="empty-state">
+                            <mat-icon>event_note</mat-icon>
+                            <p>Keine anstehenden Termine gefunden</p>
+                        </div>
+
+                        <!-- Überfällige Termine -->
+                        <div *ngIf="overdueAppointments.length > 0" class="overdue-section">
+                            <h3 class="overdue-title">
+                                <mat-icon class="warning-icon">warning</mat-icon>
+                                Überfällige Termine ({{ overdueAppointments.length }})
+                            </h3>
+                            <div class="table-container">
+                                <div class="table-scroll-wrapper">
+                                    <table mat-table [dataSource]="overdueAppointments" class="full-width-table overdue-table">
+                                        <!-- Fahrzeug -->
+                                        <ng-container matColumnDef="vehicleName">
+                                            <th mat-header-cell *matHeaderCellDef>Fahrzeug</th>
+                                            <td mat-cell *matCellDef="let element">{{ element.vehicleName }}</td>
+                                        </ng-container>
+
+                                        <!-- Datum -->
+                                        <ng-container matColumnDef="date">
+                                            <th mat-header-cell *matHeaderCellDef>Datum</th>
+                                            <td mat-cell *matCellDef="let element">{{ element.appointmentDate | date: 'dd.MM.yyyy
+                                                HH:mm' }}</td>
+                                        </ng-container>
+
+                                        <!-- Status -->
+                                        <ng-container matColumnDef="status">
+                                            <th mat-header-cell *matHeaderCellDef>Status</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-chip [ngClass]="getStatusBadgeClass(element.status)">
+                                                    {{ element.status }}
+                                                </mat-chip>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Prüfer -->
+                                        <ng-container matColumnDef="inspector">
+                                            <th mat-header-cell *matHeaderCellDef>Prüfer</th>
+                                            <td mat-cell *matCellDef="let element">{{ element.inspector || '-' }}</td>
+                                        </ng-container>
+
+                                        <!-- Bestanden -->
+                                        <ng-container matColumnDef="passed">
+                                            <th mat-header-cell *matHeaderCellDef>Bestanden</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-icon *ngIf="element.passedInspection"
+                                                    class="icon-success">check_circle</mat-icon>
+                                                <mat-icon *ngIf="!element.passedInspection" class="icon-warning">cancel</mat-icon>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Aktionen -->
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="actions-row">
+                                                    <button mat-icon-button (click)="toggleAppointmentForm(element)" title="Bearbeiten">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                    <button mat-icon-button color="warn" (click)="deleteAppointment(element._id!)"
+                                                        title="Löschen">
+                                                        <mat-icon>delete</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="appointmentDisplayColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: appointmentDisplayColumns;"></tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </mat-card-content>

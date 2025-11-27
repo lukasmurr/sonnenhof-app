@@ -308,6 +308,12 @@
         }
     }
 
+    .table-container {
+        .table-scroll-wrapper {
+            overflow: auto;
+        }
+    }
+
     // Table Styles
     .full-width-table {
         width: 100%;

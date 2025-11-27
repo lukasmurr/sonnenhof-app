@@ -45,7 +45,18 @@
             }
 
             .table-container {
-                overflow-x: auto;
+                
+                .table-scroll-wrapper {
+                    overflow: auto;
+                }
+
+                mat-paginator {
+                    font-size: 12px;
+                    
+                    ::ng-deep .mat-mdc-paginator-container {
+                        min-height: 48px;
+                    }
+                }
 
                 table {
                     width: 100%;
