@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
     couchdb: {
-        remoteUrl: 'https://admin:admin@127.0.0.1:5984/sonnenhof_db'
+        remoteUrl: 'https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db'
     }
 };

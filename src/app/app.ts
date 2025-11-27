@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,6 +42,7 @@ import { ChangePasswordDialogComponent } from './modules/settings/change-passwor
 export class App {
   protected readonly title = signal('sonnenhof-management-ui');
   private router = inject(Router);
+  private document = inject(DOCUMENT);
   public authService = inject(AuthService);
   private userService = inject(UserService);
   private couchDbService = inject(CouchDbService);
@@ -49,8 +50,15 @@ export class App {
   private snackBar = inject(MatSnackBar);
   protected showToolbar = signal(false);
   public syncStatus = toSignal(this.couchDbService.syncStatus$);
+  public isDarkMode = signal(false);
 
   constructor() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.isDarkMode.set(true);
+      this.document.body.classList.add('dark-theme');
+    }
+
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
@@ -65,6 +73,17 @@ export class App {
 
   public navigateSettings(): void {
     this.router.navigate(['/settings']);
+  }
+
+  public toggleDarkMode(): void {
+    this.isDarkMode.update(v => !v);
+    if (this.isDarkMode()) {
+      this.document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      this.document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
   }
 
   public logout(): void {

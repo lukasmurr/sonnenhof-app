@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { MarketService } from '../../../core/services/market.service';
 import { Market } from '../../../core/models/market.model';
@@ -23,7 +24,8 @@ import { MarketDialogComponent } from './dialog/market-dialog';
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatCardModule
     ],
     templateUrl: './markets.html',
     styleUrls: ['./markets.scss']

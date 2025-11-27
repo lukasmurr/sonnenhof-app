@@ -259,3 +259,47 @@
 .menu-button {
     margin-right: 8px;
 }
+
+// Dark Theme Overrides
+:host-context(.dark-theme) {
+    .app-toolbar {
+        background: rgba(48, 48, 48, 0.8);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sync-status {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+
+        .status-text {
+            color: #aaa;
+        }
+
+        &.online {
+            background: rgba(76, 175, 80, 0.15);
+            border-color: rgba(76, 175, 80, 0.3);
+            
+            .status-text {
+                color: #81c784;
+            }
+        }
+
+        &.syncing {
+            background: rgba(33, 150, 243, 0.15);
+            border-color: rgba(33, 150, 243, 0.3);
+
+            .status-text {
+                color: #64b5f6;
+            }
+        }
+
+        &.offline {
+            background: rgba(244, 67, 54, 0.15);
+            border-color: rgba(244, 67, 54, 0.3);
+
+            .status-text {
+                color: #e57373;
+            }
+        }
+    }
+}

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
@@ -23,7 +24,8 @@ import { OrderDialogComponent } from './dialog/order-dialog';
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatCardModule
     ],
     templateUrl: './orders.html',
     styleUrls: ['./orders.scss']

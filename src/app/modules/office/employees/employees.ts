@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
@@ -17,11 +19,13 @@ import { EmployeeDialogComponent } from './dialog/employee-dialog';
     imports: [
         CommonModule,
         MatTableModule,
+        MatPaginatorModule,
         MatSortModule,
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatCardModule
     ],
     templateUrl: './employees.html',
     styleUrls: ['./employees.scss']
@@ -30,6 +34,7 @@ export class EmployeesComponent implements OnInit {
     displayedColumns: string[] = ['name', 'birthDate', 'contact', 'actions'];
     dataSource: MatTableDataSource<Employee>;
 
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
     constructor(
@@ -43,6 +48,7 @@ export class EmployeesComponent implements OnInit {
     ngOnInit() {
         this.employeeService.getEmployees().subscribe(employees => {
             this.dataSource.data = employees;
+            this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
         });
     }

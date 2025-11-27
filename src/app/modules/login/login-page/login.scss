@@ -7,6 +7,56 @@
     padding: 20px;
 }
 
+:host-context(.dark-theme) {
+    .login-wrapper {
+        background: #303030;
+    }
+
+    .logo-section {
+        color: #3F51B5; // Keep original blue
+
+        .logo-subtitle {
+            color: #b0bec5;
+        }
+    }
+
+    .login-card {
+        background: #424242;
+        
+        mat-card-header {
+            mat-card-title {
+                color: #eceff1;
+            }
+
+            mat-card-subtitle {
+                color: #b0bec5;
+            }
+        }
+
+        .login-form {
+            .form-field {
+                ::ng-deep .mdc-text-field {
+                    background-color: rgba(255, 255, 255, 0.05);
+                    
+                    .mdc-text-field__input {
+                        color: #eceff1 !important;
+                    }
+
+                    .mat-mdc-floating-label {
+                        color: #b0bec5;
+                    }
+                }
+            }
+        }
+
+        .error-message {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #ef9a9a;
+            border-left-color: #ef5350;
+        }
+    }
+}
+
 .login-container {
     width: 100%;
     max-width: 420px;

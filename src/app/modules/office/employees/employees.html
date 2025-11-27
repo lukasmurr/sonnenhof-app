@@ -1,61 +1,77 @@
 <div class="employees-container">
     <div class="header">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <button mat-icon-button (click)="goBack()">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <h1>Mitarbeiter</h1>
-        </div>
-        <button mat-fab color="primary" (click)="openEmployeeDialog()" aria-label="Neuen Mitarbeiter hinzufügen">
-            <mat-icon>add</mat-icon>
+        <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
         </button>
+        <h1 class="headline">Mitarbeiter</h1>
+        <div class="spacer"></div>
     </div>
 
-    <div class="table-container mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort>
-
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-            </ng-container>
-
-            <!-- BirthDate Column -->
-            <ng-container matColumnDef="birthDate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Geburtsdatum </th>
-                <td mat-cell *matCellDef="let row"> {{row.birthDate | date:'dd.MM.yyyy'}} </td>
-            </ng-container>
-
-            <!-- Contact Column -->
-            <ng-container matColumnDef="contact">
-                <th mat-header-cell *matHeaderCellDef> Kontakt </th>
-                <td mat-cell *matCellDef="let row">
-                    <div *ngIf="row.mobile">Mobil: {{row.mobile}}</div>
-                    <div *ngIf="row.landline">Festnetz: {{row.landline}}</div>
-                    <div *ngIf="row.email">Email: {{row.email}}</div>
-                </td>
-            </ng-container>
-
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Aktionen </th>
-                <td mat-cell *matCellDef="let row">
-                    <button mat-icon-button color="primary" (click)="openEmployeeDialog(row)" matTooltip="Bearbeiten">
-                        <mat-icon>edit</mat-icon>
+    <div class="employees-content">
+        <mat-card class="employees-card">
+            <mat-card-header>
+                <mat-card-title>Mitarbeiter</mat-card-title>
+                <mat-card-subtitle>Verwalten Sie hier Ihre Mitarbeiter</mat-card-subtitle>
+                <div class="header-actions">
+                    <button mat-raised-button color="primary" (click)="openEmployeeDialog()">
+                        <mat-icon>add</mat-icon>
+                        Neuer Mitarbeiter
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteEmployee(row)" matTooltip="Löschen">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </td>
-            </ng-container>
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="table-container">
+                    <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                        </ng-container>
 
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">Keine Mitarbeiter gefunden</td>
-            </tr>
-        </table>
+                        <!-- BirthDate Column -->
+                        <ng-container matColumnDef="birthDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Geburtsdatum </th>
+                            <td mat-cell *matCellDef="let row"> {{row.birthDate | date:'dd.MM.yyyy'}} </td>
+                        </ng-container>
+
+                        <!-- Contact Column -->
+                        <ng-container matColumnDef="contact">
+                            <th mat-header-cell *matHeaderCellDef> Kontakt </th>
+                            <td mat-cell *matCellDef="let row">
+                                <div *ngIf="row.mobile">Mobil: {{row.mobile}}</div>
+                                <div *ngIf="row.landline">Festnetz: {{row.landline}}</div>
+                                <div *ngIf="row.email">Email: {{row.email}}</div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                            <td mat-cell *matCellDef="let row">
+                                <div class="actions-row">
+                                    <button mat-icon-button (click)="openEmployeeDialog(row)" matTooltip="Bearbeiten">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="warn" (click)="deleteEmployee(row)" matTooltip="Löschen">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching data. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">Keine Mitarbeiter gefunden</td>
+                        </tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Mitarbeiter pro Seite"></mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>

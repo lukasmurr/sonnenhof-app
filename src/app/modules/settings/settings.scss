@@ -80,12 +80,27 @@
                         .actions-row {
                             display: flex;
                             justify-content: flex-end;
-                            gap: 4px;
+                            // gap: 4px;
                         }
                     }
                 }
             }
         }
+    }
+}
+
+:host-context(.dark-theme) {
+    .settings-wrapper {
+        background: #303030;
+    }
+
+    .headline {
+        color: #eceff1;
+    }
+
+    .settings-card {
+        background: #424242;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 }
 

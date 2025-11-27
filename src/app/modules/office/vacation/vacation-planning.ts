@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { Vacation } from '../../../core/models/vacation.model';
 import { VacationService } from '../../../core/services/vacation.service';
@@ -25,12 +27,14 @@ interface CalendarDay {
     imports: [
         CommonModule,
         MatTableModule,
+        MatPaginatorModule,
         MatSortModule,
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
         MatTooltipModule,
-        MatTabsModule
+        MatTabsModule,
+        MatCardModule
     ],
     templateUrl: './vacation-planning.html',
     styleUrls: ['./vacation-planning.scss']
@@ -39,6 +43,7 @@ export class VacationPlanningComponent implements OnInit {
     displayedColumns: string[] = ['employeeName', 'startDate', 'endDate', 'status', 'actions'];
     dataSource: MatTableDataSource<Vacation>;
 
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
     // Calendar properties
@@ -56,9 +61,14 @@ export class VacationPlanningComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.loadVacations();
+    }
+
+    loadVacations() {
         this.vacationService.getVacations().subscribe(vacations => {
             this.allVacations = vacations;
             this.dataSource.data = vacations;
+            this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.generateCalendar();
         });
@@ -144,7 +154,6 @@ export class VacationPlanningComponent implements OnInit {
         this.openVacationDialog(vacation);
     }
 
-    // ... existing code ...
     getStatusColor(status: string): string {
         switch (status) {
             case 'approved': return '#66bb6a'; // Green

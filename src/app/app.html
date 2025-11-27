@@ -35,13 +35,13 @@
           <div class="user-email">{{ authService.getCurrentUser() }}</div>
         </div>
         <mat-divider></mat-divider>
+        <button mat-menu-item (click)="toggleDarkMode()">
+          <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <span>{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
+        </button>
         <button mat-menu-item (click)="openChangePasswordDialog()">
           <mat-icon>lock_reset</mat-icon>
           <span>Passwort ändern</span>
-        </button>
-        <button *ngIf="authService.isAdmin()" mat-menu-item routerLink="/settings">
-          <mat-icon>security</mat-icon>
-          <span>Sicherheit</span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="logout()">

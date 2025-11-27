@@ -15,6 +15,25 @@
     }
 }
 
+:host-context(.dark-theme) {
+    .landing-wrapper {
+        background: #303030;
+
+        .headline {
+            color: #eceff1;
+        }
+    }
+
+    .landing-card {
+        background: #3F51B5; // Keep original blue
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+
+        &:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+    }
+}
+
 .card-grid {
     display: flex;
     justify-content: center;

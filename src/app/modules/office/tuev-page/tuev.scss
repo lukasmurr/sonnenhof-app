@@ -12,15 +12,6 @@
         margin-left: auto;
         margin-right: auto;
 
-        .back-button {
-            color: #3F51B5;
-            font-size: 28px;
-
-            &:hover {
-                background-color: rgba(63, 81, 181, 0.1);
-            }
-        }
-
         .spacer {
             width: 40px;
         }
@@ -300,6 +291,23 @@
         }
     }
 
+    .tuev-card {
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+
+        mat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+
+            .header-actions {
+                margin-left: auto;
+            }
+        }
+    }
+
     // Table Styles
     .full-width-table {
         width: 100%;
@@ -325,8 +333,23 @@
             background-color: #fafafa;
         }
 
-        button {
-            margin: 0 4px;
+        .mat-column-actions {
+            width: 1%;
+            white-space: nowrap;
+            padding-right: 0;
+        }
+
+        th.mat-column-actions {
+            text-align: left;
+        }
+
+        td.mat-column-actions {
+            text-align: right;
+
+            .actions-row {
+                display: flex;
+                justify-content: flex-end;
+            }
         }
     }
 
@@ -494,15 +517,13 @@
     // Responsive Design
     @media (max-width: 768px) {
         .header {
-            padding: 15px 20px;
 
             .headline {
-                font-size: 20px;
+                font-size: 30px;
             }
         }
 
         .tab-content {
-            padding: 15px 20px;
             max-height: calc(100vh - 180px);
         }
 
@@ -530,6 +551,33 @@
                 margin: 2px;
                 padding: 4px;
             }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .header {
+
+            .headline {
+                font-size: 30px;
+            }
+        }
+    }
+}
+
+:host-context(.dark-theme) {
+    .tuev-wrapper {
+        background: #303030;
+    }
+
+    .headline {
+        color: #eceff1;
+    }
+
+    .back-button {
+        color: #eceff1;
+        
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
     }
 }

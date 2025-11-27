@@ -52,57 +52,70 @@
         </mat-tab>
         
         <mat-tab label="Tabelle">
-            <div class="table-container mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" matSort>
+            <div class="tab-content">
+                <mat-card class="vacation-card">
+                    <mat-card-header>
+                        <mat-card-title>Urlaubsübersicht</mat-card-title>
+                        <mat-card-subtitle>Alle Urlaubsanträge im Überblick</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="table-container">
+                            <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
-                    <!-- Employee Column -->
-                    <ng-container matColumnDef="employeeName">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mitarbeiter </th>
-                        <td mat-cell *matCellDef="let row"> {{row.employeeName}} </td>
-                    </ng-container>
+                                <!-- Employee Column -->
+                                <ng-container matColumnDef="employeeName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Mitarbeiter </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.employeeName}} </td>
+                                </ng-container>
 
-                    <!-- Start Date Column -->
-                    <ng-container matColumnDef="startDate">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Von </th>
-                        <td mat-cell *matCellDef="let row"> {{row.startDate | date:'dd.MM.yyyy'}} </td>
-                    </ng-container>
+                                <!-- Start Date Column -->
+                                <ng-container matColumnDef="startDate">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Von </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.startDate | date:'dd.MM.yyyy'}} </td>
+                                </ng-container>
 
-                    <!-- End Date Column -->
-                    <ng-container matColumnDef="endDate">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Bis </th>
-                        <td mat-cell *matCellDef="let row"> {{row.endDate | date:'dd.MM.yyyy'}} </td>
-                    </ng-container>
+                                <!-- End Date Column -->
+                                <ng-container matColumnDef="endDate">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Bis </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.endDate | date:'dd.MM.yyyy'}} </td>
+                                </ng-container>
 
-                    <!-- Status Column -->
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                        <td mat-cell *matCellDef="let row">
-                            <span [class]="'status-badge ' + row.status">
-                                {{ getStatusLabel(row.status) }}
-                            </span>
-                        </td>
-                    </ng-container>
+                                <!-- Status Column -->
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span [class]="'status-badge ' + row.status">
+                                            {{ getStatusLabel(row.status) }}
+                                        </span>
+                                    </td>
+                                </ng-container>
 
-                    <!-- Actions Column -->
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef> Aktionen </th>
-                        <td mat-cell *matCellDef="let row">
-                            <button mat-icon-button color="primary" (click)="openVacationDialog(row)" matTooltip="Bearbeiten">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="deleteVacation(row)" matTooltip="Löschen">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
+                                <!-- Actions Column -->
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <div class="actions-row">
+                                            <button mat-icon-button color="primary" (click)="openVacationDialog(row)" matTooltip="Bearbeiten">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="warn" (click)="deleteVacation(row)" matTooltip="Löschen">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                    <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell" colspan="5">Keine Urlaubseinträge gefunden</td>
-                    </tr>
-                </table>
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="5">Keine Urlaubseinträge gefunden</td>
+                                </tr>
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Einträge pro Seite"></mat-paginator>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
             </div>
         </mat-tab>
     </mat-tab-group>
