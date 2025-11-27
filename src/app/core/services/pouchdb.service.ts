@@ -19,7 +19,7 @@ export class CouchDbService {
     private initializeDatabase(): void {
         this.db = new PouchDB('sonnenhof_db');
 
-        this.db.sync("https://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db", {
+        this.db.sync("http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db", {
             live: true,
             retry: true,
             ajax: {
