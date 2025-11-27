@@ -9,6 +9,10 @@
             }
     ],
         "routes": [
-            { "src": "^/(?!.*\\.[^/]+$)(.*)", "dest": "/index.html" }
-        ]
+        {
+            "src": "/couchdb/(.*)",
+            "dest": "http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db/$1"
+        },
+        { "src": "^/(?!.*\\.[^/]+$)(.*)", "dest": "/index.html" }
+    ]
 }

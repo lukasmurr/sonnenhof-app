@@ -165,7 +165,7 @@ export class CouchDbService {
 
     public async checkRemoteConnection(): Promise<boolean> {
         try {
-            const remoteDb = new PouchDB('https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db', {
+            const remoteDb = new PouchDB('http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db', {
                 ajax: {
                     headers: {
                         'ngrok-skip-browser-warning': 'true'
@@ -182,7 +182,7 @@ export class CouchDbService {
     }
 
     public async manualSync(): Promise<any> {
-        const remoteUrl = 'https://admin:server-lukas@f59419414d64.ngrok-free.app/sonnenhof_db';
+        const remoteUrl = 'http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db';
         return this.db.sync(remoteUrl, {
             ajax: {
                 headers: {

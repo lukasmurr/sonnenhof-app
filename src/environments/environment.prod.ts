@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
     couchdb: {
-        remoteUrl: '%%COUCHDB_REMOTE_URL%%' // Placeholder
+        remoteUrl: '/couchdb' // Proxy via Vercel to avoid Mixed Content/CORS
     }
 };
