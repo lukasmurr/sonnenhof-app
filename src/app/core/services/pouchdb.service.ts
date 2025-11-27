@@ -27,7 +27,7 @@ export class CouchDbService {
                     'ngrok-skip-browser-warning': 'true'
                 },
                 timeout: 30000,
-                withCredentials: false
+                withCredentials: true
             }
         })
             .on('complete', () => {
