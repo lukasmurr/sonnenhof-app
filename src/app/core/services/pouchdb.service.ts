@@ -19,7 +19,14 @@ export class CouchDbService {
     private initializeDatabase(): void {
         this.db = new PouchDB('sonnenhof_db');
 
-        this.db.sync("http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db", {
+        const remoteUrl = environment.couchdb.remoteUrl;
+        if (!remoteUrl) {
+            console.warn('No remote CouchDB URL configured. Sync disabled.');
+            this.dbInitialized$.next(true);
+            return;
+        }
+
+        this.db.sync(remoteUrl, {
             live: true,
             retry: true,
             ajax: {
@@ -156,16 +163,12 @@ export class CouchDbService {
         return this.dbInitialized$.asObservable();
     }
 
-    public clearDatabase(): Promise<void> {
-        return this.db.destroy().then(() => {
-            this.db = new PouchDB('sonnenhof_db');
-            this.dbInitialized$.next(true);
-        });
-    }
-
     public async checkRemoteConnection(): Promise<boolean> {
         try {
-            const remoteDb = new PouchDB('http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db', {
+            const remoteUrl = environment.couchdb.remoteUrl;
+            if (!remoteUrl) return false;
+
+            const remoteDb = new PouchDB(remoteUrl, {
                 ajax: {
                     headers: {
                         'ngrok-skip-browser-warning': 'true'
@@ -182,7 +185,9 @@ export class CouchDbService {
     }
 
     public async manualSync(): Promise<any> {
-        const remoteUrl = 'http://admin:server-lukas@0.tcp.eu.ngrok.io:18846/sonnenhof_db';
+        const remoteUrl = environment.couchdb.remoteUrl;
+        if (!remoteUrl) return Promise.resolve();
+
         return this.db.sync(remoteUrl, {
             ajax: {
                 headers: {
