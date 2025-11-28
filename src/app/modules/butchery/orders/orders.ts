@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
 import { OrderDialogComponent } from './dialog/order-dialog';
+import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
+import { PdfService } from '../../../core/services/pdf.service';
+import moment from 'moment';
 
 @Component({
     selector: 'app-orders',
@@ -40,7 +43,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     constructor(
         private orderService: OrderService,
         private dialog: MatDialog,
-        private router: Router
+        private router: Router,
+        private pdfService: PdfService
     ) {
         this.dataSource = new MatTableDataSource<Order>([]);
     }
@@ -93,6 +97,47 @@ export class OrdersComponent implements OnInit, AfterViewInit {
             if (order._id) {
                 this.orderService.deleteOrder(order._id);
             }
+        }
+    }
+
+    openReportDialog(): void {
+        const dialogRef = this.dialog.open(ReportDialogComponent, {
+            width: '400px'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.generateReport(result);
+            }
+        });
+    }
+
+    generateReport(filter: any) {
+        const allOrders = this.dataSource.data;
+        let filteredOrders = [];
+
+        if (filter.type === 'market') {
+            filteredOrders = allOrders.filter(o => o.market === filter.market);
+            
+            if (filter.dateType === 'day') {
+                const date = moment(filter.date).format('YYYY-MM-DD');
+                filteredOrders = filteredOrders.filter(o => moment(o.orderDate).format('YYYY-MM-DD') === date);
+            } else {
+                filteredOrders = filteredOrders.filter(o => {
+                    const orderDate = moment(o.orderDate);
+                    return orderDate.isoWeek() === filter.week && orderDate.year() === filter.year;
+                });
+            }
+
+            this.pdfService.generateMarketVehicleReport(filteredOrders, filter);
+
+        } else if (filter.type === 'production') {
+            filteredOrders = allOrders.filter(o => {
+                const orderDate = moment(o.orderDate);
+                return orderDate.isoWeek() === filter.week && orderDate.year() === filter.year;
+            });
+
+            this.pdfService.generateProductionReport(filteredOrders, filter.week, filter.year);
         }
     }
 }

@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Bericht erstellen</h2>
+<mat-dialog-content>
+  <form [formGroup]="reportForm" class="report-form">
+    
+    <div class="form-row">
+      <mat-radio-group formControlName="type">
+        <mat-radio-button *ngFor="let type of reportTypes" [value]="type.value">
+          {{type.label}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <ng-container *ngIf="reportForm.get('type')?.value === 'market'">
+      <mat-form-field appearance="outline">
+        <mat-label>Markt / Fahrzeug</mat-label>
+        <mat-select formControlName="market">
+          <mat-option *ngFor="let market of markets" [value]="market.name">
+            {{market.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-radio-group formControlName="dateType">
+          <mat-radio-button value="day">Tag</mat-radio-button>
+          <mat-radio-button value="week">Woche</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-form-field appearance="outline" *ngIf="reportForm.get('dateType')?.value === 'day'">
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
+
+    <div class="week-selector" *ngIf="reportForm.get('type')?.value === 'production' || (reportForm.get('type')?.value === 'market' && reportForm.get('dateType')?.value === 'week')">
+      <mat-form-field appearance="outline">
+        <mat-label>Kalenderwoche</mat-label>
+        <input matInput type="number" formControlName="week" min="1" max="53">
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Jahr</mat-label>
+        <input matInput type="number" formControlName="year">
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Abbrechen</button>
+  <button mat-raised-button color="primary" (click)="generate()" [disabled]="reportForm.invalid">Erstellen</button>
+</mat-dialog-actions>

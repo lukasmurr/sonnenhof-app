@@ -13,6 +13,10 @@
                 <mat-card-title>Bestellungen</mat-card-title>
                 <mat-card-subtitle>Verwalten Sie hier Ihre Bestellungen</mat-card-subtitle>
                 <div class="header-actions">
+                    <button mat-stroked-button (click)="openReportDialog()" style="margin-right: 8px;">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                        Bericht
+                    </button>
                     <button mat-raised-button color="primary" (click)="openOrderDialog()">
                         <mat-icon>add</mat-icon>
                         Neue Bestellung

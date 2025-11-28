@@ -1,0 +1,25 @@
+.report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+  
+  mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.week-selector {
+  display: flex;
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
