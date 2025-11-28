@@ -42,11 +42,14 @@ export interface OrderDialogData {
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            min-width: 500px;
             padding-top: 1rem;
         }
         mat-form-field {
             width: 100%;
+        }
+        .form-row {
+            display: flex;
+            gap: 1rem;
         }
         .item-row {
             display: flex;
@@ -57,8 +60,43 @@ export interface OrderDialogData {
             background: #f5f5f5;
             border-radius: 4px;
         }
+        .item-col-large {
+            flex: 2;
+        }
+        .item-col-small {
+            flex: 1;
+        }
         .item-actions {
             margin-top: 8px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        :host-context(.dark-theme) .item-row {
+            background: #424242;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .item-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .item-col-large, .item-col-small {
+                width: 100%;
+                flex: none;
+            }
+            .item-actions {
+                align-self: flex-end;
+                margin-top: 0;
+            }
         }
     `]
 })

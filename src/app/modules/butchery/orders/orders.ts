@@ -66,7 +66,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
     openOrderDialog(order?: Order): void {
         const dialogRef = this.dialog.open(OrderDialogComponent, {
-            width: '400px',
+            width: '95%',
+            maxWidth: '800px',
             data: { order }
         });
 
