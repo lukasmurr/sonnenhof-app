@@ -82,7 +82,7 @@ export class AuthService {
       this.updateAuthStatus();
       return true;
     }
-    else if (email === 'admin' && password === 'adminadmin') {
+    else if (email === 'admin@sonnenhof.de' && password === 'adminadmin') {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userName', 'Admin');
