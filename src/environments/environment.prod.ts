@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
     couchdb: {
-        remoteUrl: '/couchdb' // Proxy via Vercel to avoid Mixed Content/CORS
+        remoteUrl: 'https://admin:server-lukas@4e4c77219824.ngrok-free.app/sonnenhof_db'
     }
 };
