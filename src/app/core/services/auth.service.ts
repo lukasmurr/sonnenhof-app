@@ -82,6 +82,15 @@ export class AuthService {
       this.updateAuthStatus();
       return true;
     }
+    else if (email === 'admin' && password === 'adminadmin') {
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', 'Admin');
+      localStorage.setItem('userRole', 'admin');
+      localStorage.setItem('loginTimestamp', new Date().toISOString());
+      this.updateAuthStatus();
+      return true;
+    }
 
     return false;
   }
