@@ -68,11 +68,11 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         });
     }
 
-    openOrderDialog(order?: Order): void {
+    openOrderDialog(order?: Order, isReorder: boolean = false): void {
         const dialogRef = this.dialog.open(OrderDialogComponent, {
             width: '95%',
             maxWidth: '800px',
-            data: { order }
+            data: { order, isReorder }
         });
 
         dialogRef.afterClosed().subscribe(result => {

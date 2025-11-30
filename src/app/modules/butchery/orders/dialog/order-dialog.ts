@@ -15,9 +15,11 @@ import { Product } from '../../../../core/models/product.model';
 import { ProductService } from '../../../../core/services/product.service';
 import { Market } from '../../../../core/models/market.model';
 import { MarketService } from '../../../../core/services/market.service';
+import { atLeastOneContactValidator } from '../../../../core/validators/at-least-one-contact.validator';
 
 export interface OrderDialogData {
     order?: Order;
+    isReorder?: boolean;
 }
 
 @Component({
@@ -53,21 +55,35 @@ export interface OrderDialogData {
         }
         .item-row {
             display: flex;
-            gap: 1rem;
+            gap: 12px;
             align-items: flex-start;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
-            background: #f5f5f5;
-            border-radius: 4px;
+            margin-bottom: 8px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: background-color 0.2s;
         }
-        .item-col-large {
-            flex: 2;
+        .item-row:hover {
+            background: #f0f0f0;
         }
-        .item-col-small {
+        .item-col-product {
+            flex: 3;
+            min-width: 200px;
+        }
+        .item-col-quantity {
             flex: 1;
+            min-width: 100px;
+        }
+        .item-col-notes {
+            flex: 2;
+            min-width: 150px;
         }
         .item-actions {
-            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            height: 56px; /* Match form field height */
+            justify-content: center;
         }
         .section-header {
             display: flex;
@@ -80,22 +96,30 @@ export interface OrderDialogData {
             background: #424242;
         }
         
-        @media (max-width: 600px) {
+        @media (max-width: 800px) {
             .form-row {
                 flex-direction: column;
                 gap: 0;
             }
             .item-row {
-                flex-direction: column;
-                gap: 0;
+                flex-wrap: wrap;
+                gap: 8px;
             }
-            .item-col-large, .item-col-small {
+            .item-col-product {
+                flex: 1 1 100%;
                 width: 100%;
-                flex: none;
+            }
+            .item-col-quantity {
+                flex: 1 1 calc(40% - 8px);
+            }
+            .item-col-notes {
+                flex: 1 1 calc(60% - 8px);
             }
             .item-actions {
-                align-self: flex-end;
+                flex: 0 0 auto;
+                height: auto;
                 margin-top: 0;
+                align-self: center;
             }
         }
     `]
@@ -119,7 +143,7 @@ export class OrderDialogComponent implements OnInit {
             market: [data.order?.market || '', Validators.required],
             orderDate: [data.order?.orderDate ? new Date(data.order.orderDate) : new Date(), Validators.required],
             items: this.fb.array([])
-        });
+        }, { validators: atLeastOneContactValidator('customerEmail', 'customerPhone') });
 
         if (data.order?.items) {
             data.order.items.forEach(item => this.addItem(item));
@@ -154,6 +178,10 @@ export class OrderDialogComponent implements OnInit {
                     });
                     this.items.push(itemGroup);
                 });
+
+                if (this.data.isReorder) {
+                    this.addItem();
+                }
             }
         });
     }
