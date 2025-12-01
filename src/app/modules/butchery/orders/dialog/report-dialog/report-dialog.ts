@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MarketService } from '../../../../../core/services/market.service';
 import { Market } from '../../../../../core/models/market.model';
@@ -29,9 +28,6 @@ import moment from 'moment';
     MatDatepickerModule,
     MatMomentDateModule,
     MatRadioModule
-  ],
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' }
   ],
   templateUrl: './report-dialog.html',
   styleUrls: ['./report-dialog.scss']
