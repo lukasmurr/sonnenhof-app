@@ -55,7 +55,7 @@ export class MarketDialogComponent {
             day: [data.market?.day || '', Validators.required],
             startTime: [data.market?.startTime || '', Validators.required],
             endTime: [data.market?.endTime || '', Validators.required],
-            car: [data.market?.car || '', Validators.required],
+            car: [data.market?.car || ''],
             hasGrillTrailer: [data.market?.hasGrillTrailer || false]
         });
     }

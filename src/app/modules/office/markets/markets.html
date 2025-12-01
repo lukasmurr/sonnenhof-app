@@ -51,7 +51,7 @@
                             <!-- Car Column -->
                             <ng-container matColumnDef="car">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Auto </th>
-                                <td mat-cell *matCellDef="let row"> Auto {{row.car}} </td>
+                                <td mat-cell *matCellDef="let row"> {{row.car ? 'Auto ' + row.car : ''}} </td>
                             </ng-container>
 
                             <!-- Grill Trailer Column -->

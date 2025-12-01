@@ -7,7 +7,7 @@ export interface Market {
     day: string; // e.g., "Montag", "Dienstag"
     startTime: string; // e.g., "08:00"
     endTime: string; // e.g., "13:00"
-    car: '5' | '6';
+    car?: '5' | '6';
     hasGrillTrailer: boolean;
     createdAt?: string;
     updatedAt?: string;
