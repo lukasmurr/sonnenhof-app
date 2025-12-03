@@ -65,6 +65,11 @@
                 table {
                     width: 100%;
 
+                    .mat-column-puNumber {
+                        width: 100px;
+                        max-width: 100px;
+                    }
+
                     .mat-column-actions {
                         width: 1%;
                         white-space: nowrap;
