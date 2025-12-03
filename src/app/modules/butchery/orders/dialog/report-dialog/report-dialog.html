@@ -19,23 +19,46 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
-      <div class="form-row">
-        <mat-radio-group formControlName="dateType">
-          <mat-radio-button value="day">Tag</mat-radio-button>
-          <mat-radio-button value="week">Woche</mat-radio-button>
-        </mat-radio-group>
-      </div>
-
-      <mat-form-field appearance="outline" *ngIf="reportForm.get('dateType')?.value === 'day'">
-        <mat-label>Datum</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
     </ng-container>
 
-    <div class="week-selector" *ngIf="reportForm.get('type')?.value === 'production' || (reportForm.get('type')?.value === 'market' && reportForm.get('dateType')?.value === 'week')">
+    <ng-container *ngIf="reportForm.get('type')?.value === 'production'">
+        <mat-form-field appearance="outline">
+            <mat-label>Produkt (Optional)</mat-label>
+            <mat-select formControlName="product">
+                <mat-option [value]="''">Alle Produkte</mat-option>
+                <mat-option *ngFor="let product of products" [value]="product.name">
+                    {{product.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
+
+    <div class="form-row">
+      <mat-radio-group formControlName="dateType">
+        <mat-radio-button value="day">Tag</mat-radio-button>
+        <mat-radio-button value="week">Woche</mat-radio-button>
+        <mat-radio-button value="range">Zeitraum</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <mat-form-field appearance="outline" *ngIf="reportForm.get('dateType')?.value === 'day'">
+      <mat-label>Datum</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="reportForm.get('dateType')?.value === 'range'">
+        <mat-label>Zeitraum</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker">
+            <input matStartDate formControlName="startDate" placeholder="Startdatum">
+            <input matEndDate formControlName="endDate" placeholder="Enddatum">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker></mat-date-range-picker>
+    </mat-form-field>
+
+    <div class="week-selector" *ngIf="reportForm.get('dateType')?.value === 'week'">
       <mat-form-field appearance="outline">
         <mat-label>Kalenderwoche</mat-label>
         <input matInput type="number" formControlName="week" min="1" max="53">

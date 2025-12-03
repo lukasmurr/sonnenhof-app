@@ -27,6 +27,9 @@
                 <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 16px;" subscriptSizing="dynamic">
                     <mat-label>Suchen</mat-label>
                     <input matInput (keyup)="applyFilter($event)" placeholder="Nach Kunde, Markt oder Produkt suchen..." #input>
+                    <button mat-icon-button matSuffix (click)="printFilteredOrders()" matTooltip="Suchergebnisse drucken">
+                        <mat-icon>print</mat-icon>
+                    </button>
                     <mat-icon matSuffix>search</mat-icon>
                 </mat-form-field>
 

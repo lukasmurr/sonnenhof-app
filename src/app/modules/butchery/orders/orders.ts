@@ -177,6 +177,13 @@ export class OrdersComponent implements OnInit, AfterViewInit {
             if (filter.dateType === 'day') {
                 const date = moment(filter.date).format('YYYY-MM-DD');
                 filteredOrders = filteredOrders.filter(o => moment(o.orderDate).format('YYYY-MM-DD') === date);
+            } else if (filter.dateType === 'range') {
+                const start = moment(filter.startDate).startOf('day');
+                const end = moment(filter.endDate).endOf('day');
+                filteredOrders = filteredOrders.filter(o => {
+                    const orderDate = moment(o.orderDate);
+                    return orderDate.isBetween(start, end, undefined, '[]');
+                });
             } else {
                 filteredOrders = filteredOrders.filter(o => {
                     const orderDate = moment(o.orderDate);
@@ -187,17 +194,38 @@ export class OrdersComponent implements OnInit, AfterViewInit {
             this.pdfService.generateMarketVehicleReport(filteredOrders, filter);
 
         } else if (filter.type === 'production') {
-            filteredOrders = allOrders.filter(o => {
-                const orderDate = moment(o.orderDate);
-                return orderDate.isoWeek() === filter.week && orderDate.year() === filter.year;
-            });
+            filteredOrders = allOrders;
 
-            this.pdfService.generateProductionReport(filteredOrders, filter.week, filter.year);
+            if (filter.dateType === 'day') {
+                const date = moment(filter.date).format('YYYY-MM-DD');
+                filteredOrders = filteredOrders.filter(o => moment(o.orderDate).format('YYYY-MM-DD') === date);
+            } else if (filter.dateType === 'range') {
+                const start = moment(filter.startDate).startOf('day');
+                const end = moment(filter.endDate).endOf('day');
+                filteredOrders = filteredOrders.filter(o => {
+                    const orderDate = moment(o.orderDate);
+                    return orderDate.isBetween(start, end, undefined, '[]');
+                });
+            } else {
+                filteredOrders = filteredOrders.filter(o => {
+                    const orderDate = moment(o.orderDate);
+                    return orderDate.isoWeek() === filter.week && orderDate.year() === filter.year;
+                });
+            }
+
+            this.pdfService.generateProductionReport(filteredOrders, filter);
         }
     }
 
     printOrder(order: Order): void {
         const market = this.markets.find(m => m.name === order.market);
         this.pdfService.generateOrderPdf(order, market);
+    }
+
+    printFilteredOrders() {
+        const filteredOrders = this.dataSource.filteredData;
+        if (filteredOrders.length > 0) {
+            this.pdfService.generateFilteredOrdersReport(filteredOrders);
+        }
     }
 }

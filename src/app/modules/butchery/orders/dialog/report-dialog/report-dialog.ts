@@ -11,6 +11,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatRadioModule } from '@angular/material/radio';
 import { MarketService } from '../../../../../core/services/market.service';
 import { Market } from '../../../../../core/models/market.model';
+import { ProductService } from '../../../../../core/services/product.service';
+import { Product } from '../../../../../core/models/product.model';
 import moment from 'moment';
 
 @Component({
@@ -35,21 +37,26 @@ import moment from 'moment';
 export class ReportDialogComponent implements OnInit {
   reportForm: FormGroup;
   markets: Market[] = [];
+  products: Product[] = [];
   reportTypes = [
     { value: 'market', label: 'Markt/Fahrzeug Bericht' },
-    { value: 'production', label: 'Produktionsbericht (Woche)' }
+    { value: 'production', label: 'Produktionsbericht' }
   ];
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ReportDialogComponent>,
-    private marketService: MarketService
+    private marketService: MarketService,
+    private productService: ProductService
   ) {
     this.reportForm = this.fb.group({
       type: ['market', Validators.required],
       market: [''],
-      dateType: ['week'], // 'day' or 'week'
+      product: [''],
+      dateType: ['week'], // 'day', 'week', 'range'
       date: [new Date()],
+      startDate: [new Date()],
+      endDate: [new Date()],
       week: [moment().isoWeek()],
       year: [moment().year()]
     });
@@ -58,6 +65,10 @@ export class ReportDialogComponent implements OnInit {
   ngOnInit() {
     this.marketService.getMarkets().subscribe(markets => {
       this.markets = markets;
+    });
+
+    this.productService.getProducts().subscribe(products => {
+      this.products = products.sort((a, b) => a.name.localeCompare(b.name));
     });
 
     // Update validators based on type

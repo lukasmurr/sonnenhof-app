@@ -12,12 +12,14 @@ export class PdfService {
 
   constructor() { }
 
-  generateMarketVehicleReport(orders: Order[], filter: { market: string, date?: Date, week?: number, year?: number }) {
+  generateMarketVehicleReport(orders: Order[], filter: any) {
     const doc = new jsPDF();
     let title = `Bestellbericht - ${filter.market}`;
     
-    if (filter.date) {
+    if (filter.dateType === 'day') {
       title += ` - ${moment(filter.date).format('DD.MM.YYYY')}`;
+    } else if (filter.dateType === 'range') {
+      title += ` - ${moment(filter.startDate).format('DD.MM.YYYY')} bis ${moment(filter.endDate).format('DD.MM.YYYY')}`;
     } else if (filter.week && filter.year) {
       title += ` - KW ${filter.week} / ${filter.year}`;
     }
@@ -53,9 +55,21 @@ export class PdfService {
     doc.save(`Bestellbericht_${filter.market}_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
   }
 
-  generateProductionReport(orders: Order[], week: number, year: number) {
+  generateProductionReport(orders: Order[], filter: any) {
     const doc = new jsPDF();
-    const title = `Produktionsbericht - KW ${week} / ${year}`;
+    let title = `Produktionsbericht`;
+
+    if (filter.dateType === 'day') {
+        title += ` - ${moment(filter.date).format('DD.MM.YYYY')}`;
+    } else if (filter.dateType === 'range') {
+        title += ` - ${moment(filter.startDate).format('DD.MM.YYYY')} bis ${moment(filter.endDate).format('DD.MM.YYYY')}`;
+    } else {
+        title += ` - KW ${filter.week} / ${filter.year}`;
+    }
+
+    if (filter.product) {
+        title += ` (${filter.product})`;
+    }
 
     doc.setFontSize(18);
     doc.text(title, 14, 22);
@@ -67,6 +81,11 @@ export class PdfService {
 
     orders.forEach(order => {
       order.items.forEach(item => {
+        // Filter by product if specified
+        if (filter.product && item.productName !== filter.product) {
+            return;
+        }
+
         const key = `${item.productName}-${item.unit}`;
         if (productMap.has(key)) {
           const existing = productMap.get(key)!;
@@ -95,7 +114,44 @@ export class PdfService {
       headStyles: { fillColor: [66, 66, 66] }
     });
 
-    doc.save(`Produktionsbericht_KW${week}_${year}_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
+    doc.save(`Produktionsbericht_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
+  }
+
+  generateFilteredOrdersReport(orders: Order[]) {
+    const doc = new jsPDF();
+    const title = `Bestellbericht - Suchergebnisse`;
+    
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Erstellt am: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, 30);
+
+    const tableData: any[] = [];
+
+    orders.forEach(order => {
+      order.items.forEach(item => {
+        tableData.push([
+          moment(order.orderDate).format('DD.MM.YYYY'),
+          order.customerName,
+          order.market,
+          item.productName,
+          `${item.quantity} ${item.unit}`,
+          item.notes || ''
+        ]);
+      });
+    });
+
+    autoTable(doc, {
+      head: [['Datum', 'Kunde', 'Markt', 'Produkt', 'Menge', 'Notiz']],
+      body: tableData,
+      startY: 35,
+      theme: 'grid',
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [66, 66, 66] }
+    });
+
+    doc.save(`Bestellbericht_Suche_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
   }
 
   generateOrderPdf(order: Order, market?: Market) {
