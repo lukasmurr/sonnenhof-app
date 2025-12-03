@@ -70,17 +70,11 @@
         <div formArrayName="items">
             <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
                 <div class="item-col-product">
-                    <mat-form-field appearance="outline" style="width: 100%;" subscriptSizing="dynamic">
-                        <mat-label>Produkt</mat-label>
-                        <mat-select formControlName="product" [compareWith]="compareProducts">
-                            <mat-option *ngFor="let product of products" [value]="product">
-                                {{ product.name }} ({{ product.puNumber }})
-                            </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="item.get('product')?.hasError('required')">
-                            Erforderlich
-                        </mat-error>
-                    </mat-form-field>
+                    <app-product-select formControlName="product" [products]="products"></app-product-select>
+                    <div *ngIf="item.get('product')?.hasError('required') && item.get('product')?.touched" 
+                         style="color: #f44336; font-size: 12px; padding-left: 16px; margin-top: -4px;">
+                        Erforderlich
+                    </div>
                 </div>
 
                 <div class="item-col-quantity">

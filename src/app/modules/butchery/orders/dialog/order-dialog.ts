@@ -16,6 +16,7 @@ import { ProductService } from '../../../../core/services/product.service';
 import { Market } from '../../../../core/models/market.model';
 import { MarketService } from '../../../../core/services/market.service';
 import { atLeastOneContactValidator } from '../../../../core/validators/at-least-one-contact.validator';
+import { ProductSelectComponent } from './product-select/product-select';
 
 export interface OrderDialogData {
     order?: Order;
@@ -36,7 +37,8 @@ export interface OrderDialogData {
         MatDatepickerModule,
         MatNativeDateModule,
         MatDividerModule,
-        MatIconModule
+        MatIconModule,
+        ProductSelectComponent
     ],
     templateUrl: './order-dialog.html',
     styles: [`
