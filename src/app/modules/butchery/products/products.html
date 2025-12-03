@@ -20,6 +20,12 @@
                 </div>
             </mat-card-header>
             <mat-card-content>
+                <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 16px;" subscriptSizing="dynamic">
+                    <mat-label>Suchen</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Nach Name oder PU-Nummer suchen..." #input>
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+
                 <div class="table-container">
                     <div class="table-scroll-wrapper">
                         <table mat-table [dataSource]="dataSource" matSort class="full-width-table">

@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
@@ -25,7 +27,9 @@ import { ProductDialogComponent } from './dialog/product-dialog';
         MatIconModule,
         MatDialogModule,
         MatTooltipModule,
-        MatCardModule
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     templateUrl: './products.html',
     styleUrls: ['./products.scss']
@@ -48,6 +52,21 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.productService.initializeProducts();
         this.loadProducts();
+
+        this.dataSource.filterPredicate = (data: Product, filter: string) => {
+            const searchStr = filter.toLowerCase();
+            return data.name.toLowerCase().includes(searchStr) ||
+                data.puNumber.toLowerCase().includes(searchStr);
+        };
+    }
+
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
     }
 
     goBack(): void {

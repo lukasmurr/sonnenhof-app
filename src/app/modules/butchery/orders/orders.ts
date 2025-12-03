@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
@@ -28,7 +30,9 @@ import moment from 'moment';
         MatIconModule,
         MatDialogModule,
         MatTooltipModule,
-        MatCardModule
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule
     ],
     templateUrl: './orders.html',
     styleUrls: ['./orders.scss']
@@ -51,6 +55,27 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.loadOrders();
+        
+        this.dataSource.filterPredicate = (data: Order, filter: string) => {
+            const searchStr = filter.toLowerCase();
+            const customerMatch = data.customerName?.toLowerCase().includes(searchStr) || false;
+            const marketMatch = data.market?.toLowerCase().includes(searchStr) || false;
+            const itemsMatch = data.items?.some(item => 
+                item.productName?.toLowerCase().includes(searchStr) || 
+                (item.notes && item.notes.toLowerCase().includes(searchStr))
+            ) || false;
+            
+            return customerMatch || marketMatch || itemsMatch;
+        };
+    }
+
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
     }
 
     goBack(): void {
