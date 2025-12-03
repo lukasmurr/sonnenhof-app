@@ -1,0 +1,1732 @@
+[
+    {
+        "puNumber": "10",
+        "name": "Aufschnitt 250g VA",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "11",
+        "name": "Pasteten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "12",
+        "name": "Bierkugel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "13",
+        "name": "Bierschinken",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "14",
+        "name": "Bierschinken gebacken",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "16",
+        "name": "Bierwurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "18",
+        "name": "Champignonwurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "20",
+        "name": "Gelbwurst ohne Petersilie",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "21",
+        "name": "Gelbwurst im Naturdarm",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "22",
+        "name": "Weisse im Ring",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "24",
+        "name": "Jagdwurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "25",
+        "name": "Bärlauch-Leberwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "26",
+        "name": "Delikatessleberwurst fein",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "27",
+        "name": "Fleischkäse weiß",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "28",
+        "name": "Apfel-Röstzwiebel-Leberwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "30",
+        "name": "Kochsalami",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "32",
+        "name": "Krakauer im Ring",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "33",
+        "name": "Peppadew",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "35",
+        "name": "Bay. Leberkäse",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "38",
+        "name": "Lyoner",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "39",
+        "name": "Mettwurst fein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "40",
+        "name": "Mettwurst grob",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "41",
+        "name": "Nürnberger Stadtwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "42",
+        "name": "Paprikawurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "44",
+        "name": "Pizzafleischkäse",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "45",
+        "name": "Schweinefilet heiß geräuchert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "48",
+        "name": "Lyoner i. Ring",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "49",
+        "name": "Schweinskäse",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "53",
+        "name": "Zwiebelfleischkäse",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "54",
+        "name": "Zwiebelmettwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "55",
+        "name": "fränkische Bratwürste dick",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "56",
+        "name": "Grillwürste fein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "58",
+        "name": "Geschwollene",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "59",
+        "name": "Käseknacker",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "60",
+        "name": "Knacker",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "61",
+        "name": "Polnische im Ring",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "62",
+        "name": "Regensburger",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "63",
+        "name": "Weißwürste",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "64",
+        "name": "Wiener Würste",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "65",
+        "name": "feine Bratwürste",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "66",
+        "name": "Bratwürste -mini",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "68",
+        "name": "Grillwürste Sortiment VA",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "69",
+        "name": "Debreziner",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "70",
+        "name": "Pfälzer",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "73",
+        "name": "kalter Schweinebraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "86",
+        "name": "Currywurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "87",
+        "name": "Hotdog",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "100",
+        "name": "Schweinebauch mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "101",
+        "name": "Schweinebauch ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "102",
+        "name": "Schweinefilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "103",
+        "name": "Surbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "104",
+        "name": "Schweinehals m. Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "105",
+        "name": "Schweinehals o. Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "106",
+        "name": "Haxe vordere",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "107",
+        "name": "Haxe hintere",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "108",
+        "name": "Grillhaxe (Fließhaxe)",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "109",
+        "name": "Schweineschäufele",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "110",
+        "name": "Schweinerücken o. Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "111",
+        "name": "Schweinekotelett",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "112",
+        "name": "Krustenbraten vom Schwein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "113",
+        "name": "Oberschale v. Schwein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "114",
+        "name": "Schweinerollbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "115",
+        "name": "Schweinegulasch ",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "116",
+        "name": "Grillbauch -Steakado-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "117",
+        "name": "Grillzöpfe",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "118",
+        "name": "Grillscheiben -Steakado- ",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "170",
+        "name": "Grillscheiben -Kräuter-Knoblauch-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "171",
+        "name": "Grillscheiben-Steak-Pfeffer-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "173",
+        "name": "Grillscheiben-Gyros-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "120",
+        "name": "Spareribs",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "121",
+        "name": "Grillrückensteaks Steakado",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "174",
+        "name": "Grillrückensteaks Kräuter-Knoblauch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "175",
+        "name": "Grillrückensteaks Gyros",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "122",
+        "name": "Schweineinnereien",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "123",
+        "name": "Holzfällersteak",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "124",
+        "name": "Kachelsteak",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "125",
+        "name": "Schweineschnitzel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "126",
+        "name": "Schweineleber",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "127",
+        "name": "Spanferkelbraten mit Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "128",
+        "name": "Spanferkelrollbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "129",
+        "name": "Schweinenuss",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "130",
+        "name": "Grillspieße vom SW-Rücken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "131",
+        "name": "Grillfiletspieße",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "132",
+        "name": "Grillspareribs",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "133",
+        "name": "Cordonbleubraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "136",
+        "name": "Jägerbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "137",
+        "name": "Hirtenschuh",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "138",
+        "name": "Grillfackeln",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "139",
+        "name": "Grillspieße vom SW - Bauch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "150",
+        "name": "Schweinehackfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "151",
+        "name": "Rinderhackfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "152",
+        "name": "Hackfleisch gemischt",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "153",
+        "name": "Hackbraten im Schweinenetz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "159",
+        "name": "Schweinebrust gefüllt mit Bratwurstbrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "160",
+        "name": "Schweinefilet gefüllt mit Bratwurstbrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "168",
+        "name": "Schweinefilet gefüllt mit feinem Brät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "161",
+        "name": "Schweinerücken gefüllt mit Bratwurstbrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "162",
+        "name": "Schweinebauch gefüllt mit Bratwurstbrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "163",
+        "name": "Schweinehals gefüllt mit Bratwurstbrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "169",
+        "name": "Schweinehals gefüllt mit feinem Brät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "299",
+        "name": "Suppenknochen (Rind)",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "300",
+        "name": "Rinderbeinscheibe",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "302",
+        "name": "Rinderbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "303",
+        "name": "Rinderwade",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "304",
+        "name": "Rouladen geschnitten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "305",
+        "name": "Rinderoberschale",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "306",
+        "name": "Rinderfilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "307",
+        "name": "Rinderlende (Rostbraten)",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "308",
+        "name": "Rindergulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "309",
+        "name": "Suppenfleisch mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "310",
+        "name": "Suppenfleisch ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "311",
+        "name": "Sauerbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "312",
+        "name": "Rinderhüftsteaks",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "322",
+        "name": "Rinderhüfte",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "315",
+        "name": "Rinderzunge roh",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "317",
+        "name": "Tafelspitz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "318",
+        "name": "Bugblatt",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "319",
+        "name": "Rindfleisch für Gulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "325",
+        "name": "Bürgermeisterspitz Bratenstück",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "327",
+        "name": "Hochrippe Bratenstück",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "324",
+        "name": "Ochsenschwanz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "326",
+        "name": "Rinderzunge roh gepöckelt",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "350",
+        "name": "Rindfleisch-Patties ca.160g TK",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "400",
+        "name": "Brät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "401",
+        "name": "Leberkäsebrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "402",
+        "name": "Brätknödel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "403",
+        "name": "grobes Leberkäsebrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "404",
+        "name": "Maultaschen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "405",
+        "name": "Spargelmaultaschen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "406",
+        "name": "Kürbismaultaschen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "408",
+        "name": "Brät 200g Becher",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "410",
+        "name": "Bratwurstbrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "413",
+        "name": "Pizzaleberkäsebrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "498",
+        "name": "Bauch gekocht",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "499",
+        "name": "Bauch geräuchert geschnitten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "500",
+        "name": "Bauch geräuchert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "501",
+        "name": "Bauernbratwürste geräuchert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "502",
+        "name": "Rauchpeitschen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "503",
+        "name": "Feuerteufel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "504",
+        "name": "Pfefferbeißer",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "505",
+        "name": "Rauchfleisch ganze Stücke",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "506",
+        "name": "Rauchfleisch geschnitten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "507",
+        "name": "Rauchfleisch kleine Stücke VA",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "514",
+        "name": "Rauchfleischscheiben",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "508",
+        "name": "Speck geräuchert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "509",
+        "name": "Rieser Rauchfleisch Sticks",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "510",
+        "name": "Wildschweinschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "511",
+        "name": "Wildkaminwurzen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "512",
+        "name": "Wildkaminwurzen -Paar-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "513",
+        "name": "Brotzeitwammerl",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "549",
+        "name": "Schinkensticks VA",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "550",
+        "name": "Backschinken geschnitten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "551",
+        "name": "Backschinken ganze Stücke",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "552",
+        "name": "Spargelschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "590",
+        "name": "Spargelschinken geschnitten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "553",
+        "name": "Kassler mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "554",
+        "name": "Vorderschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "555",
+        "name": "Hinterschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "556",
+        "name": "Osterschinken -roh-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "557",
+        "name": "Halskassler",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "558",
+        "name": "Kaiserfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "559",
+        "name": "Kräuterschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "560",
+        "name": "Osterbackschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "579",
+        "name": "Pfeffersalami",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "580",
+        "name": "Paprikasalami",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "581",
+        "name": "Salamiaufschnitt",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "582",
+        "name": "Haussalami Sonnenhof",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "583",
+        "name": "Wildsalami Sonnenhof",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "584",
+        "name": "Mediterrane Salami klein",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "586",
+        "name": "Mediterrane Salami groß",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "600",
+        "name": "Blutwurst geräuchert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "602",
+        "name": "Siedwürste (Blutwurst)",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "601",
+        "name": "Siedwürste (Leberwurst)",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "603",
+        "name": "Leberwurst geräuchert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "604",
+        "name": "Preßsack rot",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "605",
+        "name": "Preßsack weiß",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "606",
+        "name": "Speckwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "607",
+        "name": "Sülze",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "608",
+        "name": "Zungenwurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "611",
+        "name": "Bratwurst im Darm",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "612",
+        "name": "Bratwurst im Darm Portionswurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "654",
+        "name": "Hähnchenbrust in Aspik",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "655",
+        "name": "Hähnchen-Curry Sülze",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "680",
+        "name": "Farmersalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "681",
+        "name": "Schweinefett",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "682",
+        "name": "Fleischsalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "683",
+        "name": "Griebenschmalz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "684",
+        "name": "Kosakensalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "685",
+        "name": "Krautsalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "686",
+        "name": "Ochsenmaulsalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "687",
+        "name": "Wurstsalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "688",
+        "name": "Rohkostsalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "689",
+        "name": "Sauerkraut frisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "691",
+        "name": "Zwiebelfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "693",
+        "name": "Sauerkraut gekocht",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "694",
+        "name": "Kartoffelsalat",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "696",
+        "name": "Lammfleisch f.Hackfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "697",
+        "name": "Lamminnereien",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "698",
+        "name": "Lammhackfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "699",
+        "name": "Lammfilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "700",
+        "name": "Lammrücken mit Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "701",
+        "name": "Lammkeule mit Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "702",
+        "name": "Lammschulter mit Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "703",
+        "name": "Lammgulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "704",
+        "name": "Lammrippchen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "705",
+        "name": "Lammrückenkotelett",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "706",
+        "name": "Lammhalskotelett",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "707",
+        "name": "Lammrücken ohne Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "708",
+        "name": "Lammbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "709",
+        "name": "Lammschulter ohne Knochen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "710",
+        "name": "Damwildfilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "711",
+        "name": "Damwildkeule mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "712",
+        "name": "Damwildrücken ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "713",
+        "name": "Damwildrücken mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "714",
+        "name": "Damwildbraten ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "715",
+        "name": "Damwildschulter mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "716",
+        "name": "Damwildrollbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "717",
+        "name": "Damwildgulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "720",
+        "name": "Rehfilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "721",
+        "name": "Rehrücken mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "722",
+        "name": "Rehrücken ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "723",
+        "name": "Rehkeule mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "724",
+        "name": "Rehbraten ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "725",
+        "name": "Rehschulter mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "726",
+        "name": "Rehrollbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "727",
+        "name": "Rehgulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "730",
+        "name": "Hirschfilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "731",
+        "name": "Hirschrücken mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "732",
+        "name": "Hirschrücken ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "733",
+        "name": "Hirschkeule mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "734",
+        "name": "Hirschbraten ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "735",
+        "name": "Hirschschulter mit  Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "736",
+        "name": "Hirschrollbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "737",
+        "name": "Hirschgulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "740",
+        "name": "Wildschweinfilet",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "741",
+        "name": "Wildschweinrücken mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "742",
+        "name": "Wildschweinrücken ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "743",
+        "name": "Wildschweinbraten mit Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "744",
+        "name": "Wildschweinbraten ohne Bein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "745",
+        "name": "Wildschweinrollbraten ",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "746",
+        "name": "Wildschweingulasch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "747",
+        "name": "Wildschweinhaxe",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "748",
+        "name": "Wildschwein -Steaks-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "749",
+        "name": "Wildschweinbraten mit Soße",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "750",
+        "name": "Wildhase -ganz-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "751",
+        "name": "Wildhasenrücken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "753",
+        "name": "Wildhasenkeule",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "755",
+        "name": "Wildhasenläufe",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "758",
+        "name": "Wildhasenklein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "800",
+        "name": "Bauernbratwurst 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "801",
+        "name": "Schweinefleisch im Saft 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "802",
+        "name": "Bauernleberwurst 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "803",
+        "name": "Bauernleberkäse 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "804",
+        "name": "Blutwurst 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "805",
+        "name": "Schinkenwurst 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "806",
+        "name": "Preßsack weiß 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "807",
+        "name": "Preßsack rot 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "808",
+        "name": "Bierwurst 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "810",
+        "name": "Bierschinken 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "811",
+        "name": "Delikatessleberwurst 400g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "815",
+        "name": "Bauernbratwurst 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "816",
+        "name": "Bauernleberwurst 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "817",
+        "name": "Blutwurst 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "818",
+        "name": "Leberkäse 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "819",
+        "name": "Schinkenwurst 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "820",
+        "name": "Preßsack weiß 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "821",
+        "name": "Preßsack rot 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "822",
+        "name": "Bierwurst 200 g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "825",
+        "name": "Delikatessleberwurst 200g",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "826",
+        "name": "Wildbratwurst im Glas",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "899",
+        "name": "Schnitzel paniert",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "900",
+        "name": "Cordon Bleu",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "901",
+        "name": "Schaschlik",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "902",
+        "name": "Gulasch gemischt",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "903",
+        "name": "Schichtbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "904",
+        "name": "Gyros",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "913",
+        "name": "Fleischküchle -Roh-",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "915",
+        "name": "Semmelknödel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "916",
+        "name": "Kartoffelknödelteig",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "917",
+        "name": "Spätzle",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "918",
+        "name": "Fleischküchle",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "921",
+        "name": "Rinderzunge gegart",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "922",
+        "name": "Gulaschsuppe",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "924",
+        "name": "Suppenbrühe",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "949",
+        "name": "Kesselspeck",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "951",
+        "name": "Sulzenstand",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "964",
+        "name": "Schweinebacke",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "972",
+        "name": "Schweineleber gem.",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "974",
+        "name": "Schweinezunge",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "978",
+        "name": "Schweinemagen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "980",
+        "name": "Schweineblut",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "981",
+        "name": "Kronfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "690",
+        "name": "Blaukraut gekocht",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "4020",
+        "name": "Leberknödel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "64",
+        "name": "Wiener Würste",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "2000",
+        "name": "Gelbwurst mit Petersilie",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "5530",
+        "name": "Kassler am Stück",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "604",
+        "name": "Preßsack rot",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "605",
+        "name": "Preßsack weiß",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "505",
+        "name": "Rauchfleisch ganze Stücke",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "2601",
+        "name": "Deli. Leberwurst grob",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "13",
+        "name": "Bierschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "24",
+        "name": "Jagdwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "33",
+        "name": "Peppadew",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "38",
+        "name": "Lyoner",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "42",
+        "name": "Paprikawurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "23",
+        "name": "Schinkenwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "20",
+        "name": "Gelbwurst ohne Petersilie",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "2000",
+        "name": "Gelbwurst mit Petersilie",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "26",
+        "name": "Delikatessleberwurst fein",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "5500",
+        "name": "Fr. Bratwürste dünn",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "5501",
+        "name": "Grillschnecken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "401",
+        "name": "Leberkäsebrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "401",
+        "name": "Leberkäsebrät",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "153",
+        "name": "Hackbraten im Schweinenetz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "153",
+        "name": "Hackbraten im Schweinenetz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "904",
+        "name": "Gyros",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "56",
+        "name": "Grillwürste gebrüht",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "125",
+        "name": "Schweineschnitzel",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "111",
+        "name": "Schweinekotelett",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "514",
+        "name": "Paprikabauch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "950",
+        "name": "Bratensoße",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "29",
+        "name": "Knoblauchwurst",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "407",
+        "name": "Kürbisbrätspätzle",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "1200",
+        "name": "Mini-Spareribs",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "904",
+        "name": "Gyros",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "67",
+        "name": "Bratwurst lang",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "971",
+        "name": "Rinderwurstfleisch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "970",
+        "name": "Schweineschlegel eingesalzen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "969",
+        "name": "Schweineschlegel z. Räuchern",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "167",
+        "name": "Schweinebacke",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "321",
+        "name": "Spickbraten",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "587",
+        "name": "Salami-Snack",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "37",
+        "name": "Käsewurst",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "50",
+        "name": "Pfefferleberkäse",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "679",
+        "name": "Apfel-Griebenschmalz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "678",
+        "name": "Griebenschmalz",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "545",
+        "name": "Rehbackschinken",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "998",
+        "name": "Lammgyros",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "999",
+        "name": "Lammsteak Kräuter-Knoblauch",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "409",
+        "name": "Wildmaultaschen",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "599",
+        "name": "Siedwürste Mix",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "313",
+        "name": "Rinder-Flanksteak",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "497",
+        "name": "Rauchfleisch \"Niederbayrischer Art\"",
+        "unit": "Stück"
+    },
+    {
+        "puNumber": "498",
+        "name": "Rauchfleisch \"Niederbayrischer Art\"",
+        "unit": "Kg"
+    },
+    {
+        "puNumber": "19",
+        "name": "Pistazienlyoner",
+        "unit": "Kg"
+    }
+]

@@ -46,6 +46,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.productService.initializeProducts();
         this.loadProducts();
     }
 
