@@ -71,15 +71,15 @@
                                 <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                                 <td mat-cell *matCellDef="let row">
                                     <div class="actions-row">
-                                        <button mat-icon-button (click)="printOrder(row)" matTooltip="Drucken">
-                                            <mat-icon>print</mat-icon>
-                                        </button>
                                         <button mat-icon-button (click)="markAsPrepared(row)" matTooltip="Als hergerichtet markieren" *ngIf="row.status !== 'prepared'">
                                             <mat-icon>check_circle_outline</mat-icon>
                                         </button>
                                         <span *ngIf="row.status === 'prepared'" style="margin-right: 8px; font-weight: bold; color: green;">
                                             Nr. {{row.orderNumber}}
                                         </span>
+                                        <button mat-icon-button (click)="printOrder(row)" matTooltip="Drucken">
+                                            <mat-icon>print</mat-icon>
+                                        </button>
                                         <button mat-icon-button (click)="openOrderDialog(row, true)" matTooltip="Nachbestellung hinzufügen">
                                             <mat-icon>post_add</mat-icon>
                                         </button>

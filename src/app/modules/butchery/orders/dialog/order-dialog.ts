@@ -144,6 +144,8 @@ export class OrderDialogComponent implements OnInit {
             customerPhone: [data.order?.customerPhone || ''],
             market: [data.order?.market || '', Validators.required],
             orderDate: [data.order?.orderDate ? new Date(data.order.orderDate) : new Date(), Validators.required],
+            status: [data.order?.status || 'open'],
+            orderNumber: [data.order?.orderNumber || ''],
             items: this.fb.array([])
         }, { validators: atLeastOneContactValidator('customerEmail', 'customerPhone') });
 
@@ -247,6 +249,14 @@ export class OrderDialogComponent implements OnInit {
         this.dialogRef.close();
     }
 
+    resetStatus(): void {
+        this.form.patchValue({
+            status: 'open',
+            orderNumber: null
+        });
+        this.form.markAsDirty();
+    }
+
     onSave(): void {
         if (this.form.valid) {
             const formValue = this.form.getRawValue();
@@ -268,7 +278,9 @@ export class OrderDialogComponent implements OnInit {
                 customerPhone: formValue.customerPhone,
                 market: formValue.market,
                 orderDate: formValue.orderDate.toISOString(),
-                items: items
+                items: items,
+                status: formValue.status,
+                orderNumber: formValue.status === 'open' ? undefined : formValue.orderNumber
             };
             
             this.dialogRef.close(result);
