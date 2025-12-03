@@ -20,6 +20,14 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+            <mat-label>Urlaubstage</mat-label>
+            <input matInput type="number" formControlName="vacationDays" placeholder="30">
+            <mat-error *ngIf="form.get('vacationDays')?.hasError('required')">
+                Urlaubstage sind erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
             <mat-label>Festnetz</mat-label>
             <input matInput formControlName="landline" placeholder="01234 56789">
         </mat-form-field>

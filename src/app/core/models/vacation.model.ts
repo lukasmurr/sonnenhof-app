@@ -6,6 +6,7 @@ export interface Vacation {
     employeeName: string;
     startDate: string;
     endDate: string;
+    leaveType: 'vacation' | 'paid_leave' | 'unpaid_leave';
     status: 'approved' | 'pending' | 'rejected';
     notes?: string;
     createdAt?: string;

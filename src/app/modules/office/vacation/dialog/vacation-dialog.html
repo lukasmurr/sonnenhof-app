@@ -14,6 +14,18 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+            <mat-label>Art</mat-label>
+            <mat-select formControlName="leaveType">
+                <mat-option value="vacation">Urlaub</mat-option>
+                <mat-option value="paid_leave">Freistellung (bezahlt)</mat-option>
+                <mat-option value="unpaid_leave">Freistellung (unbezahlt)</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('leaveType')?.hasError('required')">
+                Art ist erforderlich
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
             <mat-label>Zeitraum</mat-label>
             <mat-date-range-input [rangePicker]="picker">
                 <input matStartDate formControlName="startDate" placeholder="Startdatum">
@@ -24,15 +36,6 @@
             <mat-error *ngIf="form.get('startDate')?.hasError('required') || form.get('endDate')?.hasError('required')">
                 Zeitraum ist erforderlich
             </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status">
-                <mat-option value="pending">Ausstehend</mat-option>
-                <mat-option value="approved">Genehmigt</mat-option>
-                <mat-option value="rejected">Abgelehnt</mat-option>
-            </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">

@@ -7,6 +7,7 @@ export interface Employee {
     landline?: string;
     mobile?: string;
     email?: string;
+    vacationDays: number;
     createdAt?: string;
     updatedAt?: string;
 }

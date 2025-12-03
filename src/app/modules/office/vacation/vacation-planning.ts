@@ -40,7 +40,7 @@ interface CalendarDay {
     styleUrls: ['./vacation-planning.scss']
 })
 export class VacationPlanningComponent implements OnInit {
-    displayedColumns: string[] = ['employeeName', 'startDate', 'endDate', 'status', 'actions'];
+    displayedColumns: string[] = ['employeeName', 'leaveType', 'startDate', 'endDate', 'actions'];
     dataSource: MatTableDataSource<Vacation>;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -152,6 +152,21 @@ export class VacationPlanningComponent implements OnInit {
     onVacationClick(event: Event, vacation: Vacation) {
         event.stopPropagation();
         this.openVacationDialog(vacation);
+    }
+
+    getLeaveTypeLabel(type: string): string {
+        switch (type) {
+            case 'vacation': return 'Urlaub';
+            case 'paid_leave': return 'Freistellung (bezahlt)';
+            case 'unpaid_leave': return 'Freistellung (unbezahlt)';
+            default: return 'Urlaub';
+        }
+    }
+
+    getEventClass(vacation: Vacation): string {
+        if (vacation.leaveType === 'paid_leave') return 'paid-leave';
+        if (vacation.leaveType === 'unpaid_leave') return 'unpaid-leave';
+        return vacation.status;
     }
 
     getStatusColor(status: string): string {

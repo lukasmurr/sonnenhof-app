@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { Vacation } from '../../../../core/models/vacation.model';
 import { Employee } from '../../../../core/models/employee.model';
 import { EmployeeService } from '../../../../core/services/employee.service';
+import { VacationService } from '../../../../core/services/vacation.service';
 
 export interface VacationDialogData {
     vacation?: Vacation;
@@ -48,18 +49,20 @@ export interface VacationDialogData {
 export class VacationDialogComponent implements OnInit {
     form: FormGroup;
     employees: Employee[] = [];
+    allVacations: Vacation[] = [];
 
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<VacationDialogComponent>,
         private employeeService: EmployeeService,
+        private vacationService: VacationService,
         @Inject(MAT_DIALOG_DATA) public data: VacationDialogData
     ) {
         this.form = this.fb.group({
             employeeId: [data.vacation?.employeeId || '', Validators.required],
+            leaveType: [data.vacation?.leaveType || 'vacation', Validators.required],
             startDate: [data.vacation?.startDate ? new Date(data.vacation.startDate) : (data.preselectedDate || ''), Validators.required],
             endDate: [data.vacation?.endDate ? new Date(data.vacation.endDate) : (data.preselectedDate || ''), Validators.required],
-            status: [data.vacation?.status || 'pending', Validators.required],
             notes: [data.vacation?.notes || '']
         });
     }
@@ -68,6 +71,9 @@ export class VacationDialogComponent implements OnInit {
         this.employeeService.getEmployees().subscribe(employees => {
             this.employees = employees;
         });
+        this.vacationService.getVacations().subscribe(vacations => {
+            this.allVacations = vacations;
+        });
     }
 
     save() {
@@ -75,13 +81,49 @@ export class VacationDialogComponent implements OnInit {
             const formValue = this.form.value;
             const selectedEmployee = this.employees.find(e => e._id === formValue.employeeId);
             
+            if (formValue.leaveType === 'vacation' && selectedEmployee) {
+                const totalVacationDays = selectedEmployee.vacationDays || 0;
+                const year = formValue.startDate.getFullYear();
+                
+                const usedDays = this.calculateUsedVacationDays(selectedEmployee._id!, year, this.data.vacation?._id);
+                const newDays = this.calculateWorkingDays(formValue.startDate, formValue.endDate);
+
+                if (usedDays + newDays > totalVacationDays) {
+                    alert(`Der Mitarbeiter hat nur ${totalVacationDays} Urlaubstage. Bereits verplant: ${usedDays}. Neuer Urlaub: ${newDays}. Gesamt: ${usedDays + newDays}`);
+                    return;
+                }
+            }
+
             const vacationData = {
                 ...formValue,
                 employeeName: selectedEmployee?.name || 'Unbekannt',
                 startDate: formValue.startDate.toISOString(),
-                endDate: formValue.endDate.toISOString()
+                endDate: formValue.endDate.toISOString(),
+                status: 'approved'
             };
             this.dialogRef.close(vacationData);
         }
+    }
+
+    calculateUsedVacationDays(employeeId: string, year: number, excludeVacationId?: string): number {
+        return this.allVacations
+            .filter(v => v.employeeId === employeeId && 
+                         v.leaveType === 'vacation' && 
+                         v._id !== excludeVacationId &&
+                         new Date(v.startDate).getFullYear() === year)
+            .reduce((acc, v) => acc + this.calculateWorkingDays(new Date(v.startDate), new Date(v.endDate)), 0);
+    }
+
+    calculateWorkingDays(startDate: Date, endDate: Date): number {
+        let count = 0;
+        const curDate = new Date(startDate);
+        const end = new Date(endDate);
+        
+        while (curDate <= end) {
+            const dayOfWeek = curDate.getDay();
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+            curDate.setDate(curDate.getDate() + 1);
+        }
+        return count;
     }
 }

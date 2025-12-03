@@ -51,6 +51,7 @@ export class EmployeeDialogComponent {
         this.form = this.fb.group({
             name: [data.employee?.name || '', Validators.required],
             birthDate: [data.employee?.birthDate ? new Date(data.employee.birthDate) : '', Validators.required],
+            vacationDays: [data.employee?.vacationDays || 30, [Validators.required, Validators.min(0)]],
             landline: [data.employee?.landline || ''],
             mobile: [data.employee?.mobile || ''],
             email: [data.employee?.email || '', [Validators.email]]
