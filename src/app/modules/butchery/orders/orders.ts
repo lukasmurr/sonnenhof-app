@@ -100,6 +100,25 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         }
     }
 
+    markAsPrepared(order: Order): void {
+        const orderNumber = prompt('Bitte geben Sie eine Bestellnummer ein:');
+        if (orderNumber) {
+            // Check for uniqueness
+            const exists = this.dataSource.data.some(o => o.orderNumber === orderNumber && o._id !== order._id);
+            if (exists) {
+                alert('Diese Bestellnummer existiert bereits. Bitte wählen Sie eine andere.');
+                return;
+            }
+
+            const updatedOrder: Order = {
+                ...order,
+                orderNumber: orderNumber,
+                status: 'prepared'
+            };
+            this.orderService.updateOrder(updatedOrder);
+        }
+    }
+
     openReportDialog(): void {
         const dialogRef = this.dialog.open(ReportDialogComponent, {
             width: '400px'

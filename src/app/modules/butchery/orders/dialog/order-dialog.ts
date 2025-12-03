@@ -157,6 +157,14 @@ export class OrderDialogComponent implements OnInit {
     }
 
     ngOnInit() {
+        if (this.data.isReorder) {
+            this.form.get('customerName')?.disable();
+            this.form.get('customerEmail')?.disable();
+            this.form.get('customerPhone')?.disable();
+            this.form.get('market')?.disable();
+            this.form.get('orderDate')?.disable();
+        }
+
         this.marketService.getMarkets().subscribe(markets => {
             this.markets = markets;
         });
@@ -239,7 +247,7 @@ export class OrderDialogComponent implements OnInit {
 
     onSave(): void {
         if (this.form.valid) {
-            const formValue = this.form.value;
+            const formValue = this.form.getRawValue();
             
             const items: OrderItem[] = formValue.items.map((item: any) => {
                 const product = item.product as Product;

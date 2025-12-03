@@ -60,6 +60,10 @@
                     ::ng-deep .mat-mdc-paginator-container {
                         min-height: 48px;
                     }
+
+                    .mat-mdc-paginator {
+                        border-top: 1px solid rgba(0,0,0,0.12);
+                    }
                 }
 
                 table {
@@ -81,6 +85,7 @@
                         .actions-row {
                             display: flex;
                             justify-content: flex-end;
+                            align-items: center;
                         }
                     }
                 }
@@ -110,6 +115,18 @@
     .orders-card {
         background: #424242;
         box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+}
+
+.mat-mdc-paginator {
+    border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.prepared-order {
+    background-color: #e8f5e9 !important; // Light green background
+    
+    &:hover {
+        background-color: #c8e6c9 !important; // Slightly darker green on hover
     }
 }
 

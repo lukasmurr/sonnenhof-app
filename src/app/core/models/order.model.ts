@@ -16,6 +16,8 @@ export interface Order {
     market: string;
     orderDate: string;
     items: OrderItem[];
+    orderNumber?: string;
+    status?: 'open' | 'prepared' | 'completed';
     createdAt?: string;
     updatedAt?: string;
 }
