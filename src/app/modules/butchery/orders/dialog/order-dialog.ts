@@ -240,7 +240,7 @@ export class OrderDialogComponent implements OnInit {
 
     getUnit(index: number): string {
         const product = this.items.at(index).get('product')?.value as Product;
-        return product ? product.unit : '';
+        return product ? product.unit : 'Menge';
     }
 
     onCancel(): void {

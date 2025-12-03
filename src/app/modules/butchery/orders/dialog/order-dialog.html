@@ -1,7 +1,8 @@
-<h2 mat-dialog-title>{{ data.isReorder ? 'Nachbestellung hinzufügen' : (data.order ? 'Bestellung bearbeiten' : 'Neue Bestellung') }}</h2>
+<h2 mat-dialog-title>{{ data.isReorder ? 'Nachbestellung hinzufügen' : (data.order ? 'Bestellung bearbeiten' :
+    'NeueBestellung') }}</h2>
 <mat-dialog-content>
     <form [formGroup]="form" class="order-form">
-        
+
         <!-- Customer Section -->
         <h3>Kundeninformationen</h3>
         <mat-form-field appearance="outline">
@@ -16,7 +17,8 @@
             <mat-form-field appearance="outline" style="flex: 1;">
                 <mat-label>E-Mail</mat-label>
                 <input matInput formControlName="customerEmail" placeholder="max@beispiel.de">
-                <mat-error *ngIf="form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)">
+                <mat-error
+                    *ngIf="form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)">
                     Ungültige E-Mail Adresse
                 </mat-error>
             </mat-form-field>
@@ -24,12 +26,14 @@
             <mat-form-field appearance="outline" style="flex: 1;">
                 <mat-label>Telefon</mat-label>
                 <input matInput formControlName="customerPhone" placeholder="0123 456789">
-                <mat-error *ngIf="form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)">
+                <mat-error
+                    *ngIf="form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)">
                     Ungültige Telefonnummer
                 </mat-error>
             </mat-form-field>
         </div>
-        <div *ngIf="form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)" style="color: #f44336; font-size: 12px; margin-top: -10px; margin-bottom: 10px;">
+        <div *ngIf="form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)"
+            style="color: #f44336; font-size: 12px; margin-top: -10px; margin-bottom: 10px;">
             Bitte geben Sie entweder eine E-Mail-Adresse oder eine Telefonnummer an.
         </div>
 
@@ -58,7 +62,7 @@
         </div>
 
         <mat-divider></mat-divider>
-        
+
         <!-- Items Section -->
         <div class="section-header">
             <h3>Produkte</h3>
@@ -71,17 +75,16 @@
             <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
                 <div class="item-col-product">
                     <app-product-select formControlName="product" [products]="products"></app-product-select>
-                    <div *ngIf="item.get('product')?.hasError('required') && item.get('product')?.touched" 
-                         style="color: #f44336; font-size: 12px; padding-left: 16px; margin-top: -4px;">
+                    <div *ngIf="item.get('product')?.hasError('required') && item.get('product')?.touched"
+                        style="color: #f44336; font-size: 12px; padding-left: 16px; margin-top: -4px;">
                         Erforderlich
                     </div>
                 </div>
 
                 <div class="item-col-quantity">
                     <mat-form-field appearance="outline" style="width: 100%;" subscriptSizing="dynamic">
-                        <mat-label>Menge</mat-label>
+                        <mat-label>{{ getUnit(i) }}</mat-label>
                         <input matInput type="number" formControlName="quantity" placeholder="0">
-                        <span matSuffix *ngIf="getUnit(i)" style="margin-left: 4px;">{{ getUnit(i) }}</span>
                         <mat-error *ngIf="item.get('quantity')?.hasError('required')">
                             Erforderlich
                         </mat-error>
@@ -96,7 +99,8 @@
                 </div>
 
                 <div class="item-actions">
-                    <button mat-icon-button color="warn" type="button" (click)="removeItem(i)" [disabled]="items.length === 1" matTooltip="Entfernen">
+                    <button mat-icon-button color="warn" type="button" (click)="removeItem(i)"
+                        [disabled]="items.length === 1" matTooltip="Entfernen">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>

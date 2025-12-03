@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, OnDestroy, forwardRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, forwardRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Observable, Subject, of } from 'rxjs';
@@ -34,6 +34,7 @@ import { Product } from '../../../../../core/models/product.model';
 })
 export class ProductSelectComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
     @Input() products: Product[] = [];
+    @ViewChild(MatAutocompleteTrigger) trigger!: MatAutocompleteTrigger;
     
     searchControl = new FormControl<string | Product>('');
     filteredProducts$: Observable<Product[]> = of([]);
@@ -109,25 +110,23 @@ export class ProductSelectComponent implements OnInit, OnDestroy, OnChanges, Con
     
     onBlur() {
         this._onTouched();
-        // If the value is a string (user typed but didn't select), clear it or handle it
-        // For now, if it's a string, it means no valid product selected
+        if (!this.trigger.panelOpen) {
+            this.validateSelection();
+        }
+    }
+
+    onPanelClosed() {
+        this.validateSelection();
+    }
+
+    private validateSelection() {
         const value = this.searchControl.value;
         if (typeof value === 'string' && value !== '') {
-             // Optional: try to find exact match or clear
-             // For strict selection, we might want to clear if not selected
-             // But let's leave it for now, the form validation (required) in parent will handle null
-             // Wait, if I type "Wiener" and don't select, value is "Wiener". 
-             // _onChange is not called with a Product.
-             // So the parent form control value remains what it was (or null).
-             // But the input shows "Wiener".
-             // Ideally we should clear the input if no valid selection is made.
-             
              const match = this.products.find(p => p.name === value);
              if (match) {
                  this.searchControl.setValue(match);
                  this._onChange(match);
              } else {
-                 // Reset to null if invalid text
                  this.searchControl.setValue(null);
                  this._onChange(null);
              }
