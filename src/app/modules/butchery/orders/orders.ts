@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
+import { Market } from '../../../core/models/market.model';
+import { MarketService } from '../../../core/services/market.service';
 import { OrderDialogComponent } from './dialog/order-dialog';
 import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
 import { PdfService } from '../../../core/services/pdf.service';
@@ -40,12 +42,14 @@ import moment from 'moment';
 export class OrdersComponent implements OnInit, AfterViewInit {
     displayedColumns: string[] = ['orderDate', 'customerName', 'market', 'items', 'actions'];
     dataSource: MatTableDataSource<Order>;
+    markets: Market[] = [];
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
     constructor(
         private orderService: OrderService,
+        private marketService: MarketService,
         private dialog: MatDialog,
         private router: Router,
         private pdfService: PdfService
@@ -55,6 +59,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.loadOrders();
+        this.loadMarkets();
         
         this.dataSource.filterPredicate = (data: Order, filter: string) => {
             const searchStr = filter.toLowerCase();
@@ -90,6 +95,12 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     loadOrders() {
         this.orderService.getOrders().subscribe(orders => {
             this.dataSource.data = orders;
+        });
+    }
+
+    loadMarkets() {
+        this.marketService.getMarkets().subscribe(markets => {
+            this.markets = markets;
         });
     }
 
@@ -183,5 +194,10 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
             this.pdfService.generateProductionReport(filteredOrders, filter.week, filter.year);
         }
+    }
+
+    printOrder(order: Order): void {
+        const market = this.markets.find(m => m.name === order.market);
+        this.pdfService.generateOrderPdf(order, market);
     }
 }

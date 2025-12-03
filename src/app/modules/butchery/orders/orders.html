@@ -71,6 +71,9 @@
                                 <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                                 <td mat-cell *matCellDef="let row">
                                     <div class="actions-row">
+                                        <button mat-icon-button (click)="printOrder(row)" matTooltip="Drucken">
+                                            <mat-icon>print</mat-icon>
+                                        </button>
                                         <button mat-icon-button (click)="markAsPrepared(row)" matTooltip="Als hergerichtet markieren" *ngIf="row.status !== 'prepared'">
                                             <mat-icon>check_circle_outline</mat-icon>
                                         </button>
