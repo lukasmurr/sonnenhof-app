@@ -22,7 +22,6 @@ jobs:
 
       - name: Build Angular
         run: npm run build -- --configuration production
-        # falls du ein Custom-Script hast: npm run build:prod
 
       - name: Copy dist to server
         uses: appleboy/scp-action@v0.1.7
