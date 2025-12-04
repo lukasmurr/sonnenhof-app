@@ -46,7 +46,8 @@
 
                                     <div class="day-events">
                                         <div class="event-chip" *ngFor="let vacation of day.vacations"
-                                            [ngClass]="getEventClass(vacation)" (click)="onVacationClick($event, vacation)"
+                                            [ngClass]="getEventClass(vacation)"
+                                            (click)="onVacationClick($event, vacation)"
                                             [matTooltip]="vacation.employeeName + ' (' + getLeaveTypeLabel(vacation.leaveType) + '): ' + getStatusLabel(vacation.status)">
                                             {{ vacation.employeeName }}
                                         </div>
