@@ -7,6 +7,9 @@
             <mat-error *ngIf="form.get('puNumber')?.hasError('required')">
                 PU Nummer ist erforderlich
             </mat-error>
+            <mat-error *ngIf="form.get('puNumber')?.hasError('puNumberExists')">
+                Diese PU Nummer existiert bereits
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">

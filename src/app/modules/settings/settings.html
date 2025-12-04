@@ -82,5 +82,18 @@
                 </div>
             </mat-card-content>
         </mat-card>
+
+        <mat-card class="settings-card" style="margin-top: 20px;">
+            <mat-card-header>
+                <mat-card-title>Datenbank Wartung</mat-card-title>
+                <mat-card-subtitle>Tools zur Bereinigung und Wartung der Datenbank</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <button mat-raised-button color="warn" (click)="cleanupProducts()">
+                    <mat-icon>cleaning_services</mat-icon>
+                    Doppelte Produkte bereinigen
+                </button>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>

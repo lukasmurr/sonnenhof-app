@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Observable, from, map, of } from 'rxjs';
 import { Product } from '../../../../core/models/product.model';
+import { ProductService } from '../../../../core/services/product.service';
 
 export interface ProductDialogData {
     product?: Product;
@@ -44,13 +46,34 @@ export class ProductDialogComponent {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<ProductDialogComponent>,
+        private productService: ProductService,
         @Inject(MAT_DIALOG_DATA) public data: ProductDialogData
     ) {
         this.form = this.fb.group({
-            puNumber: [data.product?.puNumber || '', Validators.required],
+            puNumber: [
+                data.product?.puNumber || '',
+                [Validators.required],
+                [this.puNumberValidator()]
+            ],
             name: [data.product?.name || '', Validators.required],
             unit: [data.product?.unit || 'Stück', Validators.required]
         });
+    }
+
+    puNumberValidator(): AsyncValidatorFn {
+        return (control: AbstractControl): Observable<ValidationErrors | null> => {
+            if (!control.value) {
+                return of(null);
+            }
+            // If we are editing and the PU number hasn't changed, it's valid
+            if (this.data.product && this.data.product.puNumber === control.value) {
+                return of(null);
+            }
+
+            return from(this.productService.checkProductExists(control.value)).pipe(
+                map(exists => exists ? { puNumberExists: true } : null)
+            );
+        };
     }
 
     onCancel(): void {

@@ -7,11 +7,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { MatPaginatorIntlDe } from '../../core/services/paginator-intl';
+import { ProductService } from '../../core/services/product.service';
 import { UserService } from '../../core/services/user.service';
 import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog';
@@ -29,7 +31,8 @@ import { UserDialogComponent } from './user-dialog/user-dialog';
     MatCardModule,
     MatChipsModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSnackBarModule
   ],
   providers: [
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlDe }
@@ -46,8 +49,20 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   constructor(
     private userService: UserService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private productService: ProductService,
+    private snackBar: MatSnackBar
   ) { }
+
+  async cleanupProducts() {
+    try {
+      const count = await this.productService.cleanupDuplicates();
+      this.snackBar.open(`${count} doppelte Produkte wurden entfernt.`, 'OK', { duration: 3000 });
+    } catch (error) {
+      console.error('Fehler beim Bereinigen:', error);
+      this.snackBar.open('Fehler beim Bereinigen der Produkte.', 'OK', { duration: 3000 });
+    }
+  }
 
   ngOnInit(): void {
     this.loadUsers();
