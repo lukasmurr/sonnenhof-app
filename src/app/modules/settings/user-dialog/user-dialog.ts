@@ -41,6 +41,8 @@ export class UserDialogComponent {
     this.userForm = this.fb.group({
       _id: [data?._id],
       _rev: [data?._rev],
+      type: [data?.type || 'user'],
+      createdAt: [data?.createdAt],
       name: [data?.name || '', Validators.required],
       email: [data?.email || '', [Validators.required, Validators.email]],
       password: [data?.password || '', this.isEditMode ? [] : [Validators.required]],
