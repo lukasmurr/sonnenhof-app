@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CouchDbService } from './pouchdb.service';
 import { Market } from '../models/market.model';
+import { CouchDbService } from './pouchdb.service';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +9,7 @@ import { Market } from '../models/market.model';
 export class MarketService {
     private readonly TYPE = 'market';
 
-    constructor(private dbService: CouchDbService) {}
+    constructor(private dbService: CouchDbService) { }
 
     getMarkets(): Observable<Market[]> {
         return this.dbService.watchDocs(this.TYPE) as Observable<Market[]>;

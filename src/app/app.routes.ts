@@ -1,23 +1,23 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    
+
     // Login
     {
         path: 'login',
         loadComponent: () => import('./modules/login/login-page/login').then(m => m.Login)
     },
-    
+
     // Landing
     {
         path: 'landing',
         canActivate: [authGuard],
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
-    
+
     // Butchery
     {
         path: 'butchery',
@@ -54,7 +54,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
-    
+
     // Office
     {
         path: 'office',
@@ -101,7 +101,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./modules/office/vacation/vacation-planning').then(m => m.VacationPlanningComponent)
     },
-    
+
     // Farming
     {
         path: 'farming',
@@ -128,7 +128,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
-    
+
     // Settings
     {
         path: 'settings',

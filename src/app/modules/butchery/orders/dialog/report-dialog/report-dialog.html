@@ -70,6 +70,14 @@
       </mat-form-field>
     </div>
 
+    <div class="form-row">
+        <label>Sortierung:</label>
+        <mat-radio-group formControlName="sortBy">
+            <mat-radio-button value="abc">Alphabetisch</mat-radio-button>
+            <mat-radio-button value="puNumber">PU-Nummer</mat-radio-button>
+        </mat-radio-group>
+    </div>
+
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

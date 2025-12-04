@@ -77,7 +77,7 @@ export class Login {
 
       // Verwende AuthService für Login
       const success = await this.authService.login(email, password);
-      
+
       if (success) {
         // Optionaler "Remember Me" Feature
         if (rememberMe) {

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CouchDbService } from './pouchdb.service';
 import { Product } from '../models/product.model';
+import { CouchDbService } from './pouchdb.service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +10,7 @@ import { Product } from '../models/product.model';
 export class ProductService {
     private readonly TYPE = 'product';
 
-    constructor(private dbService: CouchDbService, private http: HttpClient) {}
+    constructor(private dbService: CouchDbService, private http: HttpClient) { }
 
     getProducts(): Observable<Product[]> {
         return this.dbService.watchDocs(this.TYPE) as Observable<Product[]>;

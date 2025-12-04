@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, from, interval } from 'rxjs';
-import { switchMap, map, startWith } from 'rxjs/operators';
-import { Vehicle, TuevAppointment, TuevStatus } from '../models';
-import { CouchDbService } from './pouchdb.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { TuevAppointment, TuevStatus, Vehicle } from '../models';
 import { NotificationService } from './notification.service';
+import { CouchDbService } from './pouchdb.service';
 
 @Injectable({
     providedIn: 'root'
@@ -144,7 +144,7 @@ export class TuevService implements OnDestroy {
         // Lösche auch zugehörige Termine
         const appointments = this.appointments$.value;
         const relatedAppointments = appointments.filter(a => a.vehicleId === vehicleId);
-        
+
         const deleteAppointmentsPromise = Promise.all(
             relatedAppointments.map(a => this.couchDbService.deleteDoc(a._id || ''))
         );
@@ -200,7 +200,7 @@ export class TuevService implements OnDestroy {
             map(appointments => {
                 const now = new Date();
                 const futureDate = new Date(now.getTime() + daysAhead * 24 * 60 * 60 * 1000);
-                
+
                 return appointments.filter(a => {
                     const appointmentDate = new Date(a.appointmentDate);
                     return appointmentDate >= now && appointmentDate <= futureDate;
@@ -232,7 +232,7 @@ export class TuevService implements OnDestroy {
 
         const statuses: TuevStatus[] = vehicles.map(vehicle => {
             const vehicleAppointments = appointments.filter(a => a.vehicleId === vehicle._id);
-            
+
             // Get the latest appointment
             const lastAppointment = vehicleAppointments
                 .sort((a, b) => new Date(b.appointmentDate).getTime() - new Date(a.appointmentDate).getTime())

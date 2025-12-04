@@ -1,23 +1,23 @@
-import { Component, Inject, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-    selector: 'app-change-password-dialog',
-    standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule
-    ],
-    template: `
+  selector: 'app-change-password-dialog',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
+  template: `
     <h2 mat-dialog-title>{{ data?.isAdminReset ? 'Passwort zurücksetzen' : 'Passwort ändern' }}</h2>
     <mat-dialog-content>
       <form [formGroup]="passwordForm" class="password-form">
@@ -56,38 +56,38 @@ import { MatInputModule } from '@angular/material/input';
       </button>
     </mat-dialog-actions>
   `,
-    styles: [`
+  styles: [`
     .full-width { width: 100%; }
     .password-form { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
   `]
 })
 export class ChangePasswordDialogComponent {
-    passwordForm: FormGroup;
+  passwordForm: FormGroup;
 
-    constructor(
-        private fb: FormBuilder,
-        public dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
-        @Optional() @Inject(MAT_DIALOG_DATA) public data: { isAdminReset: boolean } | null
-    ) {
-        this.passwordForm = this.fb.group({
-            currentPassword: [this.data?.isAdminReset ? '' : '', this.data?.isAdminReset ? [] : [Validators.required]],
-            newPassword: ['', [Validators.required, Validators.minLength(6)]],
-            confirmPassword: ['', Validators.required]
-        }, { validators: this.passwordMatchValidator });
-    }
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { isAdminReset: boolean } | null
+  ) {
+    this.passwordForm = this.fb.group({
+      currentPassword: [this.data?.isAdminReset ? '' : '', this.data?.isAdminReset ? [] : [Validators.required]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    }, { validators: this.passwordMatchValidator });
+  }
 
-    passwordMatchValidator(g: FormGroup) {
-        return g.get('newPassword')?.value === g.get('confirmPassword')?.value
-            ? null : { mismatch: true };
-    }
+  passwordMatchValidator(g: FormGroup) {
+    return g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      ? null : { mismatch: true };
+  }
 
-    onCancel(): void {
-        this.dialogRef.close();
-    }
+  onCancel(): void {
+    this.dialogRef.close();
+  }
 
-    onSave(): void {
-        if (this.passwordForm.valid) {
-            this.dialogRef.close(this.passwordForm.value);
-        }
+  onSave(): void {
+    if (this.passwordForm.valid) {
+      this.dialogRef.close(this.passwordForm.value);
     }
+  }
 }

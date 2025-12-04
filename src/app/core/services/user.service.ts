@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, map } from 'rxjs';
-import { CouchDbService } from './pouchdb.service';
+import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { CouchDbService } from './pouchdb.service';
 
 @Injectable({
     providedIn: 'root'
@@ -40,9 +40,9 @@ export class UserService {
 
     async verifyCredentials(email: string, password: string): Promise<User | null> {
         const users = await this.dbService.getAllDocs('user');
-        const user = users.find((u: User) => 
-            u.email.toLowerCase() === email.toLowerCase() && 
-            u.password === password && 
+        const user = users.find((u: User) =>
+            u.email.toLowerCase() === email.toLowerCase() &&
+            u.password === password &&
             !u.isLocked
         );
         return user || null;

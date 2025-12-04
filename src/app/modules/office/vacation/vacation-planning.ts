@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Vacation } from '../../../core/models/vacation.model';
 import { VacationService } from '../../../core/services/vacation.service';
@@ -82,10 +82,10 @@ export class VacationPlanningComponent implements OnInit {
     generateCalendar() {
         const year = this.currentDate.getFullYear();
         const month = this.currentDate.getMonth();
-        
+
         const firstDayOfMonth = new Date(year, month, 1);
         const lastDayOfMonth = new Date(year, month + 1, 0);
-        
+
         // Adjust for Monday start (0 = Sunday, 1 = Monday, ...)
         let startDayOfWeek = firstDayOfMonth.getDay();
         startDayOfWeek = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1; // Convert to 0=Mon, 6=Sun
@@ -117,18 +117,18 @@ export class VacationPlanningComponent implements OnInit {
     createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
         const today = new Date();
         const isToday = date.getDate() === today.getDate() &&
-                        date.getMonth() === today.getMonth() &&
-                        date.getFullYear() === today.getFullYear();
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
 
         const vacations = this.allVacations.filter(v => {
             const start = new Date(v.startDate);
             const end = new Date(v.endDate);
             // Reset times for comparison
-            start.setHours(0,0,0,0);
-            end.setHours(0,0,0,0);
+            start.setHours(0, 0, 0, 0);
+            end.setHours(0, 0, 0, 0);
             const current = new Date(date);
-            current.setHours(0,0,0,0);
-            
+            current.setHours(0, 0, 0, 0);
+
             return current >= start && current <= end;
         });
 

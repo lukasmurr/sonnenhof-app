@@ -38,9 +38,9 @@ export class CouchDbService {
             }
         })
             .on('complete', () => {
-            console.log('CouchDB Sync complete');
-            this.dbInitialized$.next(true);
-        })
+                console.log('CouchDB Sync complete');
+                this.dbInitialized$.next(true);
+            })
             .on('change', (info: any) => {
                 console.log('CouchDB Sync change:', info);
                 this.syncStatus$.next('syncing');

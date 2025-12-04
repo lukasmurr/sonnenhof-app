@@ -11,8 +11,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
-import { UserService } from '../../core/services/user.service';
 import { MatPaginatorIntlDe } from '../../core/services/paginator-intl';
+import { UserService } from '../../core/services/user.service';
 import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog';
 

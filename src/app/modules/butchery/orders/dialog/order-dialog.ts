@@ -1,20 +1,20 @@
-import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
+import { Market } from '../../../../core/models/market.model';
 import { Order, OrderItem } from '../../../../core/models/order.model';
 import { Product } from '../../../../core/models/product.model';
-import { ProductService } from '../../../../core/services/product.service';
-import { Market } from '../../../../core/models/market.model';
 import { MarketService } from '../../../../core/services/market.service';
+import { ProductService } from '../../../../core/services/product.service';
 import { atLeastOneContactValidator } from '../../../../core/validators/at-least-one-contact.validator';
 import { ProductSelectComponent } from './product-select/product-select';
 
@@ -175,12 +175,12 @@ export class OrderDialogComponent implements OnInit {
 
         this.productService.getProducts().subscribe(products => {
             this.products = products;
-            
+
             // If editing, patch the items with correct product objects
             if (this.data.order && this.data.order.items) {
                 // Clear existing items first (from constructor)
                 this.items.clear();
-                
+
                 this.data.order.items.forEach(item => {
                     const selectedProduct = this.products.find(p => p._id === item.productId);
                     const itemGroup = this.fb.group({
@@ -200,7 +200,7 @@ export class OrderDialogComponent implements OnInit {
 
     createItem(item?: OrderItem): FormGroup {
         const selectedProduct = item ? this.products.find(p => p._id === item.productId) : null;
-        
+
         return this.fb.group({
             product: [selectedProduct || null, Validators.required],
             quantity: [item?.quantity || '', [Validators.required, Validators.min(0.01)]],
@@ -222,13 +222,13 @@ export class OrderDialogComponent implements OnInit {
             // For now, let's assume products are loaded fast or we handle it in ngOnInit.
             // Actually, let's just store the item data and patch it when products arrive if needed, 
             // but here we are in constructor/addItem.
-            
+
             // Better approach for edit:
             // The form control expects a Product object.
             // We only have productId in OrderItem.
             // We'll handle this by patching the form array in ngOnInit after products load.
         }
-        
+
         this.items.push(itemGroup);
     }
 
@@ -260,7 +260,7 @@ export class OrderDialogComponent implements OnInit {
     onSave(): void {
         if (this.form.valid) {
             const formValue = this.form.getRawValue();
-            
+
             const items: OrderItem[] = formValue.items.map((item: any) => {
                 const product = item.product as Product;
                 return {
@@ -282,7 +282,7 @@ export class OrderDialogComponent implements OnInit {
                 status: formValue.status,
                 orderNumber: formValue.status === 'open' ? undefined : formValue.orderNumber
             };
-            
+
             this.dialogRef.close(result);
         }
     }

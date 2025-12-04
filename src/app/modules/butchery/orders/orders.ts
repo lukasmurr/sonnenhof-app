@@ -1,24 +1,26 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { OrderService } from '../../../core/services/order.service';
-import { Order } from '../../../core/models/order.model';
+import moment from 'moment';
 import { Market } from '../../../core/models/market.model';
+import { Order } from '../../../core/models/order.model';
+import { Product } from '../../../core/models/product.model';
 import { MarketService } from '../../../core/services/market.service';
+import { OrderService } from '../../../core/services/order.service';
+import { PdfService } from '../../../core/services/pdf.service';
+import { ProductService } from '../../../core/services/product.service';
 import { OrderDialogComponent } from './dialog/order-dialog';
 import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
-import { PdfService } from '../../../core/services/pdf.service';
-import moment from 'moment';
 
 @Component({
     selector: 'app-orders',
@@ -43,6 +45,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     displayedColumns: string[] = ['orderDate', 'customerName', 'market', 'items', 'actions'];
     dataSource: MatTableDataSource<Order>;
     markets: Market[] = [];
+    products: Product[] = [];
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -50,6 +53,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     constructor(
         private orderService: OrderService,
         private marketService: MarketService,
+        private productService: ProductService,
         private dialog: MatDialog,
         private router: Router,
         private pdfService: PdfService
@@ -60,16 +64,17 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.loadOrders();
         this.loadMarkets();
-        
+        this.loadProducts();
+
         this.dataSource.filterPredicate = (data: Order, filter: string) => {
             const searchStr = filter.toLowerCase();
             const customerMatch = data.customerName?.toLowerCase().includes(searchStr) || false;
             const marketMatch = data.market?.toLowerCase().includes(searchStr) || false;
-            const itemsMatch = data.items?.some(item => 
-                item.productName?.toLowerCase().includes(searchStr) || 
+            const itemsMatch = data.items?.some(item =>
+                item.productName?.toLowerCase().includes(searchStr) ||
                 (item.notes && item.notes.toLowerCase().includes(searchStr))
             ) || false;
-            
+
             return customerMatch || marketMatch || itemsMatch;
         };
     }
@@ -101,6 +106,12 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     loadMarkets() {
         this.marketService.getMarkets().subscribe(markets => {
             this.markets = markets;
+        });
+    }
+
+    loadProducts() {
+        this.productService.getProducts().subscribe(products => {
+            this.products = products;
         });
     }
 
@@ -173,7 +184,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
         if (filter.type === 'market') {
             filteredOrders = allOrders.filter(o => o.market === filter.market);
-            
+
             if (filter.dateType === 'day') {
                 const date = moment(filter.date).format('YYYY-MM-DD');
                 filteredOrders = filteredOrders.filter(o => moment(o.orderDate).format('YYYY-MM-DD') === date);
@@ -191,7 +202,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
                 });
             }
 
-            this.pdfService.generateMarketVehicleReport(filteredOrders, filter);
+            this.pdfService.generateMarketVehicleReport(filteredOrders, filter, this.products);
 
         } else if (filter.type === 'production') {
             filteredOrders = allOrders;
@@ -213,7 +224,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
                 });
             }
 
-            this.pdfService.generateProductionReport(filteredOrders, filter);
+            this.pdfService.generateProductionReport(filteredOrders, filter, this.products);
         }
     }
 

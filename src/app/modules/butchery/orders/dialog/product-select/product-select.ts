@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnDestroy, forwardRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Observable, Subject, of } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { Product } from '../../../../../core/models/product.model';
@@ -35,13 +35,13 @@ import { Product } from '../../../../../core/models/product.model';
 export class ProductSelectComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
     @Input() products: Product[] = [];
     @ViewChild(MatAutocompleteTrigger) trigger!: MatAutocompleteTrigger;
-    
+
     searchControl = new FormControl<string | Product>('');
     filteredProducts$: Observable<Product[]> = of([]);
-    
+
     private _destroy$ = new Subject<void>();
-    private _onChange: (value: Product | null) => void = () => {};
-    private _onTouched: () => void = () => {};
+    private _onChange: (value: Product | null) => void = () => { };
+    private _onTouched: () => void = () => { };
 
     ngOnInit() {
         this.filteredProducts$ = this.searchControl.valueChanges.pipe(
@@ -81,8 +81,8 @@ export class ProductSelectComponent implements OnInit, OnDestroy, OnChanges, Con
 
     private _filter(name: string): Product[] {
         const filterValue = name.toLowerCase();
-        return this.products.filter(product => 
-            product.name.toLowerCase().includes(filterValue) || 
+        return this.products.filter(product =>
+            product.name.toLowerCase().includes(filterValue) ||
             product.puNumber.toLowerCase().includes(filterValue)
         );
     }
@@ -107,7 +107,7 @@ export class ProductSelectComponent implements OnInit, OnDestroy, OnChanges, Con
             this.searchControl.enable();
         }
     }
-    
+
     onBlur() {
         this._onTouched();
         if (!this.trigger.panelOpen) {
@@ -122,14 +122,14 @@ export class ProductSelectComponent implements OnInit, OnDestroy, OnChanges, Con
     private validateSelection() {
         const value = this.searchControl.value;
         if (typeof value === 'string' && value !== '') {
-             const match = this.products.find(p => p.name === value);
-             if (match) {
-                 this.searchControl.setValue(match);
-                 this._onChange(match);
-             } else {
-                 this.searchControl.setValue(null);
-                 this._onChange(null);
-             }
+            const match = this.products.find(p => p.name === value);
+            if (match) {
+                this.searchControl.setValue(match);
+                this._onChange(match);
+            } else {
+                this.searchControl.setValue(null);
+                this._onChange(null);
+            }
         }
     }
 }

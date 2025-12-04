@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
+    production: true,
     couchdb: {
         remoteUrl: '/api/sonnenhof_db',
     }

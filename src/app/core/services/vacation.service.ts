@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CouchDbService } from './pouchdb.service';
 import { Vacation } from '../models/vacation.model';
+import { CouchDbService } from './pouchdb.service';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +9,7 @@ import { Vacation } from '../models/vacation.model';
 export class VacationService {
     private readonly TYPE = 'vacation';
 
-    constructor(private dbService: CouchDbService) {}
+    constructor(private dbService: CouchDbService) { }
 
     getVacations(): Observable<Vacation[]> {
         return this.dbService.watchDocs(this.TYPE) as Observable<Vacation[]>;

@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatRadioModule } from '@angular/material/radio';
-import { MarketService } from '../../../../../core/services/market.service';
-import { Market } from '../../../../../core/models/market.model';
-import { ProductService } from '../../../../../core/services/product.service';
-import { Product } from '../../../../../core/models/product.model';
+import { MatSelectModule } from '@angular/material/select';
 import moment from 'moment';
+import { Market } from '../../../../../core/models/market.model';
+import { Product } from '../../../../../core/models/product.model';
+import { MarketService } from '../../../../../core/services/market.service';
+import { ProductService } from '../../../../../core/services/product.service';
 
 @Component({
   selector: 'app-report-dialog',
@@ -58,7 +58,8 @@ export class ReportDialogComponent implements OnInit {
       startDate: [new Date()],
       endDate: [new Date()],
       week: [moment().isoWeek()],
-      year: [moment().year()]
+      year: [moment().year()],
+      sortBy: ['abc'] // 'abc' or 'puNumber'
     });
   }
 
