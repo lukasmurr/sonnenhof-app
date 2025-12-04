@@ -30,12 +30,6 @@ export class CouchDbService {
         this.db.sync(remoteUrl, {
             live: true,
             retry: true,
-            ajax: {
-                headers: {
-                    'ngrok-skip-browser-warning': 'true'
-                },
-                timeout: 30000,
-            }
         })
             .on('complete', () => {
                 console.log('CouchDB Sync complete');
