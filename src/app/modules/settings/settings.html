@@ -78,7 +78,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Benutzer pro Seite"></mat-paginator>
+                    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Benutzer pro Seite"></mat-paginator>
                 </div>
             </mat-card-content>
         </mat-card>
