@@ -21,7 +21,12 @@ jobs:
         run: npm ci
 
       - name: Inject Secrets into Environment
-        run: sed -i 's|COUCHDB_CREDENTIALS|${{ secrets.COUCHDB_CREDENTIALS }}|g' src/environments/environment.prod.ts
+        run: |
+          # Ersetze den User-Platzhalter
+          sed -i 's|USER|${{ secrets.USER }}|g' src/environments/environment.prod.ts
+          
+          # Ersetze den Passwort-Platzhalter
+          sed -i 's|PASSWORD|${{ secrets.PASSWORD }}|g' src/environments/environment.prod.ts
 
       - name: Build Angular
         run: npm run build -- --configuration production

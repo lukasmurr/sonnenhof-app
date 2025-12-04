@@ -17,47 +17,45 @@ export class CouchDbService {
     }
 
     private initializeDatabase(): void {
-        this.db = new PouchDB('sonnenhof_db');
-        console.log("remoteUrl:", environment.couchdb.remoteUrl);
-
+        this.db = new PouchDB('sonnenhof_db'); // Lokale DB
         const remoteUrl = environment.couchdb.remoteUrl;
+
         if (!remoteUrl) {
-            console.warn('No remote CouchDB URL configured. Sync disabled.');
+            console.warn('No remote CouchDB URL configured...');
             this.dbInitialized$.next(true);
             return;
         }
 
-        this.db.sync(remoteUrl, {
+        // 1. Remote DB als Instanz erstellen (mit Auth!)
+        const remoteDB = new PouchDB(remoteUrl, {
+            auth: {
+                username: environment.couchdb.user,
+                password: environment.couchdb.password
+            },
+            // Wichtig für Nginx/CORS: Keine Cookies erwarten, wenn es nicht klappt
+            skip_setup: true
+        });
+
+        // 2. Sync zwischen lokal (this.db) und remote (remoteDB) starten
+        this.db.sync(remoteDB, { // Hier das Objekt übergeben, nicht den String!
             live: true,
-            retry: true,
+            retry: true
         })
-            .on('complete', () => {
-                console.log('CouchDB Sync complete');
-                this.dbInitialized$.next(true);
-            })
             .on('change', (info: any) => {
                 console.log('CouchDB Sync change:', info);
                 this.syncStatus$.next('syncing');
             })
             .on('paused', (err: any) => {
-                console.log('CouchDB Sync paused (caught up)');
-                if (err) {
-                    this.syncStatus$.next('offline');
-                } else {
-                    this.syncStatus$.next('online');
-                }
+                console.log('CouchDB Sync paused');
+                this.syncStatus$.next(err ? 'offline' : 'online');
             })
             .on('active', () => {
-                console.log('CouchDB Sync active (syncing)');
+                console.log('CouchDB Sync active');
                 this.syncStatus$.next('syncing');
             })
-            .on('denied', (err: any) => {
-                console.error('CouchDB Sync denied:', err);
-                this.syncStatus$.next('offline');
-            })
+            .on('denied', (err: any) => console.error('Sync denied:', err))
             .on('error', (err: any) => {
-                console.warn('CouchDB Sync error (working offline):', err);
-                this.dbInitialized$.next(true);
+                console.error('Sync error:', err);
                 this.syncStatus$.next('offline');
             });
     }
