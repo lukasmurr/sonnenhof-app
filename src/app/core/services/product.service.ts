@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product.model';
@@ -10,28 +9,10 @@ import { CouchDbService } from './pouchdb.service';
 export class ProductService {
     private readonly TYPE = 'product';
 
-    constructor(private dbService: CouchDbService, private http: HttpClient) { }
+    constructor(private dbService: CouchDbService) { }
 
     getProducts(): Observable<Product[]> {
         return this.dbService.watchDocs(this.TYPE) as Observable<Product[]>;
-    }
-
-    initializeProducts(): void {
-        this.dbService.getAllDocs(this.TYPE).then((products: Product[]) => {
-            this.http.get<any[]>('assets/products.json').subscribe(data => {
-                const existingPuNumbers = new Set(products.map(p => p.puNumber));
-
-                data.forEach(p => {
-                    if (p.puNumber && !existingPuNumbers.has(p.puNumber)) {
-                        this.addProduct({
-                            puNumber: p.puNumber,
-                            name: p.name,
-                            unit: p.unit
-                        } as any);
-                    }
-                });
-            });
-        });
     }
 
     addProduct(product: Omit<Product, '_id' | '_rev' | 'createdAt' | 'updatedAt'>): Promise<any> {
