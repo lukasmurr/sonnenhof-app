@@ -53,10 +53,10 @@
                                 <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                                 <td mat-cell *matCellDef="let row">
                                     <div class="actions-row">
-                                        <button mat-icon-button (click)="openProductDialog(row)" matTooltip="Bearbeiten">
+                                        <button mat-icon-button (click)="openProductDialog(row)" matTooltip="Bearbeiten" *ngIf="!isViewer">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteProduct(row)" matTooltip="Löschen">
+                                        <button mat-icon-button color="warn" (click)="deleteProduct(row)" matTooltip="Löschen" *ngIf="!isViewer">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>

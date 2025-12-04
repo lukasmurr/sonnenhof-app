@@ -86,10 +86,10 @@
                                         <button mat-icon-button (click)="openOrderDialog(row, true)" matTooltip="Nachbestellung hinzufügen">
                                             <mat-icon>post_add</mat-icon>
                                         </button>
-                                        <button mat-icon-button (click)="openOrderDialog(row)" matTooltip="Bearbeiten">
+                                        <button mat-icon-button (click)="openOrderDialog(row)" matTooltip="Bearbeiten" *ngIf="!isViewer">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteOrder(row)" matTooltip="Löschen">
+                                        <button mat-icon-button color="warn" (click)="deleteOrder(row)" matTooltip="Löschen" *ngIf="!isViewer">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>

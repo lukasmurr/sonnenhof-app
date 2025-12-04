@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/services/product.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ProductDialogComponent } from './dialog/product-dialog';
 
 @Component({
@@ -44,9 +45,14 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     constructor(
         private productService: ProductService,
         private dialog: MatDialog,
-        private router: Router
+        private router: Router,
+        private authService: AuthService
     ) {
         this.dataSource = new MatTableDataSource<Product>([]);
+    }
+
+    get isViewer(): boolean {
+        return this.authService.userRole() === 'viewer';
     }
 
     ngOnInit(): void {
@@ -84,6 +90,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
 
     openProductDialog(product?: Product): void {
+        if (this.isViewer && product) {
+            return;
+        }
         const dialogRef = this.dialog.open(ProductDialogComponent, {
             width: '400px',
             data: { product }
@@ -107,6 +116,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
 
     deleteProduct(product: Product): void {
+        if (this.isViewer) {
+            return;
+        }
         if (confirm(`Möchten Sie das Produkt "${product.name}" wirklich löschen?`)) {
             if (product._id) {
                 this.productService.deleteProduct(product._id);

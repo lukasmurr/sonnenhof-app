@@ -19,6 +19,7 @@ import { MarketService } from '../../../core/services/market.service';
 import { OrderService } from '../../../core/services/order.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { ProductService } from '../../../core/services/product.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { OrderDialogComponent } from './dialog/order-dialog';
 import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
 
@@ -56,9 +57,14 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         private productService: ProductService,
         private dialog: MatDialog,
         private router: Router,
-        private pdfService: PdfService
+        private pdfService: PdfService,
+        private authService: AuthService
     ) {
         this.dataSource = new MatTableDataSource<Order>([]);
+    }
+
+    get isViewer(): boolean {
+        return this.authService.userRole() === 'viewer';
     }
 
     ngOnInit(): void {
@@ -116,6 +122,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     }
 
     openOrderDialog(order?: Order, isReorder: boolean = false): void {
+        if (this.isViewer && order && !isReorder) {
+            return;
+        }
         const dialogRef = this.dialog.open(OrderDialogComponent, {
             width: '95%',
             maxWidth: '800px',
@@ -140,6 +149,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     }
 
     deleteOrder(order: Order): void {
+        if (this.isViewer) {
+            return;
+        }
         if (confirm(`Möchten Sie die Bestellung von "${order.customerName}" wirklich löschen?`)) {
             if (order._id) {
                 this.orderService.deleteOrder(order._id);
