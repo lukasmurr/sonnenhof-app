@@ -23,7 +23,7 @@
             font-weight: 600;
             color: #3F51B5;
             letter-spacing: 1px;
-            font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
             margin: 0;
         }
     }
@@ -35,7 +35,7 @@
         .orders-card {
             padding: 24px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 
             mat-card-header {
                 display: flex;
@@ -49,20 +49,20 @@
             }
 
             .table-container {
-                
+
                 .table-scroll-wrapper {
                     overflow: auto;
                 }
 
                 mat-paginator {
                     font-size: 12px;
-                    
+
                     ::ng-deep .mat-mdc-paginator-container {
                         min-height: 48px;
                     }
 
                     .mat-mdc-paginator {
-                        border-top: 1px solid rgba(0,0,0,0.12);
+                        border-top: 1px solid rgba(0, 0, 0, 0.12);
                     }
                 }
 
@@ -114,19 +114,18 @@
 
     .orders-card {
         background: #424242;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 }
 
 .mat-mdc-paginator {
-    border-top: 1px solid rgba(0,0,0,0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .prepared-order {
     background-color: #e8f5e9 !important; // Light green background
-    
+
     &:hover {
         background-color: #c8e6c9 !important; // Slightly darker green on hover
     }
 }
-

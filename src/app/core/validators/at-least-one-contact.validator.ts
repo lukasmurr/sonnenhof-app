@@ -24,7 +24,7 @@ export function atLeastOneContactValidator(emailControlName: string = 'email', p
         // Clear error if valid? 
         // Validators on FormGroup return null if valid, or error object if invalid.
         // We don't need to manually clear errors on controls unless we set them manually.
-        
+
         return null;
     };
 }

@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>{{ data.isReorder ? 'Nachbestellung hinzufügen' : (data.order ? 'Bestellung bearbeiten' :
     'NeueBestellung') }}</h2>
 <mat-dialog-content>
-    <div *ngIf="form.get('status')?.value === 'prepared' && !data.isReorder" style="margin-bottom: 16px; padding: 12px; background-color: #e8f5e9; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
+    <div *ngIf="form.get('status')?.value === 'prepared' && !data.isReorder"
+        style="margin-bottom: 16px; padding: 12px; background-color: #e8f5e9; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
         <span style="color: #2e7d32; font-weight: 500;">
             <mat-icon style="vertical-align: bottom; margin-right: 8px;">check_circle</mat-icon>
             Status: Hergerichtet (Nr. {{ form.get('orderNumber')?.value }})

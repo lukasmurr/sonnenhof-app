@@ -15,11 +15,11 @@ import moment from 'moment';
 import { Market } from '../../../core/models/market.model';
 import { Order } from '../../../core/models/order.model';
 import { Product } from '../../../core/models/product.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { MarketService } from '../../../core/services/market.service';
 import { OrderService } from '../../../core/services/order.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { ProductService } from '../../../core/services/product.service';
-import { AuthService } from '../../../core/services/auth.service';
 import { OrderDialogComponent } from './dialog/order-dialog';
 import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
 
