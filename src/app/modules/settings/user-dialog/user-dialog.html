@@ -42,7 +42,7 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <div class="permissions-grid" formGroupName="permissions">
+        <div class="permissions-grid">
             <mat-checkbox *ngFor="let perm of allPermissions" [formControl]="getPermissionControl(perm)">
                 {{ getPermissionLabel(perm) }}
             </mat-checkbox>

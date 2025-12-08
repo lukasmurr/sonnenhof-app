@@ -154,7 +154,7 @@ export class UserDialogComponent {
   }
 
   getPermissionControl(p: Permission): FormControl {
-      return this.userForm.get('permissions')?.get(p) as FormControl;
+      return this.userForm.get('permissions')?.get([p]) as FormControl;
   }
 
   onCancel(): void {
