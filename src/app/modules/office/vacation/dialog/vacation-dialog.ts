@@ -86,12 +86,16 @@ export class VacationDialogComponent implements OnInit {
             const formValue = this.form.getRawValue(); // Use getRawValue to include disabled fields
             const selectedEmployee = this.employees.find(e => e._id === formValue.employeeId);
             
+            // Ensure dates are Date objects
+            const startDate = new Date(formValue.startDate);
+            const endDate = new Date(formValue.endDate);
+
             if (formValue.leaveType === 'vacation' && selectedEmployee) {
                 const totalVacationDays = selectedEmployee.vacationDays || 0;
-                const year = formValue.startDate.getFullYear();
+                const year = startDate.getFullYear();
                 
                 const usedDays = this.calculateUsedVacationDays(selectedEmployee._id!, year, this.data.vacation?._id);
-                const newDays = this.calculateWorkingDays(formValue.startDate, formValue.endDate);
+                const newDays = this.calculateWorkingDays(startDate, endDate);
 
                 if (usedDays + newDays > totalVacationDays) {
                     alert(`Der Mitarbeiter hat nur ${totalVacationDays} Urlaubstage. Bereits verplant: ${usedDays}. Neuer Urlaub: ${newDays}. Gesamt: ${usedDays + newDays}`);
@@ -102,8 +106,8 @@ export class VacationDialogComponent implements OnInit {
             const vacationData = {
                 ...formValue,
                 employeeName: selectedEmployee?.name || 'Unbekannt',
-                startDate: formValue.startDate.toISOString(),
-                endDate: formValue.endDate.toISOString(),
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
                 status: 'approved'
             };
             this.dialogRef.close(vacationData);
