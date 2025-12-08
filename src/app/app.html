@@ -56,37 +56,37 @@
 <mat-sidenav-container class="app-sidenav-container" [hasBackdrop]="true">
   <mat-sidenav #sidenav mode="over" class="app-sidenav">
     <mat-nav-list>
-      <div mat-subheader>Metzgerei</div>
-      <a mat-list-item (click)="navigateAndClose('butchery/products', sidenav)">
+      <div mat-subheader *appHasPermission="'butchery.view'">Metzgerei</div>
+      <a mat-list-item (click)="navigateAndClose('butchery/products', sidenav)" *appHasPermission="'product.view'">
         <mat-icon matListItemIcon>inventory_2</mat-icon>
         <span matListItemTitle>Produkte</span>
       </a>
-      <a mat-list-item (click)="navigateAndClose('butchery/orders', sidenav)">
+      <a mat-list-item (click)="navigateAndClose('butchery/orders', sidenav)" *appHasPermission="'order.view'">
         <mat-icon matListItemIcon>shopping_cart</mat-icon>
         <span matListItemTitle>Bestellungen</span>
       </a>
 
-      <mat-divider></mat-divider>
+      <mat-divider *appHasPermission="'butchery.view'"></mat-divider>
 
-      <div mat-subheader>Büro</div>
-      <a mat-list-item (click)="navigateAndClose('office/tuev', sidenav)">
+      <div mat-subheader *appHasPermission="'office.view'">Büro</div>
+      <a mat-list-item (click)="navigateAndClose('office/tuev', sidenav)" *appHasPermission="'tuev.view'">
         <mat-icon matListItemIcon>fact_check</mat-icon>
         <span matListItemTitle>TÜV</span>
       </a>
-      <a mat-list-item (click)="navigateAndClose('office/markets', sidenav)">
+      <a mat-list-item (click)="navigateAndClose('office/markets', sidenav)" *appHasPermission="'market.view'">
         <mat-icon matListItemIcon>store</mat-icon>
         <span matListItemTitle>Märkte</span>
       </a>
-      <a mat-list-item (click)="navigateAndClose('office/employees', sidenav)">
+      <a mat-list-item (click)="navigateAndClose('office/employees', sidenav)" *appHasPermission="'employee.view'">
         <mat-icon matListItemIcon>badge</mat-icon>
         <span matListItemTitle>Mitarbeiter</span>
       </a>
-      <a mat-list-item (click)="navigateAndClose('office/vacation', sidenav)">
+      <a mat-list-item (click)="navigateAndClose('office/vacation', sidenav)" *appHasPermission="'vacation.view'">
         <mat-icon matListItemIcon>beach_access</mat-icon>
         <span matListItemTitle>Urlaub</span>
       </a>
 
-      <mat-divider></mat-divider>
+      <mat-divider *appHasPermission="'office.view'"></mat-divider>
 
       <div mat-subheader>Landwirtschaft</div>
       <a mat-list-item (click)="navigateAndClose('farming', sidenav)">

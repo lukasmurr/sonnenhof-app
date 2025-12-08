@@ -8,29 +8,35 @@ export class PermissionService {
 
     private readonly GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         admin: [
-            'product.create', 'product.update', 'product.delete',
-            'market.create', 'market.update', 'market.delete',
-            'order.create', 'order.update', 'order.delete',
-            'employee.create', 'employee.update', 'employee.delete',
+            'butchery.view', 'office.view',
+            'product.view', 'product.create', 'product.update', 'product.delete',
+            'market.view', 'market.create', 'market.update', 'market.delete',
+            'order.view', 'order.create', 'order.update', 'order.delete',
+            'employee.view', 'employee.create', 'employee.update', 'employee.delete',
+            'tuev.view',
             'user.manage',
-            'vacation.create_own', 'vacation.update_own',
+            'vacation.view', 'vacation.create_own', 'vacation.update_own',
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
         office: [
-            'product.create', 'product.update', 'product.delete',
-            'market.create', 'market.update', 'market.delete',
-            'order.create', 'order.update', 'order.delete',
-            'employee.create', 'employee.update', 'employee.delete',
-            'vacation.create_own', 'vacation.update_own',
+            'office.view',
+            'product.view', 'product.create', 'product.update', 'product.delete',
+            'market.view', 'market.create', 'market.update', 'market.delete',
+            'order.view', 'order.create', 'order.update', 'order.delete',
+            'employee.view', 'employee.create', 'employee.update', 'employee.delete',
+            'tuev.view',
+            'vacation.view', 'vacation.create_own', 'vacation.update_own',
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
         butchery: [
-            'product.create',
-            'order.create',
+            'butchery.view',
+            'product.view', 'product.create',
+            'order.view', 'order.create',
             'vacation.create_own', 'vacation.update_own'
         ],
         sales: [
-            'order.create',
+            'butchery.view',
+            'order.view', 'order.create',
             'vacation.create_own', 'vacation.update_own'
         ]
     };

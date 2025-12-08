@@ -2,14 +2,14 @@
     <h1 class="headline">Willkommen in der Sonnenhof App</h1>
 
     <div class="card-grid">
-        <mat-card class="landing-card" (click)="navigate('butchery')" color="primary">
+        <mat-card class="landing-card" (click)="navigate('butchery')" color="primary" *appHasPermission="'butchery.view'">
             <div class="card-icon">
                 <img src="assets/icons/pig.svg" alt="Metzgerei">
             </div>
             <mat-card-title>Metzgerei</mat-card-title>
         </mat-card>
 
-        <mat-card class="landing-card" (click)="navigate('office')">
+        <mat-card class="landing-card" (click)="navigate('office')" *appHasPermission="'office.view'">
             <div class="card-icon">
                 <img src="assets/icons/office.svg" alt="Büro">
             </div>

@@ -14,6 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { HasPermissionDirective } from './core/directives/has-permission.directive';
 import { AuthService } from './core/services/auth.service';
 import { CouchDbService } from './core/services/pouchdb.service';
 import { UserService } from './core/services/user.service';
@@ -34,7 +35,8 @@ import { ChangePasswordDialogComponent } from './modules/settings/change-passwor
     MatDialogModule,
     MatSnackBarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    HasPermissionDirective
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

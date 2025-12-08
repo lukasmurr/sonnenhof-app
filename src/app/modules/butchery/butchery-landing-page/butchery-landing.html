@@ -11,7 +11,7 @@
 
     <div class="card-grid">
         <!-- Produkte Card -->
-        <mat-card class="section-card products" (click)="navigateToSection('products')">
+        <mat-card class="section-card products" (click)="navigateToSection('products')" *appHasPermission="'product.view'">
             <div class="card-icon"><mat-icon>inventory_2</mat-icon></div>
             <mat-card-title>Produkte</mat-card-title>
             <mat-card-content>
@@ -21,7 +21,7 @@
         </mat-card>
 
         <!-- Bestellungen Card -->
-        <mat-card class="section-card orders" (click)="navigateToSection('orders')">
+        <mat-card class="section-card orders" (click)="navigateToSection('orders')" *appHasPermission="'order.view'">
             <div class="card-icon"><mat-icon>shopping_cart</mat-icon></div>
             <mat-card-title>Bestellungen</mat-card-title>
             <mat-card-content>

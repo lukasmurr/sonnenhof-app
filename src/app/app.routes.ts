@@ -21,84 +21,100 @@ export const routes: Routes = [
     // Butchery
     {
         path: 'butchery',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'butchery.view' },
         loadComponent: () => import('./modules/butchery/butchery-landing-page/butchery-landing').then(m => m.ButcheryLanding)
     },
     {
         path: 'butchery/products',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'product.view' },
         loadComponent: () => import('./modules/butchery/products/products').then(m => m.ProductsComponent)
     },
     {
         path: 'butchery/orders',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'order.view' },
         loadComponent: () => import('./modules/butchery/orders/orders').then(m => m.OrdersComponent)
     },
     {
         path: 'butchery/production',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'butchery/inventory',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'butchery/quality',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'butchery/sales',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
 
     // Office
     {
         path: 'office',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'office.view' },
         loadComponent: () => import('./modules/office/office-landing-page/office-landing').then(m => m.OfficeLanding)
     },
     {
         path: 'office/administration',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/documents',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/calendar',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/contacts',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/tuev',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'tuev.view' },
         loadComponent: () => import('./modules/office/tuev-page/tuev').then(m => m.Tuev)
     },
     {
         path: 'office/markets',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'market.view' },
         loadComponent: () => import('./modules/office/markets/markets').then(m => m.MarketsComponent)
     },
     {
         path: 'office/employees',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'employee.view' },
         loadComponent: () => import('./modules/office/employees/employees').then(m => m.EmployeesComponent)
     },
     {
         path: 'office/vacation',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'vacation.view' },
         loadComponent: () => import('./modules/office/vacation/vacation-planning').then(m => m.VacationPlanningComponent)
     },
 
