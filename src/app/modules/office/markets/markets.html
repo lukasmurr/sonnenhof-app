@@ -13,7 +13,7 @@
                 <mat-card-title>Märkte</mat-card-title>
                 <mat-card-subtitle>Verwalten Sie hier Ihre Märkte</mat-card-subtitle>
                 <div class="header-actions">
-                    <button mat-raised-button color="primary" (click)="openMarketDialog()">
+                    <button mat-raised-button color="primary" (click)="openMarketDialog()" *appHasPermission="'market.create'">
                         <mat-icon>add</mat-icon>
                         Neuer Markt
                     </button>
@@ -68,10 +68,10 @@
                                 <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                                 <td mat-cell *matCellDef="let row">
                                     <div class="actions-row">
-                                        <button mat-icon-button (click)="openMarketDialog(row)" matTooltip="Bearbeiten">
+                                        <button mat-icon-button (click)="openMarketDialog(row)" matTooltip="Bearbeiten" *appHasPermission="'market.update'">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteMarket(row)" matTooltip="Löschen">
+                                        <button mat-icon-button color="warn" (click)="deleteMarket(row)" matTooltip="Löschen" *appHasPermission="'market.delete'">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>

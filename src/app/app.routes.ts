@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
+import { permissionGuard } from './core/guards/permission.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -88,12 +89,14 @@ export const routes: Routes = [
     },
     {
         path: 'office/markets',
-        canActivate: [authGuard],
+        canActivate: [permissionGuard],
+        data: { permission: 'market.update' }, // Office/Admin have update
         loadComponent: () => import('./modules/office/markets/markets').then(m => m.MarketsComponent)
     },
     {
         path: 'office/employees',
-        canActivate: [authGuard],
+        canActivate: [permissionGuard],
+        data: { permission: 'employee.update' }, // Office/Admin have update
         loadComponent: () => import('./modules/office/employees/employees').then(m => m.EmployeesComponent)
     },
     {

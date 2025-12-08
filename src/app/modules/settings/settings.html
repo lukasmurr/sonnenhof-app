@@ -35,11 +35,11 @@
                         </ng-container>
 
                         <!-- Role Column -->
-                        <ng-container matColumnDef="role">
-                            <th mat-header-cell *matHeaderCellDef> Rolle </th>
+                        <ng-container matColumnDef="group">
+                            <th mat-header-cell *matHeaderCellDef> Gruppe </th>
                             <td mat-cell *matCellDef="let user">
-                                <span class="role-badge" [class.role-admin]="user.role === 'admin'" [class.role-user]="user.role !== 'admin'">
-                                    {{user.role | titlecase}}
+                                <span class="role-badge" [class.role-admin]="user.group === 'admin'" [class.role-user]="user.group !== 'admin'">
+                                    {{ getGroupLabel(user.group || 'sales') }}
                                 </span>
                             </td>
                         </ng-container>

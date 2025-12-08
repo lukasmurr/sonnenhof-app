@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeeDialogComponent } from './dialog/employee-dialog';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-employees',
@@ -25,7 +27,8 @@ import { EmployeeDialogComponent } from './dialog/employee-dialog';
         MatIconModule,
         MatDialogModule,
         MatTooltipModule,
-        MatCardModule
+        MatCardModule,
+        HasPermissionDirective
     ],
     templateUrl: './employees.html',
     styleUrls: ['./employees.scss']
@@ -40,7 +43,8 @@ export class EmployeesComponent implements OnInit {
     constructor(
         private employeeService: EmployeeService,
         private dialog: MatDialog,
-        private router: Router
+        private router: Router,
+        private authService: AuthService
     ) {
         this.dataSource = new MatTableDataSource<Employee>([]);
     }
@@ -62,6 +66,12 @@ export class EmployeesComponent implements OnInit {
     }
 
     openEmployeeDialog(employee?: Employee) {
+        if (employee) {
+            if (!this.authService.hasPermission('employee.update')) return;
+        } else {
+            if (!this.authService.hasPermission('employee.create')) return;
+        }
+
         const dialogRef = this.dialog.open(EmployeeDialogComponent, {
             data: { employee }
         });
@@ -81,6 +91,8 @@ export class EmployeesComponent implements OnInit {
     }
 
     deleteEmployee(employee: Employee) {
+        if (!this.authService.hasPermission('employee.delete')) return;
+
         if (confirm(`Möchten Sie den Mitarbeiter "${employee.name}" wirklich löschen?`)) {
             if (employee._id) {
                 this.employeeService.deleteEmployee(employee._id);

@@ -16,18 +16,38 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Passwort</mat-label>
-      <input matInput formControlName="password" type="password" [placeholder]="isEditMode ? 'Leer lassen um beizubehalten' : 'Passwort'">
+      <input matInput formControlName="password" type="text" [placeholder]="isEditMode ? 'Leer lassen um beizubehalten' : 'Passwort'">
+      <button mat-icon-button matSuffix (click)="generateAndCopyPassword()" matTooltip="Neues Passwort generieren" type="button">
+        <mat-icon>refresh</mat-icon>
+      </button>
       <mat-error *ngIf="userForm.get('password')?.hasError('required')">Passwort ist erforderlich</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Rolle</mat-label>
-      <mat-select formControlName="role">
-        <mat-option value="admin">Admin</mat-option>
-        <mat-option value="user">Benutzer</mat-option>
-        <mat-option value="viewer">Zuschauer</mat-option>
+      <mat-label>Benutzergruppe</mat-label>
+      <mat-select formControlName="group">
+        <mat-option *ngFor="let group of groups" [value]="group.value">
+            {{ group.label }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Detaillierte Berechtigungen
+            </mat-panel-title>
+            <mat-panel-description>
+                Individuell anpassen
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="permissions-grid" formGroupName="permissions">
+            <mat-checkbox *ngFor="let perm of allPermissions" [formControlName]="perm">
+                {{ getPermissionLabel(perm) }}
+            </mat-checkbox>
+        </div>
+    </mat-expansion-panel>
 
     <div class="checkbox-container">
       <mat-checkbox formControlName="isLocked">Benutzer gesperrt</mat-checkbox>

@@ -13,7 +13,7 @@
                 <mat-card-title>Mitarbeiter</mat-card-title>
                 <mat-card-subtitle>Verwalten Sie hier Ihre Mitarbeiter</mat-card-subtitle>
                 <div class="header-actions">
-                    <button mat-raised-button color="primary" (click)="openEmployeeDialog()">
+                    <button mat-raised-button color="primary" (click)="openEmployeeDialog()" *appHasPermission="'employee.create'">
                         <mat-icon>add</mat-icon>
                         Neuer Mitarbeiter
                     </button>
@@ -51,10 +51,10 @@
                                 <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                                 <td mat-cell *matCellDef="let row">
                                     <div class="actions-row">
-                                        <button mat-icon-button (click)="openEmployeeDialog(row)" matTooltip="Bearbeiten">
+                                        <button mat-icon-button (click)="openEmployeeDialog(row)" matTooltip="Bearbeiten" *appHasPermission="'employee.update'">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteEmployee(row)" matTooltip="Löschen">
+                                        <button mat-icon-button color="warn" (click)="deleteEmployee(row)" matTooltip="Löschen" *appHasPermission="'employee.delete'">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>

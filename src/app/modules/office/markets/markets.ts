@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { Market } from '../../../core/models/market.model';
 import { MarketService } from '../../../core/services/market.service';
 import { MarketDialogComponent } from './dialog/market-dialog';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-markets',
@@ -25,7 +27,8 @@ import { MarketDialogComponent } from './dialog/market-dialog';
         MatIconModule,
         MatDialogModule,
         MatTooltipModule,
-        MatCardModule
+        MatCardModule,
+        HasPermissionDirective
     ],
     templateUrl: './markets.html',
     styleUrls: ['./markets.scss']
@@ -40,7 +43,8 @@ export class MarketsComponent implements OnInit, AfterViewInit {
     constructor(
         private marketService: MarketService,
         private dialog: MatDialog,
-        private router: Router
+        private router: Router,
+        private authService: AuthService
     ) {
         this.dataSource = new MatTableDataSource<Market>([]);
     }
@@ -65,6 +69,12 @@ export class MarketsComponent implements OnInit, AfterViewInit {
     }
 
     openMarketDialog(market?: Market): void {
+        if (market) {
+            if (!this.authService.hasPermission('market.update')) return;
+        } else {
+            if (!this.authService.hasPermission('market.create')) return;
+        }
+
         const dialogRef = this.dialog.open(MarketDialogComponent, {
             width: '500px',
             data: { market }
@@ -88,6 +98,8 @@ export class MarketsComponent implements OnInit, AfterViewInit {
     }
 
     deleteMarket(market: Market): void {
+        if (!this.authService.hasPermission('market.delete')) return;
+
         if (confirm(`Möchten Sie den Markt "${market.name}" wirklich löschen?`)) {
             if (market._id) {
                 this.marketService.deleteMarket(market._id);

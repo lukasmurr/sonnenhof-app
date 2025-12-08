@@ -159,6 +159,8 @@ export class VacationPlanningComponent implements OnInit {
             case 'vacation': return 'Urlaub';
             case 'paid_leave': return 'Freistellung (bezahlt)';
             case 'unpaid_leave': return 'Freistellung (unbezahlt)';
+            case 'sick_with_certificate': return 'Krank (mit Attest)';
+            case 'sick_without_certificate': return 'Krank (ohne Attest)';
             default: return 'Urlaub';
         }
     }
@@ -166,6 +168,7 @@ export class VacationPlanningComponent implements OnInit {
     getEventClass(vacation: Vacation): string {
         if (vacation.leaveType === 'paid_leave') return 'paid-leave';
         if (vacation.leaveType === 'unpaid_leave') return 'unpaid-leave';
+        if (vacation.leaveType === 'sick_with_certificate' || vacation.leaveType === 'sick_without_certificate') return 'sick-leave';
         return vacation.status;
     }
 

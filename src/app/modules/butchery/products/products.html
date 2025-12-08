@@ -13,7 +13,7 @@
                 <mat-card-title>Produkte</mat-card-title>
                 <mat-card-subtitle>Verwalten Sie hier Ihre Produkte</mat-card-subtitle>
                 <div class="header-actions">
-                    <button mat-raised-button color="primary" (click)="openProductDialog()">
+                    <button mat-raised-button color="primary" (click)="openProductDialog()" *appHasPermission="'product.create'">
                         <mat-icon>add</mat-icon>
                         Neues Produkt
                     </button>
@@ -56,11 +56,11 @@
                                 <td mat-cell *matCellDef="let row">
                                     <div class="actions-row">
                                         <button mat-icon-button (click)="openProductDialog(row)" matTooltip="Bearbeiten"
-                                            *ngIf="!isViewer">
+                                            *appHasPermission="'product.update'">
                                             <mat-icon>edit</mat-icon>
                                         </button>
                                         <button mat-icon-button color="warn" (click)="deleteProduct(row)"
-                                            matTooltip="Löschen" *ngIf="!isViewer">
+                                            matTooltip="Löschen" *appHasPermission="'product.delete'">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>

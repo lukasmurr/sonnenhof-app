@@ -19,6 +19,8 @@
                 <mat-option value="vacation">Urlaub</mat-option>
                 <mat-option value="paid_leave">Freistellung (bezahlt)</mat-option>
                 <mat-option value="unpaid_leave">Freistellung (unbezahlt)</mat-option>
+                <mat-option value="sick_with_certificate">Krank (mit Attest)</mat-option>
+                <mat-option value="sick_without_certificate">Krank (ohne Attest)</mat-option>
             </mat-select>
             <mat-error *ngIf="form.get('leaveType')?.hasError('required')">
                 Art ist erforderlich

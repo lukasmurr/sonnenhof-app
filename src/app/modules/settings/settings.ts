@@ -15,6 +15,7 @@ import { User } from '../../core/models/user.model';
 import { MatPaginatorIntlDe } from '../../core/services/paginator-intl';
 import { ProductService } from '../../core/services/product.service';
 import { UserService } from '../../core/services/user.service';
+import { PermissionService } from '../../core/services/permission.service';
 import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog';
 
@@ -42,7 +43,7 @@ import { UserDialogComponent } from './user-dialog/user-dialog';
 })
 export class SettingsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<User>([]);
-  displayedColumns: string[] = ['name', 'email', 'role', 'status', 'actions'];
+  displayedColumns: string[] = ['name', 'email', 'group', 'status', 'actions'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -51,8 +52,15 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private router: Router,
     private productService: ProductService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private permissionService: PermissionService
   ) { }
+
+  getGroupLabel(group: string): string {
+      const groups = this.permissionService.getGroups();
+      const found = groups.find(g => g.value === group);
+      return found ? found.label : group;
+  }
 
   async cleanupProducts() {
     try {

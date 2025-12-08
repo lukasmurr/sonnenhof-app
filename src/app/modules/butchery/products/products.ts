@@ -15,6 +15,7 @@ import { Product } from '../../../core/models/product.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProductService } from '../../../core/services/product.service';
 import { ProductDialogComponent } from './dialog/product-dialog';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 @Component({
     selector: 'app-products',
@@ -30,7 +31,8 @@ import { ProductDialogComponent } from './dialog/product-dialog';
         MatTooltipModule,
         MatCardModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        HasPermissionDirective
     ],
     templateUrl: './products.html',
     styleUrls: ['./products.scss']
@@ -49,10 +51,6 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         private authService: AuthService
     ) {
         this.dataSource = new MatTableDataSource<Product>([]);
-    }
-
-    get isViewer(): boolean {
-        return this.authService.userRole() === 'viewer';
     }
 
     ngOnInit(): void {
@@ -90,9 +88,12 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
 
     openProductDialog(product?: Product): void {
-        if (this.isViewer && product) {
-            return;
+        if (product) {
+            if (!this.authService.hasPermission('product.update')) return;
+        } else {
+            if (!this.authService.hasPermission('product.create')) return;
         }
+
         const dialogRef = this.dialog.open(ProductDialogComponent, {
             width: '400px',
             data: { product }
@@ -116,9 +117,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
 
     deleteProduct(product: Product): void {
-        if (this.isViewer) {
-            return;
-        }
+        if (!this.authService.hasPermission('product.delete')) return;
+
         if (confirm(`Möchten Sie das Produkt "${product.name}" wirklich löschen?`)) {
             if (product._id) {
                 this.productService.deleteProduct(product._id);
