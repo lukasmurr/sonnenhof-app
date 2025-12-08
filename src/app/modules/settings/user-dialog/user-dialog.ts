@@ -82,9 +82,15 @@ export class UserDialogComponent {
       
       this.userForm.patchValue({ password });
       
-      navigator.clipboard.writeText(password).then(() => {
-          this.snackBar.open('Passwort generiert und kopiert!', 'OK', { duration: 3000 });
-      });
+      if (navigator.clipboard) {
+          navigator.clipboard.writeText(password).then(() => {
+              this.snackBar.open('Passwort generiert und kopiert!', 'OK', { duration: 3000 });
+          }).catch(() => {
+              this.snackBar.open('Passwort generiert (Kopieren fehlgeschlagen)', 'OK', { duration: 3000 });
+          });
+      } else {
+          this.snackBar.open('Passwort generiert', 'OK', { duration: 3000 });
+      }
   }
 
   onCancel(): void {

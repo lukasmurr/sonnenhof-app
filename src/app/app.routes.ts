@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { permissionGuard } from './core/guards/permission.guard';
 
@@ -89,14 +88,12 @@ export const routes: Routes = [
     },
     {
         path: 'office/markets',
-        canActivate: [permissionGuard],
-        data: { permission: 'market.update' }, // Office/Admin have update
+        canActivate: [authGuard],
         loadComponent: () => import('./modules/office/markets/markets').then(m => m.MarketsComponent)
     },
     {
         path: 'office/employees',
-        canActivate: [permissionGuard],
-        data: { permission: 'employee.update' }, // Office/Admin have update
+        canActivate: [authGuard],
         loadComponent: () => import('./modules/office/employees/employees').then(m => m.EmployeesComponent)
     },
     {
@@ -135,7 +132,8 @@ export const routes: Routes = [
     // Settings
     {
         path: 'settings',
-        canActivate: [authGuard, adminGuard],
+        canActivate: [permissionGuard],
+        data: { permission: 'user.manage' },
         loadComponent: () => import('./modules/settings/settings').then(m => m.SettingsComponent)
     },
     {
