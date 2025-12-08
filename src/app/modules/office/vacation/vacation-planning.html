@@ -96,7 +96,7 @@
                                                     <mat-icon>edit</mat-icon>
                                                 </button>
                                                 <button mat-icon-button color="warn" (click)="deleteVacation(row)"
-                                                    matTooltip="Löschen">
+                                                    matTooltip="Löschen" *appHasPermission="'vacation.delete_others'">
                                                     <mat-icon>delete</mat-icon>
                                                 </button>
                                             </div>

@@ -13,6 +13,9 @@ import { Router } from '@angular/router';
 import { Vacation } from '../../../core/models/vacation.model';
 import { VacationService } from '../../../core/services/vacation.service';
 import { VacationDialogComponent } from './dialog/vacation-dialog';
+import { AuthService } from '../../../core/services/auth.service';
+import { EmployeeService } from '../../../core/services/employee.service';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 interface CalendarDay {
     date: Date;
@@ -34,7 +37,8 @@ interface CalendarDay {
         MatDialogModule,
         MatTooltipModule,
         MatTabsModule,
-        MatCardModule
+        MatCardModule,
+        HasPermissionDirective
     ],
     templateUrl: './vacation-planning.html',
     styleUrls: ['./vacation-planning.scss']
@@ -51,23 +55,53 @@ export class VacationPlanningComponent implements OnInit {
     calendarDays: CalendarDay[] = [];
     weekDays: string[] = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     allVacations: Vacation[] = [];
+    
+    // Permission properties
+    canSeeAll: boolean = false;
+    currentEmployeeId: string | null = null;
 
     constructor(
         private vacationService: VacationService,
         private dialog: MatDialog,
-        private router: Router
+        private router: Router,
+        private authService: AuthService,
+        private employeeService: EmployeeService
     ) {
         this.dataSource = new MatTableDataSource<Vacation>([]);
     }
 
     ngOnInit() {
+        this.checkPermissionsAndLoad();
+    }
+
+    async checkPermissionsAndLoad() {
+        this.canSeeAll = this.authService.hasPermission('vacation.create_others');
+        
+        if (!this.canSeeAll) {
+            const userEmail = this.authService.getCurrentUser();
+            if (userEmail) {
+                const employees = await this.employeeService.getEmployees().toPromise();
+                const employee = employees?.find(e => e.email === userEmail);
+                if (employee) {
+                    this.currentEmployeeId = employee._id || null;
+                }
+            }
+        }
+        
         this.loadVacations();
     }
 
     loadVacations() {
         this.vacationService.getVacations().subscribe(vacations => {
-            this.allVacations = vacations;
-            this.dataSource.data = vacations;
+            if (this.canSeeAll) {
+                this.allVacations = vacations;
+            } else if (this.currentEmployeeId) {
+                this.allVacations = vacations.filter(v => v.employeeId === this.currentEmployeeId);
+            } else {
+                this.allVacations = [];
+            }
+            
+            this.dataSource.data = this.allVacations;
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.generateCalendar();
@@ -192,7 +226,12 @@ export class VacationPlanningComponent implements OnInit {
 
     openVacationDialog(vacation?: Vacation, preselectedDate?: Date) {
         const dialogRef = this.dialog.open(VacationDialogComponent, {
-            data: { vacation, preselectedDate }
+            data: { 
+                vacation, 
+                preselectedDate,
+                canSeeAll: this.canSeeAll,
+                currentEmployeeId: this.currentEmployeeId
+            }
         });
 
         dialogRef.afterClosed().subscribe(result => {

@@ -16,6 +16,8 @@ import { VacationService } from '../../../../core/services/vacation.service';
 export interface VacationDialogData {
     vacation?: Vacation;
     preselectedDate?: Date;
+    canSeeAll?: boolean;
+    currentEmployeeId?: string;
 }
 
 @Component({
@@ -58,8 +60,11 @@ export class VacationDialogComponent implements OnInit {
         private vacationService: VacationService,
         @Inject(MAT_DIALOG_DATA) public data: VacationDialogData
     ) {
+        const initialEmployeeId = data.vacation?.employeeId || 
+                                 (!data.canSeeAll && data.currentEmployeeId ? data.currentEmployeeId : '');
+
         this.form = this.fb.group({
-            employeeId: [data.vacation?.employeeId || '', Validators.required],
+            employeeId: [{ value: initialEmployeeId, disabled: !data.canSeeAll }, Validators.required],
             leaveType: [data.vacation?.leaveType || 'vacation', Validators.required],
             startDate: [data.vacation?.startDate ? new Date(data.vacation.startDate) : (data.preselectedDate || ''), Validators.required],
             endDate: [data.vacation?.endDate ? new Date(data.vacation.endDate) : (data.preselectedDate || ''), Validators.required],
@@ -78,7 +83,7 @@ export class VacationDialogComponent implements OnInit {
 
     save() {
         if (this.form.valid) {
-            const formValue = this.form.value;
+            const formValue = this.form.getRawValue(); // Use getRawValue to include disabled fields
             const selectedEmployee = this.employees.find(e => e._id === formValue.employeeId);
             
             if (formValue.leaveType === 'vacation' && selectedEmployee) {

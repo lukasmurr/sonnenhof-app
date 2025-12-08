@@ -54,7 +54,7 @@ export class EmployeeDialogComponent {
             vacationDays: [data.employee?.vacationDays || 30, [Validators.required, Validators.min(0)]],
             landline: [data.employee?.landline || ''],
             mobile: [data.employee?.mobile || ''],
-            email: [data.employee?.email || '', [Validators.email]]
+            email: [data.employee?.email || '', [Validators.required, Validators.email]]
         });
     }
 

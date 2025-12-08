@@ -6,7 +6,7 @@ export interface Employee {
     birthDate: string;
     landline?: string;
     mobile?: string;
-    email?: string;
+    email: string;
     vacationDays: number;
     createdAt?: string;
     updatedAt?: string;
