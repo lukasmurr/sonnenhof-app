@@ -65,10 +65,9 @@ export class PermissionService {
     }
 
     hasPermission(user: User, permission: Permission): boolean {
-        if (user.permissions && user.permissions.includes(permission)) {
-            return true;
-        }
-        return false;
+        if (!user.group) return false;
+        const groupPerms = this.getGroupPermissions(user.group);
+        return groupPerms.includes(permission);
     }
     
     getGroups(): { value: UserGroup, label: string }[] {

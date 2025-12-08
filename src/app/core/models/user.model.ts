@@ -15,9 +15,7 @@ export interface User {
     name: string;
     email: string;
     password?: string; // Optional when retrieving list, required for creation/login
-    role: 'admin' | 'user' | 'viewer';
     group?: UserGroup;
-    permissions?: Permission[];
     isLocked: boolean;
     createdAt?: string;
     updatedAt?: string;

@@ -32,23 +32,6 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Detaillierte Berechtigungen
-            </mat-panel-title>
-            <mat-panel-description>
-                Individuell anpassen
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <div class="permissions-grid">
-            <mat-checkbox *ngFor="let perm of allPermissions" [formControl]="getPermissionControl(perm)">
-                {{ getPermissionLabel(perm) }}
-            </mat-checkbox>
-        </div>
-    </mat-expansion-panel>
-
     <div class="checkbox-container">
       <mat-checkbox formControlName="isLocked">Benutzer gesperrt</mat-checkbox>
     </div>
