@@ -11,7 +11,7 @@
 
     <div class="card-grid">
         <!-- TÜV Card -->
-        <mat-card class="section-card tuev" (click)="navigateToSection('tuev')">
+        <mat-card class="section-card tuev" (click)="navigateToSection('tuev')" *appHasPermission="'tuev.view'">
             <div class="card-icon"><mat-icon>verified_user</mat-icon></div>
             <mat-card-title>TÜV</mat-card-title>
             <mat-card-content>
@@ -21,7 +21,7 @@
         </mat-card>
 
         <!-- Märkte Card -->
-        <mat-card class="section-card markets" (click)="navigateToSection('markets')">
+        <mat-card class="section-card markets" (click)="navigateToSection('markets')" *appHasPermission="'market.view'">
             <div class="card-icon"><mat-icon>storefront</mat-icon></div>
             <mat-card-title>Märkte</mat-card-title>
             <mat-card-content>
@@ -31,7 +31,7 @@
         </mat-card>
 
         <!-- Mitarbeiter Card -->
-        <mat-card class="section-card employees" (click)="navigateToSection('employees')">
+        <mat-card class="section-card employees" (click)="navigateToSection('employees')" *appHasPermission="'employee.view'">
             <div class="card-icon"><mat-icon>people</mat-icon></div>
             <mat-card-title>Mitarbeiter</mat-card-title>
             <mat-card-content>
@@ -41,7 +41,7 @@
         </mat-card>
 
         <!-- Urlaubsplanung Card -->
-        <mat-card class="section-card vacation" (click)="navigateToSection('vacation')">
+        <mat-card class="section-card vacation" (click)="navigateToSection('vacation')" *appHasPermission="'vacation.view'">
             <div class="card-icon"><mat-icon>date_range</mat-icon></div>
             <mat-card-title>Urlaubsplanung</mat-card-title>
             <mat-card-content>

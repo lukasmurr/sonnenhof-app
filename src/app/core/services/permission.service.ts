@@ -33,20 +33,20 @@ export class PermissionService {
             'butchery.view',
             'product.view', 'product.create',
             'order.view', 'order.create',
-            'vacation.create_own', 'vacation.update_own'
+            'vacation.view', 'vacation.create_own', 'vacation.update_own'
         ],
         sales: [
             'office.view',
             'butchery.view',
             'order.view', 'order.create',
-            'vacation.create_own', 'vacation.update_own'
+            'vacation.view', 'vacation.create_own', 'vacation.update_own'
         ]
     };
 
     getGroupPermissions(group: UserGroup): Permission[] {
         return this.GROUP_PERMISSIONS[group] || [];
     }
-    
+
     getGroups(): { value: UserGroup, label: string }[] {
         return [
             { value: 'admin', label: 'Admin' },
