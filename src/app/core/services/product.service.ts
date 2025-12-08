@@ -59,9 +59,9 @@ export class ProductService {
         const productsByKey: { [key: string]: Product[] } = {};
         let deletedCount = 0;
 
-        // Group by PU Number, Name and Unit
+        // Group by PU Number and Name
         products.forEach((p: Product) => {
-            const key = `${p.puNumber}_${p.name}_${p.unit}`;
+            const key = `${p.puNumber}_${p.name}`;
             if (!productsByKey[key]) {
                 productsByKey[key] = [];
             }
@@ -72,14 +72,20 @@ export class ProductService {
         for (const key in productsByKey) {
             const group = productsByKey[key];
             if (group.length > 1) {
-                // Sort: Prefer ID 'product_PU', then newest updatedAt
+                // Sort: Prefer 'Kg', then ID 'product_PU', then newest updatedAt
                 group.sort((a, b) => {
+                    // 1. Prefer 'Kg' over 'Stück'
+                    if (a.unit === 'Kg' && b.unit !== 'Kg') return -1;
+                    if (a.unit !== 'Kg' && b.unit === 'Kg') return 1;
+
+                    // 2. Prefer ID 'product_PU'
                     const aIsCorrectId = a._id === `product_${a.puNumber}`;
                     const bIsCorrectId = b._id === `product_${b.puNumber}`;
 
                     if (aIsCorrectId && !bIsCorrectId) return -1;
                     if (!aIsCorrectId && bIsCorrectId) return 1;
 
+                    // 3. Newest updatedAt
                     const dateA = new Date(a.updatedAt || 0).getTime();
                     const dateB = new Date(b.updatedAt || 0).getTime();
                     return dateB - dateA; // Newest first
