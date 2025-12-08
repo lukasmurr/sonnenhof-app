@@ -1,521 +1,121 @@
-<div class="tuev-wrapper">
+<div class="tuev-container">
     <div class="header">
-        <button mat-icon-button (click)="goBack()">
-            <mat-icon>arrow_back</mat-icon>
+        <h1>TÜV Verwaltung</h1>
+        <button mat-raised-button color="primary" (click)="openAddVehicleDialog()" *appHasPermission="'tuev.create'">
+            <mat-icon>add</mat-icon> Auto anlegen
         </button>
-        <h1 class="headline">TÜV Verwaltung</h1>
-        <div class="spacer"></div>
     </div>
 
-    <mat-tab-group class="tuev-tabs" [(selectedIndex)]="activeTab">
-        <!-- Kalender Tab -->
-        <mat-tab label="Kalender">
-            <ng-template mat-tab-label>
-                <mat-icon class="tab-icon">calendar_today</mat-icon>
-                <span>Kalender</span>
-            </ng-template>
-            <div class="tab-content">
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <button mat-icon-button (click)="previousMonth()">
-                            <mat-icon>chevron_left</mat-icon>
-                        </button>
-                        <h2>{{ currentMonth | date: 'MMMM yyyy' }}</h2>
-                        <button mat-icon-button (click)="nextMonth()">
-                            <mat-icon>chevron_right</mat-icon>
-                        </button>
-                    </div>
+    <table mat-table [dataSource]="vehicles" class="mat-elevation-z8">
+        <!-- License Plate Column -->
+        <ng-container matColumnDef="licensePlate">
+            <th mat-header-cell *matHeaderCellDef> Kennzeichen </th>
+            <td mat-cell *matCellDef="let vehicle"> {{vehicle.licensePlate}} </td>
+        </ng-container>
 
-                    <div class="calendar-grid">
-                        <div class="calendar-weekdays">
-                            <div *ngFor="let day of calendarWeekdaysShort" class="weekday">
-                                {{ day }}
-                            </div>
-                        </div>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Bezeichnung/Name </th>
+            <td mat-cell *matCellDef="let vehicle"> {{vehicle.name}} </td>
+        </ng-container>
 
-                        <div class="calendar-days">
-                            <div *ngFor="let dayObj of calendarDays"
-                                [ngClass]="{ 'empty-day': !dayObj, 'calendar-day': dayObj }"
-                                (click)="dayObj && selectDateForAppointment(dayObj.date)">
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Typ </th>
+            <td mat-cell *matCellDef="let vehicle"> {{getVehicleTypeLabel(vehicle.type)}} </td>
+        </ng-container>
 
-                                <div *ngIf="dayObj" class="day-content">
-                                    <div class="day-number">{{ dayObj.day }}</div>
-                                    <div class="day-appointments">
-                                        <div *ngFor="let appointment of dayObj.appointments" class="appointment-badge"
-                                            [ngClass]="'status-' + appointment.status"
-                                            (click)="$event.stopPropagation(); toggleAppointmentForm(appointment)"
-                                            [title]="appointment.vehicleName">
-                                            {{ appointment.vehicleName | slice:0:3 }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </mat-tab>
+        <!-- Expiry Date Column -->
+        <ng-container matColumnDef="nextTuevDate">
+            <th mat-header-cell *matHeaderCellDef> TÜV Ablaufdatum </th>
+            <td mat-cell *matCellDef="let vehicle" [class.expired]="isExpired(vehicle.nextTuevDate)"
+                [class.soon-expired]="isSoonExpired(vehicle.nextTuevDate)">
+                {{vehicle.nextTuevDate | date:'dd.MM.yyyy'}}
+                <span *ngIf="isExpired(vehicle.nextTuevDate)" class="badge badge-expired">Abgelaufen</span>
+                <span *ngIf="isSoonExpired(vehicle.nextTuevDate)" class="badge badge-soon">Bald fällig</span>
+            </td>
+        </ng-container>
 
-        <!-- Termine Tab -->
-        <mat-tab label="Termine">
-            <ng-template mat-tab-label>
-                <mat-icon class="tab-icon">event</mat-icon>
-                <span>Termine</span>
-            </ng-template>
-            <div class="tab-content">
-                <mat-card class="tuev-card">
-                    <mat-card-header>
-                        <mat-card-title>Anstehende Termine (nächste 30 Tage)</mat-card-title>
-                        <div class="header-actions">
-                            <button mat-raised-button color="primary" (click)="toggleAppointmentForm()">
-                                <mat-icon>add</mat-icon>
-                                Neuer Termin
-                            </button>
-                        </div>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <div *ngIf="showAppointmentForm" class="form-container">
-                            <h3>{{ editingAppointmentId ? 'Termin bearbeiten' : 'Neuer Termin' }}</h3>
-                            <form [formGroup]="appointmentForm">
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Fahrzeug</mat-label>
-                                    <mat-select formControlName="vehicleId">
-                                        <mat-option *ngFor="let vehicle of vehicles" [value]="vehicle._id">
-                                            {{ vehicle.name }} ({{ vehicle.licensePlate }})
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+            <td mat-cell *matCellDef="let vehicle">
+                <button mat-stroked-button (click)="openRenewDialog(vehicle)" matTooltip="TÜV erneuern" 
+                *appHasPermission="'tuev.update'">
+                    <mat-icon>add_task</mat-icon>
+                </button>
+                <button mat-icon-button (click)="openEditVehicleDialog(vehicle)"
+                    matTooltip="Bearbeiten" *appHasPermission="'tuev.update'">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteVehicle(vehicle)" matTooltip="Löschen" *appHasPermission="'tuev.delete'">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
 
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Termin Datum</mat-label>
-                                    <input matInput [matDatepicker]="picker" formControlName="appointmentDate">
-                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Status</mat-label>
-                                    <mat-select formControlName="status">
-                                        <mat-option value="pending">Ausstehend</mat-option>
-                                        <mat-option value="completed">Abgeschlossen</mat-option>
-                                        <mat-option value="failed">Nicht bestanden</mat-option>
-                                        <mat-option value="rescheduled">Verschoben</mat-option>
-                                        <mat-option value="cancelled">Storniert</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Ort</mat-label>
-                                    <input matInput formControlName="location">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Prüfer</mat-label>
-                                    <input matInput formControlName="inspector">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Notizen</mat-label>
-                                    <textarea matInput formControlName="notes" rows="3"></textarea>
-                                </mat-form-field>
-
-                                <div class="checkbox-group">
-                                    <label>
-                                        <input type="checkbox" formControlName="passedInspection">
-                                        Prüfung bestanden
-                                    </label>
-                                </div>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Nächster Termin</mat-label>
-                                    <input matInput [matDatepicker]="pickerNext" formControlName="nextAppointmentDate">
-                                    <mat-datepicker-toggle matIconSuffix [for]="pickerNext"></mat-datepicker-toggle>
-                                    <mat-datepicker #pickerNext></mat-datepicker>
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Mängel (kommagetrennt)</mat-label>
-                                    <textarea matInput formControlName="defects" rows="2"></textarea>
-                                </mat-form-field>
-
-                                <div class="form-actions">
-                                    <button mat-raised-button color="primary" (click)="saveAppointment()">
-                                        <mat-icon>save</mat-icon>
-                                        Speichern
-                                    </button>
-                                    <button mat-button (click)="cancel()">
-                                        <mat-icon>close</mat-icon>
-                                        Abbrechen
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div *ngIf="upcomingAppointments.length > 0" class="table-container">
-                            <div class="table-scroll-wrapper">
-                                <table mat-table [dataSource]="upcomingAppointments" class="full-width-table">
-                                    <!-- Fahrzeug -->
-                                    <ng-container matColumnDef="vehicleName">
-                                        <th mat-header-cell *matHeaderCellDef>Fahrzeug</th>
-                                        <td mat-cell *matCellDef="let element">{{ element.vehicleName }}</td>
-                                    </ng-container>
-
-                                    <!-- Datum -->
-                                    <ng-container matColumnDef="date">
-                                        <th mat-header-cell *matHeaderCellDef>Datum</th>
-                                        <td mat-cell *matCellDef="let element">{{ element.appointmentDate | date: 'dd.MM.yyyy
-                                            HH:mm' }}</td>
-                                    </ng-container>
-
-                                    <!-- Status -->
-                                    <ng-container matColumnDef="status">
-                                        <th mat-header-cell *matHeaderCellDef>Status</th>
-                                        <td mat-cell *matCellDef="let element">
-                                            <mat-chip [ngClass]="getStatusBadgeClass(element.status)">
-                                                {{ element.status }}
-                                            </mat-chip>
-                                        </td>
-                                    </ng-container>
-
-                                    <!-- Prüfer -->
-                                    <ng-container matColumnDef="inspector">
-                                        <th mat-header-cell *matHeaderCellDef>Prüfer</th>
-                                        <td mat-cell *matCellDef="let element">{{ element.inspector || '-' }}</td>
-                                    </ng-container>
-
-                                    <!-- Bestanden -->
-                                    <ng-container matColumnDef="passed">
-                                        <th mat-header-cell *matHeaderCellDef>Bestanden</th>
-                                        <td mat-cell *matCellDef="let element">
-                                            <mat-icon *ngIf="element.passedInspection"
-                                                class="icon-success">check_circle</mat-icon>
-                                            <mat-icon *ngIf="!element.passedInspection" class="icon-warning">cancel</mat-icon>
-                                        </td>
-                                    </ng-container>
-
-                                    <!-- Aktionen -->
-                                    <ng-container matColumnDef="actions">
-                                        <th mat-header-cell *matHeaderCellDef>Aktionen</th>
-                                        <td mat-cell *matCellDef="let element">
-                                            <div class="actions-row">
-                                                <button mat-icon-button (click)="toggleAppointmentForm(element)" title="Bearbeiten">
-                                                    <mat-icon>edit</mat-icon>
-                                                </button>
-                                                <button mat-icon-button color="warn" (click)="deleteAppointment(element._id!)"
-                                                    title="Löschen">
-                                                    <mat-icon>delete</mat-icon>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="appointmentDisplayColumns"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: appointmentDisplayColumns;"></tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div *ngIf="upcomingAppointments.length === 0 && !showAppointmentForm" class="empty-state">
-                            <mat-icon>event_note</mat-icon>
-                            <p>Keine anstehenden Termine gefunden</p>
-                        </div>
-
-                        <!-- Überfällige Termine -->
-                        <div *ngIf="overdueAppointments.length > 0" class="overdue-section">
-                            <h3 class="overdue-title">
-                                <mat-icon class="warning-icon">warning</mat-icon>
-                                Überfällige Termine ({{ overdueAppointments.length }})
-                            </h3>
-                            <div class="table-container">
-                                <div class="table-scroll-wrapper">
-                                    <table mat-table [dataSource]="overdueAppointments" class="full-width-table overdue-table">
-                                        <!-- Fahrzeug -->
-                                        <ng-container matColumnDef="vehicleName">
-                                            <th mat-header-cell *matHeaderCellDef>Fahrzeug</th>
-                                            <td mat-cell *matCellDef="let element">{{ element.vehicleName }}</td>
-                                        </ng-container>
-
-                                        <!-- Datum -->
-                                        <ng-container matColumnDef="date">
-                                            <th mat-header-cell *matHeaderCellDef>Datum</th>
-                                            <td mat-cell *matCellDef="let element">{{ element.appointmentDate | date: 'dd.MM.yyyy
-                                                HH:mm' }}</td>
-                                        </ng-container>
-
-                                        <!-- Status -->
-                                        <ng-container matColumnDef="status">
-                                            <th mat-header-cell *matHeaderCellDef>Status</th>
-                                            <td mat-cell *matCellDef="let element">
-                                                <mat-chip [ngClass]="getStatusBadgeClass(element.status)">
-                                                    {{ element.status }}
-                                                </mat-chip>
-                                            </td>
-                                        </ng-container>
-
-                                        <!-- Prüfer -->
-                                        <ng-container matColumnDef="inspector">
-                                            <th mat-header-cell *matHeaderCellDef>Prüfer</th>
-                                            <td mat-cell *matCellDef="let element">{{ element.inspector || '-' }}</td>
-                                        </ng-container>
-
-                                        <!-- Bestanden -->
-                                        <ng-container matColumnDef="passed">
-                                            <th mat-header-cell *matHeaderCellDef>Bestanden</th>
-                                            <td mat-cell *matCellDef="let element">
-                                                <mat-icon *ngIf="element.passedInspection"
-                                                    class="icon-success">check_circle</mat-icon>
-                                                <mat-icon *ngIf="!element.passedInspection" class="icon-warning">cancel</mat-icon>
-                                            </td>
-                                        </ng-container>
-
-                                        <!-- Aktionen -->
-                                        <ng-container matColumnDef="actions">
-                                            <th mat-header-cell *matHeaderCellDef>Aktionen</th>
-                                            <td mat-cell *matCellDef="let element">
-                                                <div class="actions-row">
-                                                    <button mat-icon-button (click)="toggleAppointmentForm(element)" title="Bearbeiten">
-                                                        <mat-icon>edit</mat-icon>
-                                                    </button>
-                                                    <button mat-icon-button color="warn" (click)="deleteAppointment(element._id!)"
-                                                        title="Löschen">
-                                                        <mat-icon>delete</mat-icon>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </ng-container>
-
-                                        <tr mat-header-row *matHeaderRowDef="appointmentDisplayColumns"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: appointmentDisplayColumns;"></tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </mat-tab>
-
-        <!-- TÜV Status Tab -->
-        <mat-tab label="TÜV Status">
-            <ng-template mat-tab-label>
-                <mat-icon class="tab-icon">verified_user</mat-icon>
-                <span>TÜV Status</span>
-            </ng-template>
-            <div class="tab-content">
-                <mat-card class="tuev-card">
-                    <mat-card-header>
-                        <mat-card-title>Fahrzeug-TÜV Status</mat-card-title>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <div class="table-container">
-                            <table mat-table [dataSource]="tuevStatuses" class="full-width-table status-table">
-                                <!-- Fahrzeug -->
-                                <ng-container matColumnDef="vehicleName">
-                                    <th mat-header-cell *matHeaderCellDef>Fahrzeug</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.vehicleName }}</td>
-                                </ng-container>
-
-                                <!-- Kennzeichen -->
-                                <ng-container matColumnDef="licensePlate">
-                                    <th mat-header-cell *matHeaderCellDef>Kennzeichen</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.licensePlate }}</td>
-                                </ng-container>
-
-                                <!-- TÜV Status -->
-                                <ng-container matColumnDef="status">
-                                    <th mat-header-cell *matHeaderCellDef>Status</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <mat-chip [ngClass]="getTuevStatusClass(element.currentStatus)">
-                                            <mat-icon *ngIf="element.currentStatus === 'valid'"
-                                                class="chip-icon">check_circle</mat-icon>
-                                            <mat-icon *ngIf="element.currentStatus === 'expiring-soon'"
-                                                class="chip-icon">warning</mat-icon>
-                                            <mat-icon *ngIf="element.currentStatus === 'expired'"
-                                                class="chip-icon">error</mat-icon>
-                                            <mat-icon *ngIf="element.currentStatus === 'unknown'"
-                                                class="chip-icon">help</mat-icon>
-                                            {{ element.currentStatus }}
-                                        </mat-chip>
-                                    </td>
-                                </ng-container>
-
-                                <!-- Nächster Termin -->
-                                <ng-container matColumnDef="nextDate">
-                                    <th mat-header-cell *matHeaderCellDef>Nächster Termin</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        {{ (element.nextInspectionDate | date: 'dd.MM.yyyy') || '-' }}
-                                    </td>
-                                </ng-container>
-
-                                <!-- Tage bis Ablauf -->
-                                <ng-container matColumnDef="daysUntil">
-                                    <th mat-header-cell *matHeaderCellDef>Tage bis Ablauf</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <span
-                                            [ngClass]="{ 'overdue': element.isOverdue, 'expiring-soon': element.daysUntilExpiry! <= 30 }">
-                                            {{ element.daysUntilExpiry ?? '-' }}
-                                        </span>
-                                    </td>
-                                </ng-container>
-
-                                <tr mat-header-row *matHeaderRowDef="statusDisplayColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: statusDisplayColumns;"></tr>
-                            </table>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </mat-tab>
-
-        <!-- Fahrzeuge Tab -->
-        <mat-tab label="Fahrzeuge">
-            <ng-template mat-tab-label>
-                <mat-icon class="tab-icon">directions_car</mat-icon>
-                <span>Fahrzeuge</span>
-            </ng-template>
-            <div class="tab-content">
-                <mat-card class="tuev-card">
-                    <mat-card-header>
-                        <mat-card-title>Fahrzeugverwaltung</mat-card-title>
-                        <div class="header-actions">
-                            <button mat-raised-button color="primary" (click)="toggleVehicleForm()">
-                                <mat-icon>add</mat-icon>
-                                Neues Fahrzeug
-                            </button>
-                        </div>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <div *ngIf="showVehicleForm" class="form-container">
-                            <h3>{{ editingVehicleId ? 'Fahrzeug bearbeiten' : 'Neues Fahrzeug' }}</h3>
-                            <form [formGroup]="vehicleForm">
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Fahrzeugname</mat-label>
-                                    <input matInput formControlName="name">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Kennzeichen</mat-label>
-                                    <input matInput formControlName="licensePlate">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>FIN/VIN</mat-label>
-                                    <input matInput formControlName="vin">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Fahrzeugtyp</mat-label>
-                                    <mat-select formControlName="type">
-                                        <mat-option value="car">Auto</mat-option>
-                                        <mat-option value="truck">Lastkraftwagen</mat-option>
-                                        <mat-option value="trailer">Anhänger</mat-option>
-                                        <mat-option value="other">Sonstige</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Hersteller</mat-label>
-                                    <input matInput formControlName="manufacturer">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Modell</mat-label>
-                                    <input matInput formControlName="model">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Baujahr</mat-label>
-                                    <input matInput type="number" formControlName="year">
-                                </mat-form-field>
-
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Laufleistung (km)</mat-label>
-                                    <input matInput type="number" formControlName="mileage">
-                                </mat-form-field>
-
-                                <div class="form-actions">
-                                    <button mat-raised-button color="primary" (click)="saveVehicle()">
-                                        <mat-icon>save</mat-icon>
-                                        Speichern
-                                    </button>
-                                    <button mat-button (click)="cancel()">
-                                        <mat-icon>close</mat-icon>
-                                        Abbrechen
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div *ngIf="vehicles.length > 0" class="table-container">
-                            <table mat-table [dataSource]="vehicles" class="full-width-table">
-                                <!-- Name -->
-                                <ng-container matColumnDef="name">
-                                    <th mat-header-cell *matHeaderCellDef>Name</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-                                </ng-container>
-
-                                <!-- Kennzeichen -->
-                                <ng-container matColumnDef="licensePlate">
-                                    <th mat-header-cell *matHeaderCellDef>Kennzeichen</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.licensePlate }}</td>
-                                </ng-container>
-
-                                <!-- Typ -->
-                                <ng-container matColumnDef="type">
-                                    <th mat-header-cell *matHeaderCellDef>Typ</th>
-                                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-                                </ng-container>
-
-                                <!-- Status -->
-                                <ng-container matColumnDef="status">
-                                    <th mat-header-cell *matHeaderCellDef>TÜV Status</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <mat-chip [ngClass]="getTuevStatusClass(getTuevStatusForVehicle(element._id!))">
-                                            {{ getTuevStatusForVehicle(element._id!) }}
-                                        </mat-chip>
-                                    </td>
-                                </ng-container>
-
-                                <!-- Nächster Termin -->
-                                <ng-container matColumnDef="nextDate">
-                                    <th mat-header-cell *matHeaderCellDef>Nächster Termin</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        {{ (getNextInspectionDateForVehicle(element._id!) | date: 'dd.MM.yyyy') || '-' }}
-                                    </td>
-                                </ng-container>
-
-                                <!-- Aktionen -->
-                                <ng-container matColumnDef="actions">
-                                    <th mat-header-cell *matHeaderCellDef>Aktionen</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <div class="actions-row">
-                                            <button mat-icon-button (click)="toggleVehicleForm(element)" title="Bearbeiten">
-                                                <mat-icon>edit</mat-icon>
-                                            </button>
-                                            <button mat-icon-button (click)="selectVehicleForAppointment(element)"
-                                                title="Termin hinzufügen">
-                                                <mat-icon>add_event</mat-icon>
-                                            </button>
-                                            <button mat-icon-button color="warn" (click)="deleteVehicle(element._id!)"
-                                                title="Löschen">
-                                                <mat-icon>delete</mat-icon>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </ng-container>
-
-                                <tr mat-header-row *matHeaderRowDef="vehicleDisplayColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: vehicleDisplayColumns;"></tr>
-                            </table>
-                        </div>
-
-                        <div *ngIf="vehicles.length === 0 && !showVehicleForm" class="empty-state">
-                            <mat-icon>directions_car</mat-icon>
-                            <p>Keine Fahrzeuge gefunden</p>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </mat-tab>
-    </mat-tab-group>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </div>
+
+<!-- Add/Edit Vehicle Dialog -->
+<ng-template #vehicleDialog>
+    <h2 mat-dialog-title>{{selectedVehicle ? 'Fahrzeug bearbeiten' : 'Auto anlegen'}}</h2>
+    <mat-dialog-content>
+        <form [formGroup]="vehicleForm">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Kennzeichen</mat-label>
+                <input matInput formControlName="licensePlate" placeholder="M-AB 123">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Bezeichnung/Name</mat-label>
+                <input matInput formControlName="name" placeholder="Firmenwagen 1">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Typ</mat-label>
+                <mat-select formControlName="type">
+                    <mat-option value="car">Auto</mat-option>
+                    <mat-option value="truck">LKW</mat-option>
+                    <mat-option value="trailer">Hänger</mat-option>
+                    <mat-option value="tractor">Traktor</mat-option>
+                    <mat-option value="other">Sonstiges</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>TÜV Ablaufdatum</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="nextTuevDate">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Abbrechen</button>
+        <button mat-raised-button color="primary" (click)="saveVehicle()"
+            [disabled]="vehicleForm.invalid">Speichern</button>
+    </mat-dialog-actions>
+</ng-template>
+
+<!-- Renew Dialog -->
+<ng-template #renewDialog>
+    <h2 mat-dialog-title>TÜV erneuern</h2>
+    <mat-dialog-content>
+        <p>Wann läuft der neue TÜV ab?</p>
+        <form [formGroup]="renewForm">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Neues Ablaufdatum</mat-label>
+                <input matInput [matDatepicker]="renewPicker" formControlName="nextTuevDate">
+                <mat-datepicker-toggle matIconSuffix [for]="renewPicker"></mat-datepicker-toggle>
+                <mat-datepicker #renewPicker></mat-datepicker>
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Abbrechen</button>
+        <button mat-raised-button color="accent" (click)="saveRenew()" [disabled]="renewForm.invalid">Erneuern</button>
+    </mat-dialog-actions>
+</ng-template>

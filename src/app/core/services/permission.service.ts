@@ -13,7 +13,7 @@ export class PermissionService {
             'market.view', 'market.create', 'market.update', 'market.delete',
             'order.view', 'order.create', 'order.update', 'order.delete',
             'employee.view', 'employee.create', 'employee.update', 'employee.delete',
-            'tuev.view',
+            'tuev.view', 'tuev.create', 'tuev.update', 'tuev.delete',
             'user.manage',
             'vacation.view', 'vacation.create_own', 'vacation.update_own',
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others',
@@ -25,7 +25,7 @@ export class PermissionService {
             'market.view', 'market.create', 'market.update', 'market.delete',
             'order.view', 'order.create', 'order.update', 'order.delete',
             'employee.view', 'employee.create', 'employee.update', 'employee.delete',
-            'tuev.view',
+            'tuev.view', 'tuev.create', 'tuev.update', 'tuev.delete',
             'vacation.view', 'vacation.create_own', 'vacation.update_own',
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
