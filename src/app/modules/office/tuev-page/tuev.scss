@@ -1,63 +1,130 @@
 .tuev-container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+    min-height: 100%;
+    padding: 24px;
+    background: #f5f5f5;
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-      color: #333;
-    }
-  }
+        .spacer {
+            width: 40px;
+        }
 
-  table {
-    width: 100%;
-    
-    th.mat-header-cell {
-      font-weight: bold;
-      color: #555;
-    }
-
-    td.mat-cell {
-      padding: 16px;
-    }
-
-    .expired {
-      background-color: rgba(244, 67, 54, 0.1);
+        .headline {
+            flex: 1;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #3F51B5;
+            letter-spacing: 1px;
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+        }
     }
 
-    .soon-expired {
-      background-color: rgba(255, 152, 0, 0.1);
+    .tuev-content {
+        max-width: 1200px;
+        margin: 0 auto;
+
+        .tuev-card {
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+            mat-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+
+                .header-actions {
+                    margin-left: auto;
+                }
+            }
+
+            .table-container {
+                .table-scroll-wrapper {
+                    overflow: auto;
+                }
+
+                mat-paginator {
+                    font-size: 12px;
+
+                    ::ng-deep .mat-mdc-paginator-container {
+                        min-height: 48px;
+                    }
+
+                    .mat-mdc-paginator {
+                        border-top: 1px solid rgba(0, 0, 0, 0.12);
+                    }
+                }
+
+                table {
+                    width: 100%;
+
+                    .mat-column-actions {
+                        width: 1%;
+                        white-space: nowrap;
+                        padding-right: 0;
+                    }
+
+                    th.mat-column-actions {
+                        text-align: left;
+                    }
+
+                    td.mat-column-actions {
+                        text-align: right;
+
+                        .actions-row {
+                            display: flex;
+                            justify-content: flex-end;
+                            align-items: center;
+                        }
+                    }
+
+                    .expired {
+                        background-color: rgba(244, 67, 54, 0.1);
+                    }
+
+                    .soon-expired {
+                        background-color: rgba(255, 152, 0, 0.1);
+                    }
+
+                    .badge {
+                        display: inline-block;
+                        padding: 4px 8px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        font-weight: bold;
+                        margin-left: 8px;
+
+                        &.badge-expired {
+                            background-color: #f44336;
+                            color: white;
+                        }
+
+                        &.badge-soon {
+                            background-color: #ff9800;
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-left: 8px;
-      
-      &.badge-expired {
-        background-color: #f44336;
-        color: white;
-      }
-
-      &.badge-soon {
-        background-color: #ff9800;
-        color: white;
-      }
+    @media (max-width: 768px) {
+        .header {
+            .headline {
+                font-size: 30px;
+            }
+        }
     }
-  }
-
-  .full-width {
-    width: 100%;
-  }
 }
 
