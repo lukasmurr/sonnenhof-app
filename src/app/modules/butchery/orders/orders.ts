@@ -65,10 +65,6 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         this.dataSource = new MatTableDataSource<Order>([]);
     }
 
-    get isViewer(): boolean {
-        return this.authService.userRole() === 'viewer';
-    }
-
     ngOnInit(): void {
         this.loadOrders();
         this.loadMarkets();
@@ -124,8 +120,6 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     }
 
     openOrderDialog(order?: Order, isReorder: boolean = false): void {
-        if (this.isViewer && order && !isReorder) {
-            return;
 
         const dialogRef = this.dialog.open(OrderDialogComponent, {
             width: '95%',
