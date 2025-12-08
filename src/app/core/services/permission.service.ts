@@ -20,7 +20,7 @@ export class PermissionService {
             'stall.view', 'stall.create', 'stall.update', 'stall.delete'
         ],
         office: [
-            'office.view',
+            'butchery.view', 'office.view',
             'product.view', 'product.create', 'product.update', 'product.delete',
             'market.view', 'market.create', 'market.update', 'market.delete',
             'order.view', 'order.create', 'order.update', 'order.delete',
