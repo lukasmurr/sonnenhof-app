@@ -29,12 +29,14 @@ export class PermissionService {
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
         butchery: [
+            'office.view',
             'butchery.view',
             'product.view', 'product.create',
             'order.view', 'order.create',
             'vacation.create_own', 'vacation.update_own'
         ],
         sales: [
+            'office.view',
             'butchery.view',
             'order.view', 'order.create',
             'vacation.create_own', 'vacation.update_own'
