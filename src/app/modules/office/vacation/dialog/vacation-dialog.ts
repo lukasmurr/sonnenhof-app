@@ -108,7 +108,7 @@ export class VacationDialogComponent implements OnInit {
                 employeeName: selectedEmployee?.name || 'Unbekannt',
                 startDate: startDate.toISOString(),
                 endDate: endDate.toISOString(),
-                status: 'approved'
+                status: this.data.canSeeAll ? 'approved' : 'pending'
             };
             this.dialogRef.close(vacationData);
         }

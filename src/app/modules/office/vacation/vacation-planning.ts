@@ -10,6 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { Vacation } from '../../../core/models/vacation.model';
 import { VacationService } from '../../../core/services/vacation.service';
 import { VacationDialogComponent } from './dialog/vacation-dialog';
@@ -47,8 +48,14 @@ export class VacationPlanningComponent implements OnInit {
     displayedColumns: string[] = ['employeeName', 'leaveType', 'startDate', 'endDate', 'actions'];
     dataSource: MatTableDataSource<Vacation>;
 
+    pendingDisplayedColumns: string[] = ['employeeName', 'leaveType', 'startDate', 'endDate', 'notes', 'actions'];
+    pendingDataSource: MatTableDataSource<Vacation>;
+
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
+
+    @ViewChild('pendingPaginator') pendingPaginator!: MatPaginator;
+    @ViewChild('pendingSort') pendingSort!: MatSort;
 
     // Calendar properties
     currentDate: Date = new Date();
@@ -59,6 +66,7 @@ export class VacationPlanningComponent implements OnInit {
     // Permission properties
     canSeeAll: boolean = false;
     currentEmployeeId: string | null = null;
+    pendingVacations: Vacation[] = [];
 
     constructor(
         private vacationService: VacationService,
@@ -68,6 +76,7 @@ export class VacationPlanningComponent implements OnInit {
         private employeeService: EmployeeService
     ) {
         this.dataSource = new MatTableDataSource<Vacation>([]);
+        this.pendingDataSource = new MatTableDataSource<Vacation>([]);
     }
 
     ngOnInit() {
@@ -80,8 +89,8 @@ export class VacationPlanningComponent implements OnInit {
         if (!this.canSeeAll) {
             const userEmail = this.authService.getCurrentUser();
             if (userEmail) {
-                const employees = await this.employeeService.getEmployees().toPromise();
-                const employee = employees?.find(e => e.email === userEmail);
+                const employees = await firstValueFrom(this.employeeService.getEmployees());
+                const employee = employees?.find(e => e.email?.toLowerCase() === userEmail.toLowerCase());
                 if (employee) {
                     this.currentEmployeeId = employee._id || null;
                 }
@@ -95,16 +104,38 @@ export class VacationPlanningComponent implements OnInit {
         this.vacationService.getVacations().subscribe(vacations => {
             if (this.canSeeAll) {
                 this.allVacations = vacations;
+                this.pendingVacations = vacations.filter(v => v.status === 'pending');
             } else if (this.currentEmployeeId) {
                 this.allVacations = vacations.filter(v => v.employeeId === this.currentEmployeeId);
+                this.pendingVacations = [];
             } else {
                 this.allVacations = [];
+                this.pendingVacations = [];
             }
             
             this.dataSource.data = this.allVacations;
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+
+            this.pendingDataSource.data = this.pendingVacations;
+            this.pendingDataSource.paginator = this.pendingPaginator;
+            this.pendingDataSource.sort = this.pendingSort;
+
             this.generateCalendar();
+        });
+    }
+
+    approveVacation(vacation: Vacation) {
+        this.vacationService.updateVacation({
+            ...vacation,
+            status: 'approved'
+        });
+    }
+
+    rejectVacation(vacation: Vacation) {
+        this.vacationService.updateVacation({
+            ...vacation,
+            status: 'rejected'
         });
     }
 

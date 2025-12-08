@@ -91,7 +91,7 @@
                                         <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                                         <td mat-cell *matCellDef="let row">
                                             <div class="actions-row">
-                                                <button mat-icon-button color="primary"
+                                                <button mat-icon-button
                                                     (click)="openVacationDialog(row)" matTooltip="Bearbeiten">
                                                     <mat-icon>edit</mat-icon>
                                                 </button>
@@ -112,6 +112,71 @@
                                 </table>
                             </div>
                             <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
+                                aria-label="Einträge pro Seite"></mat-paginator>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Anträge verwalten" *appHasPermission="'vacation.create_others'">
+                        <div class="table-container">
+                            <div class="table-scroll-wrapper">
+                                <table mat-table [dataSource]="pendingDataSource" #pendingSort="matSort" matSort class="full-width-table">
+
+                                    <!-- Employee Column -->
+                                    <ng-container matColumnDef="employeeName">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mitarbeiter </th>
+                                        <td mat-cell *matCellDef="let row"> {{row.employeeName}} </td>
+                                    </ng-container>
+
+                                    <!-- Leave Type Column -->
+                                    <ng-container matColumnDef="leaveType">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Art </th>
+                                        <td mat-cell *matCellDef="let row"> {{getLeaveTypeLabel(row.leaveType)}} </td>
+                                    </ng-container>
+
+                                    <!-- Start Date Column -->
+                                    <ng-container matColumnDef="startDate">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Von </th>
+                                        <td mat-cell *matCellDef="let row"> {{row.startDate | date:'dd.MM.yyyy'}} </td>
+                                    </ng-container>
+
+                                    <!-- End Date Column -->
+                                    <ng-container matColumnDef="endDate">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Bis </th>
+                                        <td mat-cell *matCellDef="let row"> {{row.endDate | date:'dd.MM.yyyy'}} </td>
+                                    </ng-container>
+
+                                    <!-- Notes Column -->
+                                    <ng-container matColumnDef="notes">
+                                        <th mat-header-cell *matHeaderCellDef> Notiz </th>
+                                        <td mat-cell *matCellDef="let row"> {{row.notes}} </td>
+                                    </ng-container>
+
+                                    <!-- Actions Column -->
+                                    <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <div class="actions-row">
+                                                <button mat-icon-button style="color: #66bb6a;"
+                                                    (click)="approveVacation(row)" matTooltip="Genehmigen">
+                                                    <mat-icon>check_circle</mat-icon>
+                                                </button>
+                                                <button mat-icon-button style="color: #ef5350;"
+                                                    (click)="rejectVacation(row)" matTooltip="Ablehnen">
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="pendingDisplayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: pendingDisplayedColumns;"></tr>
+
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell" colspan="6">Keine ausstehenden Anträge vorhanden</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <mat-paginator #pendingPaginator [pageSizeOptions]="[10, 25, 50, 100]"
                                 aria-label="Einträge pro Seite"></mat-paginator>
                         </div>
                     </mat-tab>

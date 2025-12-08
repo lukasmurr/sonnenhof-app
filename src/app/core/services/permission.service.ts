@@ -17,9 +17,11 @@ export class PermissionService {
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
         office: [
-            'market.update', 'market.delete',
-            'order.update', 'order.delete',
+            'product.create', 'product.update', 'product.delete',
+            'market.create', 'market.update', 'market.delete',
+            'order.create', 'order.update', 'order.delete',
             'employee.create', 'employee.update', 'employee.delete',
+            'vacation.create_own', 'vacation.update_own',
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
         butchery: [
