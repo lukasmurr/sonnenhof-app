@@ -54,6 +54,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.checkPermissions();
         this.loadProducts();
 
         this.dataSource.filterPredicate = (data: Product, filter: string) => {
@@ -69,6 +70,15 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
+        }
+    }
+
+    checkPermissions(): void {
+        const canEdit = this.authService.hasPermission('product.update');
+        const canDelete = this.authService.hasPermission('product.delete');
+
+        if (!canEdit && !canDelete) {
+            this.displayedColumns = this.displayedColumns.filter(c => c !== 'actions');
         }
     }
 
