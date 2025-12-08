@@ -128,7 +128,13 @@ export const routes: Routes = [
         path: 'farming/stall',
         canActivate: [authGuard, permissionGuard],
         data: { permission: 'stall.view' },
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
+        loadComponent: () => import('./modules/farming/stall/stall-overview/stall-overview').then(m => m.StallOverviewComponent)
+    },
+    {
+        path: 'farming/stall/:id',
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'stall.view' },
+        loadComponent: () => import('./modules/farming/stall/stall-detail/stall-detail').then(m => m.StallDetailComponent)
     },
 
     // Settings

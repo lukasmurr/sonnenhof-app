@@ -1,0 +1,53 @@
+<div class="stall-detail-wrapper" *ngIf="stall$ | async as stall">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="headline">{{ stall.name }}</h1>
+        <div class="spacer"></div>
+        <div class="legend">
+            <span class="legend-item recommended"><span class="dot"></span> Empfohlen zur Schlachtung</span>
+            <span class="legend-item moving" *ngIf="moveSourceBoxId"><span class="dot"></span> Ziel wählen</span>
+        </div>
+    </div>
+
+    <div class="box-grid">
+        <mat-card *ngFor="let box of stall.boxes" 
+                  class="box-card" 
+                  [class.recommended]="isRecommended(box)"
+                  [class.moving-source]="moveSourceBoxId === box.id"
+                  [class.moving-target]="moveSourceBoxId && moveSourceBoxId !== box.id && box.pigs.length === 0"
+                  (click)="moveSourceBoxId && moveSourceBoxId !== box.id && box.pigs.length === 0 ? selectTarget(box) : null">
+            
+            <mat-card-header>
+                <mat-card-title>{{ box.name }}</mat-card-title>
+                <span class="capacity">{{ box.pigs.length }} / {{ box.capacity }}</span>
+            </mat-card-header>
+            
+            <mat-card-content>
+                <div class="pig-icons">
+                    <mat-icon *ngFor="let pig of box.pigs" class="pig-icon">pets</mat-icon>
+                    <span *ngIf="box.pigs.length === 0" class="empty-text">Leer</span>
+                </div>
+                <div class="stats" *ngIf="box.pigs.length > 0">
+                    <span>Ø Alter: {{ getAverageAge(box) }} Tage</span>
+                </div>
+            </mat-card-content>
+
+            <mat-card-actions *ngIf="!moveSourceBoxId">
+                <button mat-icon-button color="primary" (click)="addPig(box)" [disabled]="box.pigs.length >= box.capacity" title="Schwein hinzufügen">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="removePig(box)" [disabled]="box.pigs.length === 0" title="Schwein entfernen">
+                    <mat-icon>remove</mat-icon>
+                </button>
+                <button mat-icon-button (click)="startMove(box)" [disabled]="box.pigs.length === 0" title="Umstallen">
+                    <mat-icon>swap_horiz</mat-icon>
+                </button>
+                <button mat-icon-button color="accent" (click)="slaughterBox(box)" [disabled]="box.pigs.length === 0" title="Schlachten">
+                    <mat-icon>restaurant</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

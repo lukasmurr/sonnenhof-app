@@ -1,0 +1,43 @@
+.stall-overview-wrapper {
+    padding: 20px;
+    
+    .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        
+        .headline {
+            margin: 0 0 0 16px;
+        }
+        
+        .spacer {
+            flex: 1;
+        }
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .stall-card {
+        cursor: pointer;
+        transition: transform 0.2s;
+
+        &:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            
+            mat-icon {
+                margin-right: 8px;
+                color: #666;
+            }
+        }
+    }
+}
