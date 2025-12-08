@@ -16,7 +16,6 @@ export class PermissionService {
             'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
         ],
         office: [
-            'product.update', 'product.delete',
             'market.update', 'market.delete',
             'order.update', 'order.delete',
             'employee.create', 'employee.update', 'employee.delete',
@@ -66,16 +65,9 @@ export class PermissionService {
     }
 
     hasPermission(user: User, permission: Permission): boolean {
-        if (user.role === 'admin') return true; // Fallback for legacy admin role
         if (user.permissions && user.permissions.includes(permission)) {
             return true;
         }
-        // If no custom permissions are set, check group permissions? 
-        // The requirement says "individuell für jeden benutzer die berechtigunen verwaltet werden".
-        // So if user.permissions is set, we use that. 
-        // If not, we might fall back to group.
-        // But the UI will likely save the permissions into the user object directly when a group is selected.
-        // Let's assume user.permissions is the source of truth.
         return false;
     }
     

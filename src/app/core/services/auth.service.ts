@@ -192,7 +192,6 @@ export class AuthService {
   }
 
   public hasPermission(permission: Permission): boolean {
-      if (this.isAdmin()) return true; // Admin has all permissions
       return this.userPermissionsSignal().includes(permission);
   }
 }
