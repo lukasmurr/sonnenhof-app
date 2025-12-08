@@ -17,7 +17,8 @@
                         <mat-icon>picture_as_pdf</mat-icon>
                         Bericht
                     </button>
-                    <button mat-raised-button color="primary" (click)="openOrderDialog()">
+                    <button mat-raised-button color="primary" (click)="openOrderDialog()"
+                        *appHasPermission="'order.create'">
                         <mat-icon>add</mat-icon>
                         Neue Bestellung
                     </button>
@@ -95,11 +96,11 @@
                                             <mat-icon>post_add</mat-icon>
                                         </button>
                                         <button mat-icon-button (click)="openOrderDialog(row)" matTooltip="Bearbeiten"
-                                            *ngIf="!isViewer">
+                                            *appHasPermission="'order.update'">
                                             <mat-icon>edit</mat-icon>
                                         </button>
                                         <button mat-icon-button color="warn" (click)="deleteOrder(row)"
-                                            matTooltip="Löschen" *ngIf="!isViewer">
+                                            matTooltip="Löschen" *appHasPermission="'order.delete'">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>
