@@ -125,23 +125,9 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/farming/farming-landing-page/farming-landing').then(m => m.FarmingLanding)
     },
     {
-        path: 'farming/fields',
-        canActivate: [authGuard],
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
-    },
-    {
-        path: 'farming/animals',
-        canActivate: [authGuard],
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
-    },
-    {
-        path: 'farming/harvest',
-        canActivate: [authGuard],
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
-    },
-    {
-        path: 'farming/equipment',
-        canActivate: [authGuard],
+        path: 'farming/stall',
+        canActivate: [authGuard, permissionGuard],
+        data: { permission: 'stall.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
 
@@ -151,11 +137,6 @@ export const routes: Routes = [
         canActivate: [permissionGuard],
         data: { permission: 'user.manage' },
         loadComponent: () => import('./modules/settings/settings').then(m => m.SettingsComponent)
-    },
-    {
-        path: 'agriculture',
-        canActivate: [authGuard],
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
 
     // Catch-all

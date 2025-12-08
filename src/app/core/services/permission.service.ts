@@ -16,7 +16,8 @@ export class PermissionService {
             'tuev.view',
             'user.manage',
             'vacation.view', 'vacation.create_own', 'vacation.update_own',
-            'vacation.create_others', 'vacation.update_others', 'vacation.delete_others'
+            'vacation.create_others', 'vacation.update_others', 'vacation.delete_others',
+            'stall.view', 'stall.create', 'stall.update', 'stall.delete'
         ],
         office: [
             'office.view',
