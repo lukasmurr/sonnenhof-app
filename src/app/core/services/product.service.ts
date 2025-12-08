@@ -56,20 +56,21 @@ export class ProductService {
 
     async cleanupDuplicates(): Promise<number> {
         const products = await this.dbService.getAllDocs(this.TYPE);
-        const productsByPu: { [key: string]: Product[] } = {};
+        const productsByKey: { [key: string]: Product[] } = {};
         let deletedCount = 0;
 
-        // Group by PU Number
+        // Group by PU Number, Name and Unit
         products.forEach((p: Product) => {
-            if (!productsByPu[p.puNumber]) {
-                productsByPu[p.puNumber] = [];
+            const key = `${p.puNumber}_${p.name}_${p.unit}`;
+            if (!productsByKey[key]) {
+                productsByKey[key] = [];
             }
-            productsByPu[p.puNumber].push(p);
+            productsByKey[key].push(p);
         });
 
         // Find duplicates
-        for (const pu in productsByPu) {
-            const group = productsByPu[pu];
+        for (const key in productsByKey) {
+            const group = productsByKey[key];
             if (group.length > 1) {
                 // Sort: Prefer ID 'product_PU', then newest updatedAt
                 group.sort((a, b) => {
