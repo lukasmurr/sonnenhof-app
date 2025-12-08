@@ -45,7 +45,7 @@ interface CalendarDay {
     styleUrls: ['./vacation-planning.scss']
 })
 export class VacationPlanningComponent implements OnInit {
-    displayedColumns: string[] = ['employeeName', 'leaveType', 'startDate', 'endDate', 'actions'];
+    displayedColumns: string[] = ['employeeName', 'leaveType', 'startDate', 'endDate', 'status', 'actions'];
     dataSource: MatTableDataSource<Vacation>;
 
     pendingDisplayedColumns: string[] = ['employeeName', 'leaveType', 'startDate', 'endDate', 'notes', 'actions'];
