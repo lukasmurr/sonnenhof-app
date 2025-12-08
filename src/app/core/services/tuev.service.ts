@@ -184,12 +184,6 @@ export class TuevService implements OnDestroy {
         return this.appointments$.asObservable();
     }
 
-    public getAppointmentsByVehicle(vehicleId: string): Observable<TuevAppointment[]> {
-        return this.appointments$.pipe(
-            map(appointments => appointments.filter(a => a.vehicleId === vehicleId))
-        );
-    }
-
     // ===== TÜV Status Management =====
     public getTuevStatuses(): Observable<TuevStatus[]> {
         return this.tuevStatuses$.asObservable();

@@ -161,10 +161,6 @@ export class AuthService {
     return this.isAuthenticatedSignal();
   }
 
-  public isAdmin(): boolean {
-    return this.userGroupSignal() === 'admin';
-  }
-
   public hasPermission(permission: Permission): boolean {
       return this.userPermissionsSignal().includes(permission);
   }

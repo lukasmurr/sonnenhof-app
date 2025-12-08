@@ -54,69 +54,10 @@ export class NotificationService {
         };
     }
 
-    public scheduleNotification(config: NotificationConfig, delayMs: number, id: string): void {
-        // Alte Zeitpläne löschen
-        if (this.notificationQueue.has(id)) {
-            clearTimeout(this.notificationQueue.get(id));
-        }
-
-        const timeout = setTimeout(() => {
-            this.sendNotification(config);
-            this.notificationQueue.delete(id);
-        }, delayMs);
-
-        this.notificationQueue.set(id, timeout);
-    }
-
-    public scheduleRecurringNotification(
-        config: NotificationConfig,
-        intervalMs: number,
-        maxTimes: number,
-        id: string
-    ): void {
-        let count = 0;
-
-        const interval = setInterval(() => {
-            this.sendNotification(config);
-            count++;
-
-            if (count >= maxTimes) {
-                clearInterval(interval);
-                this.notificationQueue.delete(id);
-            }
-        }, intervalMs);
-
-        this.notificationQueue.set(id, interval as any);
-    }
-
-    public cancelScheduled(id: string): void {
-        if (this.notificationQueue.has(id)) {
-            clearTimeout(this.notificationQueue.get(id));
-            this.notificationQueue.delete(id);
-        }
-    }
-
-    public cancelAll(): void {
-        this.notificationQueue.forEach(timeout => clearTimeout(timeout));
-        this.notificationQueue.clear();
-    }
-
     public getTimeUntil(futureDate: Date): { days: number; ms: number } {
         const now = new Date();
         const diff = futureDate.getTime() - now.getTime();
         const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
         return { days, ms: diff };
-    }
-
-    public shouldNotifyToday(appointmentDate: Date, daysUntil: number): boolean {
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const appointment = new Date(appointmentDate);
-        const appointmentDay = new Date(appointment.getFullYear(), appointment.getMonth(), appointment.getDate());
-
-        // Berechne den Tag, an dem die Benachrichtigung sein sollte
-        const notificationDay = new Date(appointmentDay.getTime() - daysUntil * 24 * 60 * 60 * 1000);
-
-        return today.getTime() === notificationDay.getTime();
     }
 }

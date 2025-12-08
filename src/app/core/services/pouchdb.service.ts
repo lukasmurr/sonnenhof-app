@@ -101,19 +101,6 @@ export class CouchDbService {
             });
     }
 
-    public queryByType(type: string): Promise<any[]> {
-        return this.getAllDocs(type);
-    }
-
-    public getDocsByIds(ids: string[]): Promise<any[]> {
-        return this.db.allDocs({ include_docs: true, keys: ids })
-            .then((result: any) => {
-                return result.rows
-                    .filter((row: any) => row.doc)
-                    .map((row: any) => row.doc);
-            });
-    }
-
     public watchDocs(type?: string): Observable<any[]> {
         return new Observable((subscriber) => {
             const sendUpdatedDocs = async () => {
@@ -149,44 +136,5 @@ export class CouchDbService {
 
     public generateId(): string {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    }
-
-    public isInitialized(): Observable<boolean> {
-        return this.dbInitialized$.asObservable();
-    }
-
-    public async checkRemoteConnection(): Promise<boolean> {
-        try {
-            const remoteUrl = environment.couchdb.remoteUrl;
-            if (!remoteUrl) return false;
-
-            const remoteDb = new PouchDB(remoteUrl, {
-                ajax: {
-                    headers: {
-                        'ngrok-skip-browser-warning': 'true'
-                    },
-                    withCredentials: false
-                }
-            });
-            await remoteDb.info();
-            return true;
-        } catch (err) {
-            console.error('Remote connection check failed:', err);
-            return false;
-        }
-    }
-
-    public async manualSync(): Promise<any> {
-        const remoteUrl = environment.couchdb.remoteUrl;
-        if (!remoteUrl) return Promise.resolve();
-
-        return this.db.sync(remoteUrl, {
-            ajax: {
-                headers: {
-                    'ngrok-skip-browser-warning': 'true'
-                },
-                withCredentials: false
-            }
-        });
     }
 }
