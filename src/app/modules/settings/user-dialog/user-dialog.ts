@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -153,17 +153,23 @@ export class UserDialogComponent {
       return this.permissionService.getPermissionLabel(p);
   }
 
+  getPermissionControl(p: Permission): FormControl {
+      return this.userForm.get('permissions')?.get(p) as FormControl;
+  }
+
   onCancel(): void {
     this.dialogRef.close();
   }
 
   onSave(): void {
     if (this.userForm.valid) {
-      const formValue = this.userForm.value;
+      const formValue = this.userForm.getRawValue();
       
       // Convert permissions object back to array
-      const permissionsObj = formValue.permissions;
-      const permissionsArray = Object.keys(permissionsObj).filter(key => permissionsObj[key]) as Permission[];
+      // Use allPermissions to iterate and check value to be robust against key issues
+      const permissionsArray = this.allPermissions.filter(p => {
+          return formValue.permissions[p] === true;
+      });
       
       const userData: User = {
           ...formValue,
@@ -171,9 +177,6 @@ export class UserDialogComponent {
           // Auto-set role based on group for backward compatibility
           role: formValue.group === 'admin' ? 'admin' : 'user'
       };
-
-      // Remove the permissions object from the result as we mapped it to array
-      // (Actually we constructed a new object so it's fine)
 
       this.dialogRef.close(userData);
     }
