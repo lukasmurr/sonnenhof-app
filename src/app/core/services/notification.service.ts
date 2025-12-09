@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export interface NotificationConfig {
-    title: string;
-    body?: string;
-    icon?: string;
-    badge?: string;
-    tag?: string;
-    priority?: 'low' | 'normal' | 'high';
-}
+import { NotificationConfig } from '../models/notification.model';
 
 @Injectable({
     providedIn: 'root'

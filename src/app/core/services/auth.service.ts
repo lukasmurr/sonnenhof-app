@@ -1,6 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { Permission, User, UserGroup } from '../models/user.model';
+import { User } from '../models/user.model';
+import { Permission, UserGroup } from '../models/permission.model';
 import { UserService } from './user.service';
 import { PermissionService } from './permission.service';
 

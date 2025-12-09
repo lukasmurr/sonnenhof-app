@@ -15,7 +15,6 @@ export class TuevService implements OnDestroy {
     private notificationIntervalId: any;
 
     constructor(private couchDbService: CouchDbService, private notificationService: NotificationService) {
-        console.log('TÜV Service initialized');
         this.initializeData();
         this.startNotificationCheck();
     }

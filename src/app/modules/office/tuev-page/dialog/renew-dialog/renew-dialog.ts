@@ -1,30 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Vehicle } from '../../../../../core/models';
-import { MatMomentDateModule, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
+import { CUSTOM_DATE_PROVIDERS } from '../../../../../core/config/date-formats';
+import { Vehicle } from '../../../../../core/models';
 
 const moment = _rollupMoment || _moment;
-
-export const MY_FORMATS = {
-    parse: {
-        dateInput: 'MM.YYYY',
-    },
-    display: {
-        dateInput: 'MM.YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
-};
 
 export interface RenewDialogData {
     vehicle: Vehicle;
@@ -43,14 +31,7 @@ export interface RenewDialogData {
         MatDatepickerModule,
         MatMomentDateModule
     ],
-    providers: [
-        {
-            provide: DateAdapter,
-            useClass: MomentDateAdapter,
-            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-        },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ],
+    providers: [CUSTOM_DATE_PROVIDERS],
     templateUrl: './renew-dialog.html',
     styles: [`
         .full-width {
