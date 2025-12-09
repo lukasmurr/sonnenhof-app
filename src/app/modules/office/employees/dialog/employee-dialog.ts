@@ -27,18 +27,7 @@ export interface EmployeeDialogData {
         MatNativeDateModule
     ],
     templateUrl: './employee-dialog.html',
-    styles: [`
-        .employee-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            min-width: 400px;
-            padding-top: 1rem;
-        }
-        mat-form-field {
-            width: 100%;
-        }
-    `]
+    styleUrls: ['./employee-dialog.scss']
 })
 export class EmployeeDialogComponent {
     form: FormGroup;

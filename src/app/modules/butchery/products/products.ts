@@ -11,11 +11,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 import { Product } from '../../../core/models/product.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProductService } from '../../../core/services/product.service';
 import { ProductDialogComponent } from './dialog/product-dialog';
-import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 @Component({
     selector: 'app-products',

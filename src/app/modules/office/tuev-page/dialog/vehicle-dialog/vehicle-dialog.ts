@@ -15,10 +15,6 @@ import { Vehicle } from '../../../../../core/models';
 
 const moment = _rollupMoment || _moment;
 
-export interface VehicleDialogData {
-    vehicle?: Vehicle;
-}
-
 @Component({
     selector: 'app-vehicle-dialog',
     standalone: true,
@@ -35,18 +31,7 @@ export interface VehicleDialogData {
     ],
     providers: [CUSTOM_DATE_PROVIDERS],
     templateUrl: './vehicle-dialog.html',
-    styles: [`
-        .vehicle-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            padding-top: 1rem;
-            min-width: 400px;
-        }
-        .full-width {
-            width: 100%;
-        }
-    `]
+    styleUrls: ['./vehicle-dialog.scss']
 })
 export class VehicleDialog implements OnInit {
     form: FormGroup;
@@ -54,7 +39,7 @@ export class VehicleDialog implements OnInit {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<VehicleDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: VehicleDialogData
+        @Inject(MAT_DIALOG_DATA) public data: { vehicle?: Vehicle }
     ) {
         this.form = this.fb.group({
             _id: [null],

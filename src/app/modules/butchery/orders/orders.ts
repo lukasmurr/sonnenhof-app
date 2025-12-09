@@ -12,6 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import moment from 'moment';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 import { Market } from '../../../core/models/market.model';
 import { Order } from '../../../core/models/order.model';
 import { Product } from '../../../core/models/product.model';
@@ -22,7 +23,6 @@ import { PdfService } from '../../../core/services/pdf.service';
 import { ProductService } from '../../../core/services/product.service';
 import { OrderDialogComponent } from './dialog/order-dialog';
 import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
-import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 @Component({
     selector: 'app-orders',

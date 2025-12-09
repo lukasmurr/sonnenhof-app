@@ -1,9 +1,8 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
 import { Permission, UserGroup } from '../models/permission.model';
-import { UserService } from './user.service';
 import { PermissionService } from './permission.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +14,9 @@ export class AuthService {
 
   // Computed permissions based on group
   private userPermissionsSignal = computed(() => {
-      const group = this.userGroupSignal();
-      if (!group) return [];
-      return this.permissionService.getGroupPermissions(group);
+    const group = this.userGroupSignal();
+    if (!group) return [];
+    return this.permissionService.getGroupPermissions(group);
   });
 
   get isAuthenticated() {
@@ -29,9 +28,9 @@ export class AuthService {
   }
 
   constructor(
-      private userService: UserService,
-      private permissionService: PermissionService,
-      private router: Router
+    private userService: UserService,
+    private permissionService: PermissionService,
+    private router: Router
   ) {
     // Check if user is already logged in on service initialization
     this.updateAuthStatus();
@@ -40,47 +39,47 @@ export class AuthService {
   }
 
   private startUserMonitoring() {
-      this.userService.getUsers().subscribe(users => {
-          if (this.isAuthenticatedSignal()) {
-              const email = this.getCurrentUser();
-              if (email) {
-                  const currentUser = users.find(u => u.email === email);
-                  
-                  if (!currentUser) {
-                      // User deleted
-                      this.logoutAndRedirect('Ihr Benutzerkonto wurde gelöscht.');
-                      return;
-                  }
+    this.userService.getUsers().subscribe(users => {
+      if (this.isAuthenticatedSignal()) {
+        const email = this.getCurrentUser();
+        if (email) {
+          const currentUser = users.find(u => u.email === email);
 
-                  if (currentUser.isLocked) {
-                      // User locked
-                      this.logoutAndRedirect('Ihr Benutzerkonto wurde gesperrt.');
-                      return;
-                  }
-
-                  // Check for permission/group changes
-                  const storedGroup = localStorage.getItem('userGroup'); // We need to store group too
-                  
-                  // Check if critical data changed
-                  // Note: We compare group
-                  // If any of these changed, we logout the user as requested
-                  
-                  const hasGroupChanged = storedGroup && storedGroup !== (currentUser.group || 'sales');
-
-                  if (hasGroupChanged) {
-                      this.logoutAndRedirect('Ihre Berechtigungen haben sich geändert. Bitte melden Sie sich erneut an.');
-                  }
-              }
+          if (!currentUser) {
+            // User deleted
+            this.logoutAndRedirect('Ihr Benutzerkonto wurde gelöscht.');
+            return;
           }
-      });
+
+          if (currentUser.isLocked) {
+            // User locked
+            this.logoutAndRedirect('Ihr Benutzerkonto wurde gesperrt.');
+            return;
+          }
+
+          // Check for permission/group changes
+          const storedGroup = localStorage.getItem('userGroup'); // We need to store group too
+
+          // Check if critical data changed
+          // Note: We compare group
+          // If any of these changed, we logout the user as requested
+
+          const hasGroupChanged = storedGroup && storedGroup !== (currentUser.group || 'sales');
+
+          if (hasGroupChanged) {
+            this.logoutAndRedirect('Ihre Berechtigungen haben sich geändert. Bitte melden Sie sich erneut an.');
+          }
+        }
+      }
+    });
   }
 
   private logoutAndRedirect(message?: string) {
-      this.logout();
-      this.router.navigate(['/login']);
-      if (message) {
-          alert(message); // Simple alert for now, could be a snackbar if we injected it
-      }
+    this.logout();
+    this.router.navigate(['/login']);
+    if (message) {
+      alert(message); // Simple alert for now, could be a snackbar if we injected it
+    }
   }
 
   private async restoreSessionData() {
@@ -163,6 +162,6 @@ export class AuthService {
   }
 
   public hasPermission(permission: Permission): boolean {
-      return this.userPermissionsSignal().includes(permission);
+    return this.userPermissionsSignal().includes(permission);
   }
 }

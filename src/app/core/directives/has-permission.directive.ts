@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, effect } from '@angular/core';
-import { Permission } from '../models/user.model';
+import { Permission } from '../models';
 import { AuthService } from '../services/auth.service';
 
 @Directive({

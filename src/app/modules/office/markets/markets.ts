@@ -9,11 +9,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 import { Market } from '../../../core/models/market.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { MarketService } from '../../../core/services/market.service';
 import { MarketDialogComponent } from './dialog/market-dialog';
-import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-markets',

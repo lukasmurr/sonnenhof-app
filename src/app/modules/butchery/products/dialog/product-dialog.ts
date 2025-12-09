@@ -10,10 +10,6 @@ import { Observable, from, map, of } from 'rxjs';
 import { Product } from '../../../../core/models/product.model';
 import { ProductService } from '../../../../core/services/product.service';
 
-export interface ProductDialogData {
-    product?: Product;
-}
-
 @Component({
     selector: 'app-product-dialog',
     standalone: true,
@@ -27,18 +23,7 @@ export interface ProductDialogData {
         MatSelectModule
     ],
     templateUrl: './product-dialog.html',
-    styles: [`
-        .product-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            min-width: 300px;
-            padding-top: 1rem;
-        }
-        mat-form-field {
-            width: 100%;
-        }
-    `]
+    styleUrls: ['./product-dialog.scss']
 })
 export class ProductDialogComponent {
     form: FormGroup;
@@ -47,7 +32,7 @@ export class ProductDialogComponent {
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<ProductDialogComponent>,
         private productService: ProductService,
-        @Inject(MAT_DIALOG_DATA) public data: ProductDialogData
+        @Inject(MAT_DIALOG_DATA) public data: { product?: Product }
     ) {
         this.form = this.fb.group({
             puNumber: [

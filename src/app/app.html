@@ -20,7 +20,8 @@
   </div>
 
   <div class="toolbar-right">
-    <button *ngIf="authService.hasPermission('user.manage')" mat-icon-button (click)="navigateSettings()" class="toolbar-button">
+    <button *ngIf="authService.hasPermission('user.manage')" mat-icon-button (click)="navigateSettings()"
+      class="toolbar-button">
       <mat-icon>settings</mat-icon>
     </button>
 

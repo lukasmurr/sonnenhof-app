@@ -5,13 +5,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { User, UserGroup } from '../../../core/models/user.model';
+import { User } from '../../../core/models/user.model';
 import { PermissionService } from '../../../core/services/permission.service';
+import { UserGroup } from '../../../core/models';
 
 @Component({
   selector: 'app-user-dialog',
@@ -30,10 +31,7 @@ import { PermissionService } from '../../../core/services/permission.service';
     MatTooltipModule
   ],
   templateUrl: './user-dialog.html',
-  styles: [`
-    .full-width { width: 100%; }
-    form { display: flex; flex-direction: column; gap: 16px; }
-  `]
+  styleUrls: ['./user-dialog.scss']
 })
 export class UserDialogComponent {
   userForm: FormGroup;
@@ -53,7 +51,7 @@ export class UserDialogComponent {
     // Determine initial group
     let initialGroup: UserGroup = 'sales';
     if (data?.group) {
-        initialGroup = data.group;
+      initialGroup = data.group;
     }
 
     this.userForm = this.fb.group({
@@ -69,28 +67,28 @@ export class UserDialogComponent {
     });
 
     if (!this.isEditMode) {
-        this.generateAndCopyPassword();
+      this.generateAndCopyPassword();
     }
   }
 
   generateAndCopyPassword() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-      let password = '';
-      for (let i = 0; i < 12; i++) {
-          password += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      
-      this.userForm.patchValue({ password });
-      
-      if (navigator.clipboard) {
-          navigator.clipboard.writeText(password).then(() => {
-              this.snackBar.open('Passwort generiert und kopiert!', 'OK', { duration: 3000 });
-          }).catch(() => {
-              this.snackBar.open('Passwort generiert (Kopieren fehlgeschlagen)', 'OK', { duration: 3000 });
-          });
-      } else {
-          this.snackBar.open('Passwort generiert', 'OK', { duration: 3000 });
-      }
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    this.userForm.patchValue({ password });
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(password).then(() => {
+        this.snackBar.open('Passwort generiert und kopiert!', 'OK', { duration: 3000 });
+      }).catch(() => {
+        this.snackBar.open('Passwort generiert (Kopieren fehlgeschlagen)', 'OK', { duration: 3000 });
+      });
+    } else {
+      this.snackBar.open('Passwort generiert', 'OK', { duration: 3000 });
+    }
   }
 
   onCancel(): void {
@@ -100,9 +98,9 @@ export class UserDialogComponent {
   onSave(): void {
     if (this.userForm.valid) {
       const formValue = this.userForm.getRawValue();
-      
+
       const userData: User = {
-          ...formValue
+        ...formValue
       };
 
       this.dialogRef.close(userData);

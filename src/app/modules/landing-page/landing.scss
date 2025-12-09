@@ -26,10 +26,10 @@
 
     .landing-card {
         background: #3F51B5; // Keep original blue
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
         &:hover {
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
         }
     }
 }
@@ -48,7 +48,7 @@
     height: 300px;
     border-radius: 24px !important;
     background: #3f51b5;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
     cursor: pointer;
     display: flex;
@@ -59,14 +59,14 @@
 
     &:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
     .card-icon {
         width: 120px;
         height: 120px;
         margin-bottom: 32px;
-        
+
         img {
             width: 100%;
             height: 100%;

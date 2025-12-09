@@ -115,12 +115,15 @@
     &.online {
         background: rgba(76, 175, 80, 0.1);
         border-color: rgba(76, 175, 80, 0.2);
-        
+
         .status-indicator {
             background-color: #4caf50;
             box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
         }
-        .status-text { color: #2e7d32; }
+
+        .status-text {
+            color: #2e7d32;
+        }
     }
 
     &.syncing {
@@ -132,7 +135,10 @@
             box-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
             animation: pulse 1.5s infinite;
         }
-        .status-text { color: #ef6c00; }
+
+        .status-text {
+            color: #ef6c00;
+        }
     }
 
     &.offline {
@@ -143,14 +149,28 @@
             background-color: #f44336;
             box-shadow: 0 0 8px rgba(244, 67, 54, 0.4);
         }
-        .status-text { color: #c62828; }
+
+        .status-text {
+            color: #c62828;
+        }
     }
 }
 
 @keyframes pulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
-    100% { opacity: 1; transform: scale(1); }
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 
@@ -284,7 +304,7 @@
         &.online {
             background: rgba(76, 175, 80, 0.15);
             border-color: rgba(76, 175, 80, 0.3);
-            
+
             .status-text {
                 color: #81c784;
             }

@@ -11,7 +11,8 @@
 
     <div class="card-grid">
         <!-- Produkte Card -->
-        <mat-card class="section-card products" (click)="navigateToSection('products')" *appHasPermission="'product.view'">
+        <mat-card class="section-card products" (click)="navigateToSection('products')"
+            *appHasPermission="'product.view'">
             <div class="card-icon"><mat-icon>inventory_2</mat-icon></div>
             <mat-card-title>Produkte</mat-card-title>
             <mat-card-content>

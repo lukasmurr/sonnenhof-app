@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { TuevAppointment, TuevStatus, Vehicle } from '../models';
 import { NotificationService } from './notification.service';
 import { CouchDbService } from './pouchdb.service';

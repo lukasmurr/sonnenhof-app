@@ -1,0 +1,97 @@
+.order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.item-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+.item-row:hover {
+    background: #f0f0f0;
+}
+
+.item-col-product {
+    flex: 3;
+    min-width: 200px;
+}
+
+.item-col-quantity {
+    flex: 1;
+    min-width: 100px;
+}
+
+.item-col-notes {
+    flex: 2;
+    min-width: 150px;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    /* Match form field height */
+    justify-content: center;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+:host-context(.dark-theme) .item-row {
+    background: #424242;
+}
+
+@media (max-width: 800px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .item-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .item-col-product {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .item-col-quantity {
+        flex: 1 1 calc(40% - 8px);
+    }
+
+    .item-col-notes {
+        flex: 1 1 calc(60% - 8px);
+    }
+
+    .item-actions {
+        flex: 0 0 auto;
+        height: auto;
+        margin-top: 0;
+        align-self: center;
+    }
+}

@@ -27,18 +27,7 @@ export interface MarketDialogData {
         MatCheckboxModule
     ],
     templateUrl: './market-dialog.html',
-    styles: [`
-        .market-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            min-width: 350px;
-            padding-top: 1rem;
-        }
-        mat-form-field {
-            width: 100%;
-        }
-    `]
+    styleUrls: ['./market-dialog.scss']
 })
 export class MarketDialogComponent {
     form: FormGroup;

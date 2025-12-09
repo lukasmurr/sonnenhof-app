@@ -1,0 +1,11 @@
+.market-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 350px;
+    padding-top: 1rem;
+}
+
+mat-form-field {
+    width: 100%;
+}

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Box, Pig, Stall } from '../models/stall.model';
 import { CouchDbService } from './pouchdb.service';
-import { Stall, Box, Pig } from '../models/stall.model';
 
 @Injectable({
     providedIn: 'root'
@@ -81,9 +80,9 @@ export class StallService {
 
             if (fromBox && toBox) {
                 if (toBox.pigs.length > 0) {
-                     return Promise.reject('Target box must be empty');
+                    return Promise.reject('Target box must be empty');
                 }
-                
+
                 const pigIndex = fromBox.pigs.findIndex(p => p.id === pigId);
                 if (pigIndex > -1) {
                     const pig = fromBox.pigs[pigIndex];
@@ -96,9 +95,9 @@ export class StallService {
             return Promise.reject('Invalid move operation');
         });
     }
-    
+
     slaughterPig(stallId: string, boxId: string, pigId: string): Promise<any> {
-         return this.removePig(stallId, boxId, pigId);
+        return this.removePig(stallId, boxId, pigId);
     }
 
     getSlaughterRecommendations(stall: Stall): Box[] {

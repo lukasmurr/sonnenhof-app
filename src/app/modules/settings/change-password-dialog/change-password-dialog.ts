@@ -17,49 +17,8 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatInputModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ data?.isAdminReset ? 'Passwort zurücksetzen' : 'Passwort ändern' }}</h2>
-    <mat-dialog-content>
-      <form [formGroup]="passwordForm" class="password-form">
-        <mat-form-field appearance="outline" class="full-width" *ngIf="!data?.isAdminReset">
-          <mat-label>Aktuelles Passwort</mat-label>
-          <input matInput formControlName="currentPassword" type="password">
-          <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">
-            Aktuelles Passwort ist erforderlich
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Neues Passwort</mat-label>
-          <input matInput formControlName="newPassword" type="password">
-          <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
-            Neues Passwort ist erforderlich
-          </mat-error>
-          <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
-            Mindestens 6 Zeichen
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Passwort bestätigen</mat-label>
-          <input matInput formControlName="confirmPassword" type="password">
-          <mat-error *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">
-            Passwörter stimmen nicht überein
-          </mat-error>
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="onCancel()">Abbrechen</button>
-      <button mat-raised-button color="primary" (click)="onSave()" [disabled]="passwordForm.invalid">
-        {{ data?.isAdminReset ? 'Speichern' : 'Ändern' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .full-width { width: 100%; }
-    .password-form { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
-  `]
+  templateUrl: './change-password-dialog.html',
+  styleUrls: ['./change-password-dialog.scss']
 })
 export class ChangePasswordDialogComponent {
   passwordForm: FormGroup;

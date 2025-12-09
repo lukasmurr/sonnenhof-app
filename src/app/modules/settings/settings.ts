@@ -13,9 +13,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { MatPaginatorIntlDe } from '../../core/services/paginator-intl';
+import { PermissionService } from '../../core/services/permission.service';
 import { ProductService } from '../../core/services/product.service';
 import { UserService } from '../../core/services/user.service';
-import { PermissionService } from '../../core/services/permission.service';
 import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog';
 
@@ -57,9 +57,9 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   ) { }
 
   getGroupLabel(group: string): string {
-      const groups = this.permissionService.getGroups();
-      const found = groups.find(g => g.value === group);
-      return found ? found.label : group;
+    const groups = this.permissionService.getGroups();
+    const found = groups.find(g => g.value === group);
+    return found ? found.label : group;
   }
 
   async cleanupProducts() {

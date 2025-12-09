@@ -36,7 +36,7 @@ export class StallOverviewComponent implements OnInit {
     getOccupiedBoxes(stall: Stall): number {
         return stall.boxes.filter(box => box.pigs.length > 0).length;
     }
-    
+
     goBack(): void {
         this.router.navigate(['/farming']);
     }

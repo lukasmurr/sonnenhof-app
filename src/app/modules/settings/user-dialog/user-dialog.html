@@ -16,8 +16,10 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Passwort</mat-label>
-      <input matInput formControlName="password" type="text" [placeholder]="isEditMode ? 'Leer lassen um beizubehalten' : 'Passwort'">
-      <button mat-icon-button matSuffix (click)="generateAndCopyPassword()" matTooltip="Neues Passwort generieren" type="button">
+      <input matInput formControlName="password" type="text"
+        [placeholder]="isEditMode ? 'Leer lassen um beizubehalten' : 'Passwort'">
+      <button mat-icon-button matSuffix (click)="generateAndCopyPassword()" matTooltip="Neues Passwort generieren"
+        type="button">
         <mat-icon>refresh</mat-icon>
       </button>
       <mat-error *ngIf="userForm.get('password')?.hasError('required')">Passwort ist erforderlich</mat-error>
@@ -27,7 +29,7 @@
       <mat-label>Benutzergruppe</mat-label>
       <mat-select formControlName="group">
         <mat-option *ngFor="let group of groups" [value]="group.value">
-            {{ group.label }}
+          {{ group.label }}
         </mat-option>
       </mat-select>
     </mat-form-field>

@@ -31,7 +31,8 @@
         </mat-card>
 
         <!-- Mitarbeiter Card -->
-        <mat-card class="section-card employees" (click)="navigateToSection('employees')" *appHasPermission="'employee.view'">
+        <mat-card class="section-card employees" (click)="navigateToSection('employees')"
+            *appHasPermission="'employee.view'">
             <div class="card-icon"><mat-icon>people</mat-icon></div>
             <mat-card-title>Mitarbeiter</mat-card-title>
             <mat-card-content>
@@ -41,7 +42,8 @@
         </mat-card>
 
         <!-- Urlaubsplanung Card -->
-        <mat-card class="section-card vacation" (click)="navigateToSection('vacation')" *appHasPermission="'vacation.view'">
+        <mat-card class="section-card vacation" (click)="navigateToSection('vacation')"
+            *appHasPermission="'vacation.view'">
             <div class="card-icon"><mat-icon>date_range</mat-icon></div>
             <mat-card-title>Urlaubsplanung</mat-card-title>
             <mat-card-content>

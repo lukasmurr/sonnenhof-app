@@ -14,10 +14,6 @@ import { Vehicle } from '../../../../../core/models';
 
 const moment = _rollupMoment || _moment;
 
-export interface RenewDialogData {
-    vehicle: Vehicle;
-}
-
 @Component({
     selector: 'app-renew-dialog',
     standalone: true,
@@ -33,15 +29,7 @@ export interface RenewDialogData {
     ],
     providers: [CUSTOM_DATE_PROVIDERS],
     templateUrl: './renew-dialog.html',
-    styles: [`
-        .full-width {
-            width: 100%;
-        }
-        mat-dialog-content {
-            min-width: 300px;
-            padding-top: 1rem;
-        }
-    `]
+    styleUrls: ['./renew-dialog.scss']
 })
 export class RenewDialog implements OnInit {
     form: FormGroup;
@@ -49,7 +37,7 @@ export class RenewDialog implements OnInit {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<RenewDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: RenewDialogData
+        @Inject(MAT_DIALOG_DATA) public data: { vehicle: Vehicle }
     ) {
         this.form = this.fb.group({
             nextTuevDate: [null, Validators.required]

@@ -9,11 +9,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 import { Employee } from '../../../core/models/employee.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeeDialogComponent } from './dialog/employee-dialog';
-import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-employees',

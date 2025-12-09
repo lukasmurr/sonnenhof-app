@@ -24,7 +24,7 @@
         font-weight: 600;
         color: #3F51B5;
         letter-spacing: 1px;
-        font-family: "Roboto","Helvetica Neue",Arial,sans-serif;
+        font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
         margin: 0;
     }
 
@@ -35,7 +35,7 @@
         .settings-card {
             padding: 24px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 
             mat-card-header {
                 display: flex;
@@ -50,10 +50,10 @@
 
             .table-container {
                 overflow-x: auto;
-                
+
                 table {
                     width: 100%;
-                    
+
                     th.mat-header-cell {
                         font-weight: 600;
                         color: #3F51B5;
@@ -100,7 +100,7 @@
 
     .settings-card {
         background: #424242;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 }
 
@@ -110,12 +110,12 @@
     font-size: 0.85rem;
     font-weight: 500;
     display: inline-block;
-    
+
     &.role-admin {
         background-color: #ffebee;
         color: #c62828;
     }
-    
+
     &.role-user {
         background-color: #e3f2fd;
         color: #1565c0;

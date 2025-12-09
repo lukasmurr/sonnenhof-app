@@ -11,19 +11,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
+import { CalendarDay } from '../../../core/models/calendar-day.model';
 import { Vacation } from '../../../core/models/vacation.model';
-import { VacationService } from '../../../core/services/vacation.service';
-import { VacationDialogComponent } from './dialog/vacation-dialog';
 import { AuthService } from '../../../core/services/auth.service';
 import { EmployeeService } from '../../../core/services/employee.service';
-import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
-
-interface CalendarDay {
-    date: Date;
-    isCurrentMonth: boolean;
-    isToday: boolean;
-    vacations: Vacation[];
-}
+import { VacationService } from '../../../core/services/vacation.service';
+import { VacationDialogComponent } from './dialog/vacation-dialog';
 
 @Component({
     selector: 'app-vacation-planning',
@@ -62,7 +56,7 @@ export class VacationPlanningComponent implements OnInit {
     calendarDays: CalendarDay[] = [];
     weekDays: string[] = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     allVacations: Vacation[] = [];
-    
+
     // Permission properties
     canSeeAll: boolean = false;
     currentEmployeeId: string | null = null;
@@ -85,7 +79,7 @@ export class VacationPlanningComponent implements OnInit {
 
     async checkPermissionsAndLoad() {
         this.canSeeAll = this.authService.hasPermission('vacation.create_others');
-        
+
         if (!this.canSeeAll) {
             const userEmail = this.authService.getCurrentUser();
             if (userEmail) {
@@ -96,7 +90,7 @@ export class VacationPlanningComponent implements OnInit {
                 }
             }
         }
-        
+
         this.loadVacations();
     }
 
@@ -112,7 +106,7 @@ export class VacationPlanningComponent implements OnInit {
                 this.allVacations = [];
                 this.pendingVacations = [];
             }
-            
+
             this.dataSource.data = this.allVacations;
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -257,8 +251,8 @@ export class VacationPlanningComponent implements OnInit {
 
     openVacationDialog(vacation?: Vacation, preselectedDate?: Date) {
         const dialogRef = this.dialog.open(VacationDialogComponent, {
-            data: { 
-                vacation, 
+            data: {
+                vacation,
                 preselectedDate,
                 canSeeAll: this.canSeeAll,
                 currentEmployeeId: this.currentEmployeeId
