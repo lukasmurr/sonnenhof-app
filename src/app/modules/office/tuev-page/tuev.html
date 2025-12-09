@@ -1,6 +1,8 @@
 <div class="tuev-container">
     <div class="header">
-        <div class="spacer"></div>
+        <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
         <h1 class="headline">TÜV Verwaltung</h1>
         <div class="spacer"></div>
     </div>
@@ -8,6 +10,8 @@
     <div class="tuev-content">
         <mat-card class="tuev-card">
             <mat-card-header>
+                <mat-card-title>Fahrzeugliste</mat-card-title>
+                <mat-card-subtitle>Verwalten Sie hier den TÜV Ihrer Fahrzeuge</mat-card-subtitle>
                 <div class="header-actions">
                     <button mat-raised-button color="primary" (click)="openAddVehicleDialog()"
                         *appHasPermission="'tuev.create'">
@@ -35,7 +39,7 @@
                             <!-- Type Column -->
                             <ng-container matColumnDef="type">
                                 <th mat-header-cell *matHeaderCellDef> Typ </th>
-                                <td mat-cell *matCellDef="let vehicle"> {{getVehicleTypeLabel(vehicle.type)}} </td>
+                                <td mat-cell *matCellDef="let vehicle"> {{getVehicleTypeLabel(vehicle.vehicleType)}} </td>
                             </ng-container>
 
                             <!-- Expiry Date Column -->
@@ -43,7 +47,7 @@
                                 <th mat-header-cell *matHeaderCellDef> TÜV Ablaufdatum </th>
                                 <td mat-cell *matCellDef="let vehicle" [class.expired]="isExpired(vehicle.nextTuevDate)"
                                     [class.soon-expired]="isSoonExpired(vehicle.nextTuevDate)">
-                                    {{vehicle.nextTuevDate | date:'dd.MM.yyyy'}}
+                                    {{vehicle.nextTuevDate | date:'MM.yyyy'}}
                                     <span *ngIf="isExpired(vehicle.nextTuevDate)"
                                         class="badge badge-expired">Abgelaufen</span>
                                     <span *ngIf="isSoonExpired(vehicle.nextTuevDate)" class="badge badge-soon">Bald
@@ -81,67 +85,3 @@
         </mat-card>
     </div>
 </div>
-
-<!-- Add/Edit Vehicle Dialog -->
-<ng-template #vehicleDialog>
-    <h2 mat-dialog-title>{{selectedVehicle ? 'Fahrzeug bearbeiten' : 'Auto anlegen'}}</h2>
-    <mat-dialog-content>
-        <form [formGroup]="vehicleForm">
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Kennzeichen</mat-label>
-                <input matInput formControlName="licensePlate" placeholder="M-AB 123" (blur)="formatLicensePlate()">
-                <mat-error *ngIf="vehicleForm.get('licensePlate')?.hasError('invalidFormat')">
-                    Ungültiges Format (z.B. DON-LM-320)
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Bezeichnung/Name</mat-label>
-                <input matInput formControlName="name" placeholder="Firmenwagen 1">
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Typ</mat-label>
-                <mat-select formControlName="type">
-                    <mat-option value="car">Auto</mat-option>
-                    <mat-option value="truck">LKW</mat-option>
-                    <mat-option value="trailer">Hänger</mat-option>
-                    <mat-option value="tractor">Traktor</mat-option>
-                    <mat-option value="other">Sonstiges</mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>TÜV Ablaufdatum</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="nextTuevDate">
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-        </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Abbrechen</button>
-        <button mat-raised-button color="primary" (click)="saveVehicle()"
-            [disabled]="vehicleForm.invalid">Speichern</button>
-    </mat-dialog-actions>
-</ng-template>
-
-<!-- Renew Dialog -->
-<ng-template #renewDialog>
-    <h2 mat-dialog-title>TÜV erneuern</h2>
-    <mat-dialog-content>
-        <p>Wann läuft der neue TÜV ab?</p>
-        <form [formGroup]="renewForm">
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Neues Ablaufdatum</mat-label>
-                <input matInput [matDatepicker]="renewPicker" formControlName="nextTuevDate">
-                <mat-datepicker-toggle matIconSuffix [for]="renewPicker"></mat-datepicker-toggle>
-                <mat-datepicker #renewPicker></mat-datepicker>
-            </mat-form-field>
-        </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Abbrechen</button>
-        <button mat-raised-button color="accent" (click)="saveRenew()" [disabled]="renewForm.invalid">Erneuern</button>
-    </mat-dialog-actions>
-</ng-template>

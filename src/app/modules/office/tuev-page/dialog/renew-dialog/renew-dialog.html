@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>TÜV erneuern</h2>
+<mat-dialog-content>
+    <p>Neues TÜV-Datum für <strong>{{data.vehicle.licensePlate}}</strong> ({{data.vehicle.name}})</p>
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Neues Ablaufdatum</mat-label>
+            <input matInput [matDatepicker]="renewPicker" formControlName="nextTuevDate">
+            <mat-datepicker-toggle matIconSuffix [for]="renewPicker"></mat-datepicker-toggle>
+            <mat-datepicker #renewPicker startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                (monthSelected)="chosenMonthHandler($event, renewPicker)"
+                panelClass="example-month-picker"></mat-datepicker>
+            <mat-error *ngIf="form.get('nextTuevDate')?.hasError('required')">
+                Datum ist erforderlich
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-raised-button color="accent" (click)="save()" [disabled]="form.invalid">
+        Erneuern
+    </button>
+</mat-dialog-actions>

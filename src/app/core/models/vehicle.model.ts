@@ -3,12 +3,7 @@ export interface Vehicle {
     _rev?: string;
     name: string;
     licensePlate: string;
-    vin?: string;
-    type: 'car' | 'truck' | 'trailer' | 'tractor' | 'other';
-    manufacturer?: string;
-    model?: string;
-    year?: number;
-    mileage?: number;
+    vehicleType: 'car' | 'truck' | 'trailer' | 'tractor' | 'other';
     nextTuevDate?: Date;
     lastTuevDate?: Date;
     createdAt: Date;
