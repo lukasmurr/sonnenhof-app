@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -19,7 +19,6 @@ import { ProductService } from '../../../../../core/services/product.service';
   selector: 'app-report-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
@@ -30,7 +29,7 @@ import { ProductService } from '../../../../../core/services/product.service';
     MatDatepickerModule,
     MatMomentDateModule,
     MatRadioModule
-  ],
+],
   templateUrl: './report-dialog.html',
   styleUrls: ['./report-dialog.scss']
 })

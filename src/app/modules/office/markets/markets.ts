@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,17 +19,16 @@ import { MarketDialogComponent } from './dialog/market-dialog';
     selector: 'app-markets',
     standalone: true,
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatButtonModule,
-        MatIconModule,
-        MatDialogModule,
-        MatTooltipModule,
-        MatCardModule,
-        HasPermissionDirective
-    ],
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatCardModule,
+    HasPermissionDirective
+],
     templateUrl: './markets.html',
     styleUrls: ['./markets.scss']
 })

@@ -1,58 +1,57 @@
-<mat-toolbar *ngIf="showToolbar()" class="app-toolbar">
-  <div class="toolbar-left">
-    <button mat-icon-button (click)="toggleSidenav(sidenav, $event)" class="menu-button">
-      <mat-icon>menu</mat-icon>
-    </button>
-
-    <div class="sync-status" [class.online]="syncStatus() === 'online'" [class.offline]="syncStatus() === 'offline'"
-      [class.syncing]="syncStatus() === 'syncing'">
-      <div class="status-indicator"></div>
-      <span class="status-text">
-        {{ syncStatus() === 'online' ? 'Online' : (syncStatus() === 'syncing' ? 'Syncing...' : 'Offline') }}
-      </span>
-    </div>
-  </div>
-
-  <div class="toolbar-center">
-    <div class="toolbar-logo" (click)="navigateHome()">
-      <img src="assets/favicon.ico" alt="Sonnenhof Logo" class="toolbar-logo-image">
-    </div>
-  </div>
-
-  <div class="toolbar-right">
-    <button *ngIf="authService.hasPermission('user.manage')" mat-icon-button (click)="navigateSettings()"
-      class="toolbar-button">
-      <mat-icon>settings</mat-icon>
-    </button>
-
-    <div class="user-menu-container">
-      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
-        <mat-icon class="user-avatar">account_circle</mat-icon>
+@if (showToolbar()) {
+  <mat-toolbar class="app-toolbar">
+    <div class="toolbar-left">
+      <button mat-icon-button (click)="toggleSidenav(sidenav, $event)" class="menu-button">
+        <mat-icon>menu</mat-icon>
       </button>
-
-      <mat-menu #userMenu="matMenu" class="user-menu">
-        <div class="user-info-item" (click)="$event.stopPropagation()">
-          <div class="user-name">{{ authService.userName() }}</div>
-          <div class="user-email">{{ authService.getCurrentUser() }}</div>
-        </div>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="toggleDarkMode()">
-          <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-          <span>{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
-        </button>
-        <button mat-menu-item (click)="openChangePasswordDialog()">
-          <mat-icon>lock_reset</mat-icon>
-          <span>Passwort ändern</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Abmelden</span>
-        </button>
-      </mat-menu>
+      <div class="sync-status" [class.online]="syncStatus() === 'online'" [class.offline]="syncStatus() === 'offline'"
+        [class.syncing]="syncStatus() === 'syncing'">
+        <div class="status-indicator"></div>
+        <span class="status-text">
+          {{ syncStatus() === 'online' ? 'Online' : (syncStatus() === 'syncing' ? 'Syncing...' : 'Offline') }}
+        </span>
+      </div>
     </div>
-  </div>
-</mat-toolbar>
+    <div class="toolbar-center">
+      <div class="toolbar-logo" (click)="navigateHome()">
+        <img src="assets/favicon.ico" alt="Sonnenhof Logo" class="toolbar-logo-image">
+      </div>
+    </div>
+    <div class="toolbar-right">
+      @if (authService.hasPermission('user.manage')) {
+        <button mat-icon-button (click)="navigateSettings()"
+          class="toolbar-button">
+          <mat-icon>settings</mat-icon>
+        </button>
+      }
+      <div class="user-menu-container">
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
+          <mat-icon class="user-avatar">account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <div class="user-info-item" (click)="$event.stopPropagation()">
+            <div class="user-name">{{ authService.userName() }}</div>
+            <div class="user-email">{{ authService.getCurrentUser() }}</div>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="toggleDarkMode()">
+            <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            <span>{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
+          </button>
+          <button mat-menu-item (click)="openChangePasswordDialog()">
+            <mat-icon>lock_reset</mat-icon>
+            <span>Passwort ändern</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Abmelden</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-toolbar>
+}
 
 <mat-sidenav-container class="app-sidenav-container" [hasBackdrop]="true">
   <mat-sidenav #sidenav mode="over" class="app-sidenav">

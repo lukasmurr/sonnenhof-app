@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -21,19 +21,18 @@ import { ProductDialogComponent } from './dialog/product-dialog';
     selector: 'app-products',
     standalone: true,
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatButtonModule,
-        MatIconModule,
-        MatDialogModule,
-        MatTooltipModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        HasPermissionDirective
-    ],
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    HasPermissionDirective
+],
     templateUrl: './products.html',
     styleUrls: ['./products.scss']
 })

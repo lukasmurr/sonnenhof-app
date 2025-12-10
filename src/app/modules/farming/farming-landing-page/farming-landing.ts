@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +9,7 @@ import { HasPermissionDirective } from '../../../core/directives/has-permission.
 @Component({
     selector: 'app-farming-landing',
     standalone: true,
-    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, HasPermissionDirective],
+    imports: [MatCardModule, MatIconModule, MatButtonModule, HasPermissionDirective],
     templateUrl: './farming-landing.html',
     styleUrls: ['./farming-landing.scss']
 })

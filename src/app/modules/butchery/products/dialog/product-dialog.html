@@ -1,40 +1,48 @@
 <h2 mat-dialog-title>{{ data.product ? 'Produkt bearbeiten' : 'Neues Produkt' }}</h2>
 <mat-dialog-content>
-    <form [formGroup]="form" class="product-form">
-        <mat-form-field appearance="outline">
-            <mat-label>PU Nummer</mat-label>
-            <input matInput formControlName="puNumber" placeholder="z.B. 12345">
-            <mat-error *ngIf="form.get('puNumber')?.hasError('required')">
-                PU Nummer ist erforderlich
-            </mat-error>
-            <mat-error *ngIf="form.get('puNumber')?.hasError('puNumberExists')">
-                Diese PU Nummer existiert bereits
-            </mat-error>
-        </mat-form-field>
+  <form [formGroup]="form" class="product-form">
+    <mat-form-field appearance="outline">
+      <mat-label>PU Nummer</mat-label>
+      <input matInput formControlName="puNumber" placeholder="z.B. 12345">
+      @if (form.get('puNumber')?.hasError('required')) {
+        <mat-error>
+          PU Nummer ist erforderlich
+        </mat-error>
+      }
+      @if (form.get('puNumber')?.hasError('puNumberExists')) {
+        <mat-error>
+          Diese PU Nummer existiert bereits
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name" placeholder="Produktname">
-            <mat-error *ngIf="form.get('name')?.hasError('required')">
-                Name ist erforderlich
-            </mat-error>
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Produktname">
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          Name ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Einheit</mat-label>
-            <mat-select formControlName="unit">
-                <mat-option value="Stück">Stück</mat-option>
-                <mat-option value="Kg">Kg</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('unit')?.hasError('required')">
-                Einheit ist erforderlich
-            </mat-error>
-        </mat-form-field>
-    </form>
+    <mat-form-field appearance="outline">
+      <mat-label>Einheit</mat-label>
+      <mat-select formControlName="unit">
+        <mat-option value="Stück">Stück</mat-option>
+        <mat-option value="Kg">Kg</mat-option>
+      </mat-select>
+      @if (form.get('unit')?.hasError('required')) {
+        <mat-error>
+          Einheit ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="onCancel()">Abbrechen</button>
-    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSave()">
-        Speichern
-    </button>
+  <button mat-button (click)="onCancel()">Abbrechen</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSave()">
+    Speichern
+  </button>
 </mat-dialog-actions>

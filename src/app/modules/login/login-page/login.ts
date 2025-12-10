@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,6 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -24,7 +23,7 @@ import { AuthService } from '../../../core/services/auth.service';
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule
-  ],
+],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,13 +10,12 @@ import { MatInputModule } from '@angular/material/input';
   selector: 'app-change-password-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule
-  ],
+],
   templateUrl: './change-password-dialog.html',
   styleUrls: ['./change-password-dialog.scss']
 })

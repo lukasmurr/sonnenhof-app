@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +18,6 @@ import { UserGroup } from '../../../core/models';
   selector: 'app-user-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
@@ -29,7 +28,7 @@ import { UserGroup } from '../../../core/models';
     MatSnackBarModule,
     MatIconModule,
     MatTooltipModule
-  ],
+],
   templateUrl: './user-dialog.html',
   styleUrls: ['./user-dialog.scss']
 })

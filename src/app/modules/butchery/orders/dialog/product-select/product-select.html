@@ -1,9 +1,11 @@
 <mat-form-field appearance="outline" subscriptSizing="dynamic">
-    <mat-label>Produkt</mat-label>
-    <input type="text" matInput [formControl]="searchControl" [matAutocomplete]="auto" (blur)="onBlur()">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (closed)="onPanelClosed()">
-        <mat-option *ngFor="let product of filteredProducts$ | async" [value]="product">
-            {{ product.name }} ({{ product.puNumber }})
-        </mat-option>
-    </mat-autocomplete>
+  <mat-label>Produkt</mat-label>
+  <input type="text" matInput [formControl]="searchControl" [matAutocomplete]="auto" (blur)="onBlur()">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (closed)="onPanelClosed()">
+    @for (product of filteredProducts$ | async; track product) {
+      <mat-option [value]="product">
+        {{ product.name }} ({{ product.puNumber }})
+      </mat-option>
+    }
+  </mat-autocomplete>
 </mat-form-field>

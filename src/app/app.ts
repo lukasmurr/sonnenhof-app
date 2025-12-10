@@ -1,4 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,6 @@ import { ChangePasswordDialogComponent } from './modules/settings/change-passwor
 @Component({
   selector: 'app-root',
   imports: [
-    CommonModule,
     RouterOutlet,
     MatCardModule,
     MatIconModule,
@@ -37,7 +36,7 @@ import { ChangePasswordDialogComponent } from './modules/settings/change-passwor
     MatSidenavModule,
     MatListModule,
     HasPermissionDirective
-  ],
+],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

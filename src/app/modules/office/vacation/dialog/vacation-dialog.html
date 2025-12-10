@@ -1,54 +1,62 @@
 <h2 mat-dialog-title>{{ data.vacation ? 'Urlaub bearbeiten' : 'Neuer Urlaub' }}</h2>
 <mat-dialog-content>
-    <form [formGroup]="form" class="vacation-form">
-        <mat-form-field appearance="outline">
-            <mat-label>Mitarbeiter</mat-label>
-            <mat-select formControlName="employeeId">
-                <mat-option *ngFor="let emp of employees" [value]="emp._id">
-                    {{ emp.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('employeeId')?.hasError('required')">
-                Mitarbeiter ist erforderlich
-            </mat-error>
-        </mat-form-field>
+  <form [formGroup]="form" class="vacation-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Mitarbeiter</mat-label>
+      <mat-select formControlName="employeeId">
+        @for (emp of employees; track emp) {
+          <mat-option [value]="emp._id">
+            {{ emp.name }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('employeeId')?.hasError('required')) {
+        <mat-error>
+          Mitarbeiter ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Art</mat-label>
-            <mat-select formControlName="leaveType">
-                <mat-option value="vacation">Urlaub</mat-option>
-                <mat-option value="paid_leave">Freistellung (bezahlt)</mat-option>
-                <mat-option value="unpaid_leave">Freistellung (unbezahlt)</mat-option>
-                <mat-option value="sick_with_certificate">Krank (mit Attest)</mat-option>
-                <mat-option value="sick_without_certificate">Krank (ohne Attest)</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('leaveType')?.hasError('required')">
-                Art ist erforderlich
-            </mat-error>
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Art</mat-label>
+      <mat-select formControlName="leaveType">
+        <mat-option value="vacation">Urlaub</mat-option>
+        <mat-option value="paid_leave">Freistellung (bezahlt)</mat-option>
+        <mat-option value="unpaid_leave">Freistellung (unbezahlt)</mat-option>
+        <mat-option value="sick_with_certificate">Krank (mit Attest)</mat-option>
+        <mat-option value="sick_without_certificate">Krank (ohne Attest)</mat-option>
+      </mat-select>
+      @if (form.get('leaveType')?.hasError('required')) {
+        <mat-error>
+          Art ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Zeitraum</mat-label>
-            <mat-date-range-input [rangePicker]="picker">
-                <input matStartDate formControlName="startDate" placeholder="Startdatum">
-                <input matEndDate formControlName="endDate" placeholder="Enddatum">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-            <mat-error *ngIf="form.get('startDate')?.hasError('required') || form.get('endDate')?.hasError('required')">
-                Zeitraum ist erforderlich
-            </mat-error>
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Zeitraum</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="startDate" placeholder="Startdatum">
+        <input matEndDate formControlName="endDate" placeholder="Enddatum">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      @if (form.get('startDate')?.hasError('required') || form.get('endDate')?.hasError('required')) {
+        <mat-error>
+          Zeitraum ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Bemerkung</mat-label>
-            <textarea matInput formControlName="notes" rows="3"></textarea>
-        </mat-form-field>
-    </form>
+    <mat-form-field appearance="outline">
+      <mat-label>Bemerkung</mat-label>
+      <textarea matInput formControlName="notes" rows="3"></textarea>
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Abbrechen</button>
-    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">
-        Speichern
-    </button>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">
+    Speichern
+  </button>
 </mat-dialog-actions>

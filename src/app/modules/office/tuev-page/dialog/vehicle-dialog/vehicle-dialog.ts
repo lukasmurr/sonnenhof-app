@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -19,16 +19,15 @@ const moment = _rollupMoment || _moment;
     selector: 'app-vehicle-dialog',
     standalone: true,
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatMomentDateModule
-    ],
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatMomentDateModule
+],
     providers: [CUSTOM_DATE_PROVIDERS],
     templateUrl: './vehicle-dialog.html',
     styleUrls: ['./vehicle-dialog.scss']

@@ -1,88 +1,92 @@
 <div class="tuev-container">
-    <div class="header">
-        <button mat-icon-button (click)="goBack()">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <h1 class="headline">TÜV Verwaltung</h1>
-        <div class="spacer"></div>
-    </div>
+  <div class="header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="headline">TÜV Verwaltung</h1>
+    <div class="spacer"></div>
+  </div>
 
-    <div class="tuev-content">
-        <mat-card class="tuev-card">
-            <mat-card-header>
-                <mat-card-title>Fahrzeugliste</mat-card-title>
-                <mat-card-subtitle>Verwalten Sie hier den TÜV Ihrer Fahrzeuge</mat-card-subtitle>
-                <div class="header-actions">
-                    <button mat-raised-button color="primary" (click)="openAddVehicleDialog()"
-                        *appHasPermission="'tuev.create'">
-                        <mat-icon>add</mat-icon> Auto anlegen
+  <div class="tuev-content">
+    <mat-card class="tuev-card">
+      <mat-card-header>
+        <mat-card-title>Fahrzeugliste</mat-card-title>
+        <mat-card-subtitle>Verwalten Sie hier den TÜV Ihrer Fahrzeuge</mat-card-subtitle>
+        <div class="header-actions">
+          <button mat-raised-button color="primary" (click)="openAddVehicleDialog()"
+            *appHasPermission="'tuev.create'">
+            <mat-icon>add</mat-icon> Auto anlegen
+          </button>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="table-container">
+          <div class="table-scroll-wrapper">
+            <table mat-table [dataSource]="vehicles" class="mat-elevation-z8">
+              <!-- License Plate Column -->
+              <ng-container matColumnDef="licensePlate">
+                <th mat-header-cell *matHeaderCellDef> Kennzeichen </th>
+                <td mat-cell *matCellDef="let vehicle"> {{vehicle.licensePlate}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Bezeichnung/Name </th>
+                <td mat-cell *matCellDef="let vehicle"> {{vehicle.name}} </td>
+              </ng-container>
+
+              <!-- Type Column -->
+              <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef> Typ </th>
+                <td mat-cell *matCellDef="let vehicle"> {{getVehicleTypeLabel(vehicle.vehicleType)}}
+                </td>
+              </ng-container>
+
+              <!-- Expiry Date Column -->
+              <ng-container matColumnDef="nextTuevDate">
+                <th mat-header-cell *matHeaderCellDef> TÜV Ablaufdatum </th>
+                <td mat-cell *matCellDef="let vehicle" [class.expired]="isExpired(vehicle.nextTuevDate)"
+                  [class.soon-expired]="isSoonExpired(vehicle.nextTuevDate)">
+                  {{vehicle.nextTuevDate | date:'MM.yyyy'}}
+                  @if (isExpired(vehicle.nextTuevDate)) {
+                    <span
+                    class="badge badge-expired">Abgelaufen</span>
+                  }
+                  @if (isSoonExpired(vehicle.nextTuevDate)) {
+                    <span class="badge badge-soon">Bald
+                    fällig</span>
+                  }
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-actions"> Aktionen </th>
+                <td mat-cell *matCellDef="let vehicle" class="mat-column-actions">
+                  <div class="actions-row">
+                    <button mat-icon-button (click)="openRenewDialog(vehicle)"
+                      matTooltip="TÜV erneuern" *appHasPermission="'tuev.update'">
+                      <mat-icon>add_task</mat-icon>
                     </button>
-                </div>
-            </mat-card-header>
+                    <button mat-icon-button (click)="openEditVehicleDialog(vehicle)"
+                      matTooltip="Bearbeiten" *appHasPermission="'tuev.update'">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteVehicle(vehicle)"
+                      matTooltip="Löschen" *appHasPermission="'tuev.delete'">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
 
-            <mat-card-content>
-                <div class="table-container">
-                    <div class="table-scroll-wrapper">
-                        <table mat-table [dataSource]="vehicles" class="mat-elevation-z8">
-                            <!-- License Plate Column -->
-                            <ng-container matColumnDef="licensePlate">
-                                <th mat-header-cell *matHeaderCellDef> Kennzeichen </th>
-                                <td mat-cell *matCellDef="let vehicle"> {{vehicle.licensePlate}} </td>
-                            </ng-container>
-
-                            <!-- Name Column -->
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef> Bezeichnung/Name </th>
-                                <td mat-cell *matCellDef="let vehicle"> {{vehicle.name}} </td>
-                            </ng-container>
-
-                            <!-- Type Column -->
-                            <ng-container matColumnDef="type">
-                                <th mat-header-cell *matHeaderCellDef> Typ </th>
-                                <td mat-cell *matCellDef="let vehicle"> {{getVehicleTypeLabel(vehicle.vehicleType)}}
-                                </td>
-                            </ng-container>
-
-                            <!-- Expiry Date Column -->
-                            <ng-container matColumnDef="nextTuevDate">
-                                <th mat-header-cell *matHeaderCellDef> TÜV Ablaufdatum </th>
-                                <td mat-cell *matCellDef="let vehicle" [class.expired]="isExpired(vehicle.nextTuevDate)"
-                                    [class.soon-expired]="isSoonExpired(vehicle.nextTuevDate)">
-                                    {{vehicle.nextTuevDate | date:'MM.yyyy'}}
-                                    <span *ngIf="isExpired(vehicle.nextTuevDate)"
-                                        class="badge badge-expired">Abgelaufen</span>
-                                    <span *ngIf="isSoonExpired(vehicle.nextTuevDate)" class="badge badge-soon">Bald
-                                        fällig</span>
-                                </td>
-                            </ng-container>
-
-                            <!-- Actions Column -->
-                            <ng-container matColumnDef="actions">
-                                <th mat-header-cell *matHeaderCellDef class="mat-column-actions"> Aktionen </th>
-                                <td mat-cell *matCellDef="let vehicle" class="mat-column-actions">
-                                    <div class="actions-row">
-                                        <button mat-icon-button (click)="openRenewDialog(vehicle)"
-                                            matTooltip="TÜV erneuern" *appHasPermission="'tuev.update'">
-                                            <mat-icon>add_task</mat-icon>
-                                        </button>
-                                        <button mat-icon-button (click)="openEditVehicleDialog(vehicle)"
-                                            matTooltip="Bearbeiten" *appHasPermission="'tuev.update'">
-                                            <mat-icon>edit</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="warn" (click)="deleteVehicle(vehicle)"
-                                            matTooltip="Löschen" *appHasPermission="'tuev.delete'">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                    </div>
-                                </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                        </table>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

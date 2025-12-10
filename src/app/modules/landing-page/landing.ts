@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { HasPermissionDirective } from '../../core/directives/has-permission.dir
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, MatCardModule, HasPermissionDirective],
+  imports: [MatCardModule, HasPermissionDirective],
   templateUrl: './landing.html',
   styleUrls: ['./landing.scss']
 })

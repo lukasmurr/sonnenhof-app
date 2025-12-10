@@ -1,54 +1,62 @@
 <h2 mat-dialog-title>{{ data.employee ? 'Mitarbeiter bearbeiten' : 'Neuer Mitarbeiter' }}</h2>
 <mat-dialog-content>
-    <form [formGroup]="form" class="employee-form">
-        <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name" placeholder="Max Mustermann">
-            <mat-error *ngIf="form.get('name')?.hasError('required')">
-                Name ist erforderlich
-            </mat-error>
-        </mat-form-field>
+  <form [formGroup]="form" class="employee-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Max Mustermann">
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          Name ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Geburtsdatum</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="birthDate">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="form.get('birthDate')?.hasError('required')">
-                Geburtsdatum ist erforderlich
-            </mat-error>
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Geburtsdatum</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="birthDate">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      @if (form.get('birthDate')?.hasError('required')) {
+        <mat-error>
+          Geburtsdatum ist erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Urlaubstage</mat-label>
-            <input matInput type="number" formControlName="vacationDays" placeholder="30">
-            <mat-error *ngIf="form.get('vacationDays')?.hasError('required')">
-                Urlaubstage sind erforderlich
-            </mat-error>
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Urlaubstage</mat-label>
+      <input matInput type="number" formControlName="vacationDays" placeholder="30">
+      @if (form.get('vacationDays')?.hasError('required')) {
+        <mat-error>
+          Urlaubstage sind erforderlich
+        </mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Festnetz</mat-label>
-            <input matInput formControlName="landline" placeholder="01234 56789">
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Festnetz</mat-label>
+      <input matInput formControlName="landline" placeholder="01234 56789">
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Handy</mat-label>
-            <input matInput formControlName="mobile" placeholder="0170 12345678">
-        </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Handy</mat-label>
+      <input matInput formControlName="mobile" placeholder="0170 12345678">
+    </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>E-Mail</mat-label>
-            <input matInput formControlName="email" placeholder="max@beispiel.de">
-            <mat-error *ngIf="form.get('email')?.hasError('email')">
-                Ungültige E-Mail Adresse
-            </mat-error>
-        </mat-form-field>
-    </form>
+    <mat-form-field appearance="outline">
+      <mat-label>E-Mail</mat-label>
+      <input matInput formControlName="email" placeholder="max@beispiel.de">
+      @if (form.get('email')?.hasError('email')) {
+        <mat-error>
+          Ungültige E-Mail Adresse
+        </mat-error>
+      }
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Abbrechen</button>
-    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">
-        Speichern
-    </button>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">
+    Speichern
+  </button>
 </mat-dialog-actions>

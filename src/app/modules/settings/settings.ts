@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -23,7 +23,6 @@ import { UserDialogComponent } from './user-dialog/user-dialog';
   selector: 'app-settings',
   standalone: true,
   imports: [
-    CommonModule,
     MatButtonModule,
     MatIconModule,
     MatTableModule,
@@ -34,7 +33,7 @@ import { UserDialogComponent } from './user-dialog/user-dialog';
     MatMenuModule,
     MatTooltipModule,
     MatSnackBarModule
-  ],
+],
   providers: [
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlDe }
   ],

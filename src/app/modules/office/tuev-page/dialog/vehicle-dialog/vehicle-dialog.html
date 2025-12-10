@@ -1,55 +1,65 @@
 <h2 mat-dialog-title>{{ data.vehicle ? 'Fahrzeug bearbeiten' : 'Auto anlegen' }}</h2>
 <mat-dialog-content>
-    <form [formGroup]="form" class="vehicle-form">
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Kennzeichen</mat-label>
-            <input matInput formControlName="licensePlate" placeholder="M-AB 123" (blur)="formatLicensePlate()"
-                (input)="onLicensePlateInput($event)">
-            <mat-error *ngIf="form.get('licensePlate')?.hasError('required')">
-                Kennzeichen ist erforderlich
-            </mat-error>
-            <mat-error *ngIf="form.get('licensePlate')?.hasError('invalidFormat')">
-                Ungültiges Format (z.B. DON-LM-320)
-            </mat-error>
-        </mat-form-field>
+  <form [formGroup]="form" class="vehicle-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Kennzeichen</mat-label>
+      <input matInput formControlName="licensePlate" placeholder="M-AB 123" (blur)="formatLicensePlate()"
+        (input)="onLicensePlateInput($event)">
+        @if (form.get('licensePlate')?.hasError('required')) {
+          <mat-error>
+            Kennzeichen ist erforderlich
+          </mat-error>
+        }
+        @if (form.get('licensePlate')?.hasError('invalidFormat')) {
+          <mat-error>
+            Ungültiges Format (z.B. DON-LM-320)
+          </mat-error>
+        }
+      </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Bezeichnung/Name</mat-label>
-            <input matInput formControlName="name" placeholder="Firmenwagen 1">
-            <mat-error *ngIf="form.get('name')?.hasError('required')">
-                Name ist erforderlich
-            </mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bezeichnung/Name</mat-label>
+        <input matInput formControlName="name" placeholder="Firmenwagen 1">
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>
+            Name ist erforderlich
+          </mat-error>
+        }
+      </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Typ</mat-label>
-            <mat-select formControlName="vehicleType">
-                <mat-option value="car">Auto</mat-option>
-                <mat-option value="truck">LKW</mat-option>
-                <mat-option value="trailer">Hänger</mat-option>
-                <mat-option value="tractor">Traktor</mat-option>
-                <mat-option value="other">Sonstiges</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('vehicleType')?.hasError('required')">
-                Typ ist erforderlich
-            </mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Typ</mat-label>
+        <mat-select formControlName="vehicleType">
+          <mat-option value="car">Auto</mat-option>
+          <mat-option value="truck">LKW</mat-option>
+          <mat-option value="trailer">Hänger</mat-option>
+          <mat-option value="tractor">Traktor</mat-option>
+          <mat-option value="other">Sonstiges</mat-option>
+        </mat-select>
+        @if (form.get('vehicleType')?.hasError('required')) {
+          <mat-error>
+            Typ ist erforderlich
+          </mat-error>
+        }
+      </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>TÜV Ablaufdatum</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="nextTuevDate">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker startView="multi-year" (yearSelected)="chosenYearHandler($event)"
-                (monthSelected)="chosenMonthHandler($event, picker)" panelClass="example-month-picker"></mat-datepicker>
-            <mat-error *ngIf="form.get('nextTuevDate')?.hasError('required')">
-                Datum ist erforderlich
-            </mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>TÜV Ablaufdatum</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="nextTuevDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+        (monthSelected)="chosenMonthHandler($event, picker)" panelClass="example-month-picker"></mat-datepicker>
+        @if (form.get('nextTuevDate')?.hasError('required')) {
+          <mat-error>
+            Datum ist erforderlich
+          </mat-error>
+        }
+      </mat-form-field>
     </form>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Abbrechen</button>
     <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
-        Speichern
+      Speichern
     </button>
-</mat-dialog-actions>
+  </mat-dialog-actions>

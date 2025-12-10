@@ -1,99 +1,103 @@
 <div class="markets-container">
-    <div class="header">
-        <button mat-icon-button (click)="goBack()">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <h1 class="headline">Märkte</h1>
-        <div class="spacer"></div>
-    </div>
+  <div class="header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="headline">Märkte</h1>
+    <div class="spacer"></div>
+  </div>
 
-    <div class="markets-content">
-        <mat-card class="markets-card">
-            <mat-card-header>
-                <mat-card-title>Märkte</mat-card-title>
-                <mat-card-subtitle>Verwalten Sie hier Ihre Märkte</mat-card-subtitle>
-                <div class="header-actions">
-                    <button mat-raised-button color="primary" (click)="openMarketDialog()"
-                        *appHasPermission="'market.create'">
-                        <mat-icon>add</mat-icon>
-                        Neuer Markt
+  <div class="markets-content">
+    <mat-card class="markets-card">
+      <mat-card-header>
+        <mat-card-title>Märkte</mat-card-title>
+        <mat-card-subtitle>Verwalten Sie hier Ihre Märkte</mat-card-subtitle>
+        <div class="header-actions">
+          <button mat-raised-button color="primary" (click)="openMarketDialog()"
+            *appHasPermission="'market.create'">
+            <mat-icon>add</mat-icon>
+            Neuer Markt
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-container">
+          <div class="table-scroll-wrapper">
+            <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+              </ng-container>
+
+              <!-- Address Column -->
+              <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Adresse </th>
+                <td mat-cell *matCellDef="let row"> {{row.address}} </td>
+              </ng-container>
+
+              <!-- Day Column -->
+              <ng-container matColumnDef="day">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag </th>
+                <td mat-cell *matCellDef="let row"> {{row.day}} </td>
+              </ng-container>
+
+              <!-- Time Column -->
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef> Zeit </th>
+                <td mat-cell *matCellDef="let row"> {{row.startTime}} - {{row.endTime}} </td>
+              </ng-container>
+
+              <!-- Car Column -->
+              <ng-container matColumnDef="car">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Auto </th>
+                <td mat-cell *matCellDef="let row"> {{row.car ? 'Auto ' + row.car : ''}} </td>
+              </ng-container>
+
+              <!-- Grill Trailer Column -->
+              <ng-container matColumnDef="hasGrillTrailer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Grillhänger </th>
+                <td mat-cell *matCellDef="let row">
+                  @if (row.hasGrillTrailer) {
+                    <mat-icon color="primary">check_circle</mat-icon>
+                  }
+                  @if (!row.hasGrillTrailer) {
+                    <mat-icon color="disabled">cancel</mat-icon>
+                  }
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="actions-row">
+                    <button mat-icon-button (click)="openMarketDialog(row)" matTooltip="Bearbeiten"
+                      *appHasPermission="'market.update'">
+                      <mat-icon>edit</mat-icon>
                     </button>
-                </div>
-            </mat-card-header>
-            <mat-card-content>
-                <div class="table-container">
-                    <div class="table-scroll-wrapper">
-                        <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+                    <button mat-icon-button color="warn" (click)="deleteMarket(row)"
+                      matTooltip="Löschen" *appHasPermission="'market.delete'">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
 
-                            <!-- Name Column -->
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-                            </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                            <!-- Address Column -->
-                            <ng-container matColumnDef="address">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Adresse </th>
-                                <td mat-cell *matCellDef="let row"> {{row.address}} </td>
-                            </ng-container>
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="7">Keine Märkte vorhanden</td>
+              </tr>
+            </table>
+          </div>
 
-                            <!-- Day Column -->
-                            <ng-container matColumnDef="day">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag </th>
-                                <td mat-cell *matCellDef="let row"> {{row.day}} </td>
-                            </ng-container>
-
-                            <!-- Time Column -->
-                            <ng-container matColumnDef="time">
-                                <th mat-header-cell *matHeaderCellDef> Zeit </th>
-                                <td mat-cell *matCellDef="let row"> {{row.startTime}} - {{row.endTime}} </td>
-                            </ng-container>
-
-                            <!-- Car Column -->
-                            <ng-container matColumnDef="car">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Auto </th>
-                                <td mat-cell *matCellDef="let row"> {{row.car ? 'Auto ' + row.car : ''}} </td>
-                            </ng-container>
-
-                            <!-- Grill Trailer Column -->
-                            <ng-container matColumnDef="hasGrillTrailer">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Grillhänger </th>
-                                <td mat-cell *matCellDef="let row">
-                                    <mat-icon *ngIf="row.hasGrillTrailer" color="primary">check_circle</mat-icon>
-                                    <mat-icon *ngIf="!row.hasGrillTrailer" color="disabled">cancel</mat-icon>
-                                </td>
-                            </ng-container>
-
-                            <!-- Actions Column -->
-                            <ng-container matColumnDef="actions">
-                                <th mat-header-cell *matHeaderCellDef> Aktionen </th>
-                                <td mat-cell *matCellDef="let row">
-                                    <div class="actions-row">
-                                        <button mat-icon-button (click)="openMarketDialog(row)" matTooltip="Bearbeiten"
-                                            *appHasPermission="'market.update'">
-                                            <mat-icon>edit</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="warn" (click)="deleteMarket(row)"
-                                            matTooltip="Löschen" *appHasPermission="'market.delete'">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                    </div>
-                                </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                            <!-- Row shown when there is no matching data. -->
-                            <tr class="mat-row" *matNoDataRow>
-                                <td class="mat-cell" colspan="7">Keine Märkte vorhanden</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Märkte pro Seite"></mat-paginator>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Märkte pro Seite"></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
