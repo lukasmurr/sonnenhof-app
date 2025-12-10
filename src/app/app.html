@@ -89,26 +89,10 @@
 
       <mat-divider *appHasPermission="'office.view'"></mat-divider>
 
-      <div mat-subheader>Landwirtschaft</div>
-      <a mat-list-item (click)="navigateAndClose('farming', sidenav)">
-        <mat-icon matListItemIcon>agriculture</mat-icon>
-        <span matListItemTitle>Übersicht</span>
-      </a>
-      <a mat-list-item (click)="navigateAndClose('farming/fields', sidenav)">
-        <mat-icon matListItemIcon>landscape</mat-icon>
-        <span matListItemTitle>Felder</span>
-      </a>
-      <a mat-list-item (click)="navigateAndClose('farming/animals', sidenav)">
-        <mat-icon matListItemIcon>pets</mat-icon>
-        <span matListItemTitle>Tiere</span>
-      </a>
-      <a mat-list-item (click)="navigateAndClose('farming/harvest', sidenav)">
-        <mat-icon matListItemIcon>grass</mat-icon>
-        <span matListItemTitle>Ernte</span>
-      </a>
-      <a mat-list-item (click)="navigateAndClose('farming/equipment', sidenav)">
-        <mat-icon matListItemIcon>handyman</mat-icon>
-        <span matListItemTitle>Geräte</span>
+      <div mat-subheader *appHasPermission="'farming.view'">Landwirtschaft</div>
+      <a mat-list-item (click)="navigateAndClose('farming/stall', sidenav)" *appHasPermission="'stall.view'">
+        <mat-icon matListItemIcon>house_siding</mat-icon>
+        <span matListItemTitle>Stall</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>

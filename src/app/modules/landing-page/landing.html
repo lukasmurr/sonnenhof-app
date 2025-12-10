@@ -17,7 +17,7 @@
             <mat-card-title>Büro</mat-card-title>
         </mat-card>
 
-        <mat-card class="landing-card" (click)="navigate('farming')">
+        <mat-card class="landing-card" (click)="navigate('farming')" *appHasPermission="'farming.view'">
             <div class="card-icon">
                 <img src="assets/icons/traktor.svg" alt="Landwirtschaft">
             </div>

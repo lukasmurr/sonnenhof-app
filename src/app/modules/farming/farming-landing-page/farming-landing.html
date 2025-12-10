@@ -11,7 +11,7 @@
 
     <div class="card-grid">
         <!-- Stall Card -->
-        <mat-card class="section-card stall" (click)="navigateToSection('stall')">
+        <mat-card class="section-card stall" (click)="navigateToSection('stall')" *appHasPermission="'stall.view'">
             <div class="card-icon"><mat-icon>house</mat-icon></div>
             <mat-card-title>Stall</mat-card-title>
             <mat-card-content>

@@ -21,43 +21,43 @@ export const routes: Routes = [
     // Butchery
     {
         path: 'butchery',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'butchery.view' },
         loadComponent: () => import('./modules/butchery/butchery-landing-page/butchery-landing').then(m => m.ButcheryLanding)
     },
     {
         path: 'butchery/products',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'product.view' },
         loadComponent: () => import('./modules/butchery/products/products').then(m => m.ProductsComponent)
     },
     {
         path: 'butchery/orders',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'order.view' },
         loadComponent: () => import('./modules/butchery/orders/orders').then(m => m.OrdersComponent)
     },
     {
         path: 'butchery/production',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'butchery/inventory',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'butchery/quality',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'butchery/sales',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'product.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
@@ -65,55 +65,55 @@ export const routes: Routes = [
     // Office
     {
         path: 'office',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'office.view' },
         loadComponent: () => import('./modules/office/office-landing-page/office-landing').then(m => m.OfficeLanding)
     },
     {
         path: 'office/administration',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/documents',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/calendar',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/contacts',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'office.view' },
         loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
     },
     {
         path: 'office/tuev',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'tuev.view' },
         loadComponent: () => import('./modules/office/tuev-page/tuev').then(m => m.Tuev)
     },
     {
         path: 'office/markets',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'market.view' },
         loadComponent: () => import('./modules/office/markets/markets').then(m => m.MarketsComponent)
     },
     {
         path: 'office/employees',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'employee.view' },
         loadComponent: () => import('./modules/office/employees/employees').then(m => m.EmployeesComponent)
     },
     {
         path: 'office/vacation',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'vacation.view' },
         loadComponent: () => import('./modules/office/vacation/vacation-planning').then(m => m.VacationPlanningComponent)
     },
@@ -121,18 +121,19 @@ export const routes: Routes = [
     // Farming
     {
         path: 'farming',
-        canActivate: [authGuard],
+        canActivate: [permissionGuard],
+        data: { permission: 'farming.view' },
         loadComponent: () => import('./modules/farming/farming-landing-page/farming-landing').then(m => m.FarmingLanding)
     },
     {
         path: 'farming/stall',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'stall.view' },
         loadComponent: () => import('./modules/farming/stall/stall-overview/stall-overview').then(m => m.StallOverviewComponent)
     },
     {
         path: 'farming/stall/:id',
-        canActivate: [authGuard, permissionGuard],
+        canActivate: [permissionGuard],
         data: { permission: 'stall.view' },
         loadComponent: () => import('./modules/farming/stall/stall-detail/stall-detail').then(m => m.StallDetailComponent)
     },
