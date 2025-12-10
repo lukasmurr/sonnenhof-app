@@ -1,10 +1,10 @@
-# Sonnenhof Management UI
+# Sonnenhof App
 
 Eine moderne, modulare Verwaltungsoberfläche zur Unterstützung der Abläufe auf dem Sonnenhof.
 
 Kurzbeschreibung
 -----------------
-Die Sonnenhof Management UI ist die All‑in‑One Lösung zur Digitalisierung des Sonnenhofs in Rudelstetten (bei Nördlingen). Sie bildet Funktionen zur Verwaltung von Märkten, Ständen, Mitarbeitenden, Bestellungen und weiteren Hofprozessen ab.
+Die Sonnenhof App ist die All‑in‑One Lösung zur Digitalisierung des Sonnenhofs in Rudelstetten (bei Nördlingen). Sie bildet Funktionen zur Verwaltung von Märkten, Ständen, Mitarbeitenden, Bestellungen und weiteren Hofprozessen ab.
 
 Über den Sonnenhof
 ------------------
