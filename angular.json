@@ -35,11 +35,17 @@
               "html2canvas",
               "raf",
               "rgbcolor",
-              "core-js"
+              "core-js",
+              "pouchdb"
             ]
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": false
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

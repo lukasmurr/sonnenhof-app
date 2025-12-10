@@ -35,6 +35,7 @@
     "@auth0/angular-jwt": "^5.2.0",
     "@daypilot/daypilot-lite-angular": "^4.8.0",
     "@types/pouchdb": "^6.4.2",
+    "events": "^3.3.0",
     "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",
     "moment": "^2.30.1",
@@ -56,7 +57,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "sass": "^1.95.0",
+    "sass": "^1.95.1",
     "typescript": "~5.9.2"
   }
 }
