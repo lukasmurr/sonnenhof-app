@@ -41,7 +41,7 @@ import { ChangePasswordDialogComponent } from './modules/settings/change-passwor
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('sonnenhof-management-ui');
+  protected readonly title = signal('sonnenhof-app');
   private router = inject(Router);
   private document = inject(DOCUMENT);
   public authService = inject(AuthService);
