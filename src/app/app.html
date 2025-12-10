@@ -74,15 +74,15 @@
         <span matListItemTitle>TÜV</span>
       </a>
       <a mat-list-item (click)="navigateAndClose('office/markets', sidenav)" *appHasPermission="'market.view'">
-        <mat-icon matListItemIcon>store</mat-icon>
+        <mat-icon matListItemIcon>storefront</mat-icon>
         <span matListItemTitle>Märkte</span>
       </a>
       <a mat-list-item (click)="navigateAndClose('office/employees', sidenav)" *appHasPermission="'employee.view'">
-        <mat-icon matListItemIcon>badge</mat-icon>
+        <mat-icon matListItemIcon>people</mat-icon>
         <span matListItemTitle>Mitarbeiter</span>
       </a>
       <a mat-list-item (click)="navigateAndClose('office/vacation', sidenav)" *appHasPermission="'vacation.view'">
-        <mat-icon matListItemIcon>beach_access</mat-icon>
+        <mat-icon matListItemIcon>date_range</mat-icon>
         <span matListItemTitle>Urlaub</span>
       </a>
 
@@ -90,7 +90,7 @@
 
       <div mat-subheader *appHasPermission="'farming.view'">Landwirtschaft</div>
       <a mat-list-item (click)="navigateAndClose('farming/stall', sidenav)" *appHasPermission="'stall.view'">
-        <mat-icon matListItemIcon>house_siding</mat-icon>
+        <mat-icon matListItemIcon>house</mat-icon>
         <span matListItemTitle>Stall</span>
       </a>
     </mat-nav-list>
