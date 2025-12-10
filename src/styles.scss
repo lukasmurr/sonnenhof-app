@@ -27,6 +27,7 @@ $sonnenhof-dark-theme: mat.m2-define-dark-theme((
 
 .dark-theme {
   @include mat.all-component-colors($sonnenhof-dark-theme);
+  color: white;
 }
 
 // Global Styles
