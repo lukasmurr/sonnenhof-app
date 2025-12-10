@@ -40,7 +40,8 @@ export class PdfService {
           product: item.productName,
           quantity: `${item.quantity} ${item.unit}`,
           notes: item.notes || '',
-          puNumber: this.getPuNumber(item.productName, products)
+          puNumber: this.getPuNumber(item.productName, products),
+          orderNumber: order.orderNumber
         });
       });
     });
@@ -52,6 +53,20 @@ export class PdfService {
         const puB = b.puNumber || '';
         return puA.localeCompare(puB, undefined, { numeric: true });
       });
+    } else if (filter.sortBy === 'customer') {
+      allItems.sort((a, b) => {
+        const customerDiff = a.customer.localeCompare(b.customer);
+        if (customerDiff !== 0) return customerDiff;
+        return a.product.localeCompare(b.product);
+      });
+    } else if (filter.sortBy === 'orderNumber') {
+      allItems.sort((a, b) => {
+        const orderA = a.orderNumber || '';
+        const orderB = b.orderNumber || '';
+        const orderDiff = orderA.localeCompare(orderB, undefined, { numeric: true });
+        if (orderDiff !== 0) return orderDiff;
+        return a.product.localeCompare(b.product);
+      });
     } else {
       // Default abc
       allItems.sort((a, b) => a.product.localeCompare(b.product));
@@ -59,6 +74,7 @@ export class PdfService {
 
     const tableData = allItems.map(item => [
       item.date,
+      item.orderNumber || '',
       item.customer,
       item.product,
       item.quantity,
@@ -66,7 +82,7 @@ export class PdfService {
     ]);
 
     autoTable(doc, {
-      head: [['Datum', 'Kunde', 'Produkt', 'Menge', 'Notiz']],
+      head: [['Datum', 'Bestellnr.', 'Kunde', 'Produkt', 'Menge', 'Notiz']],
       body: tableData,
       startY: 30,
       theme: 'grid',

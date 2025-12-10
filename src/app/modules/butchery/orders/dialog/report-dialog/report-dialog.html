@@ -18,7 +18,7 @@
         <mat-select formControlName="market">
           @for (market of markets; track market) {
             <mat-option [value]="market.name">
-              {{market.name}}
+              {{market.name}} {{market.car ? '(' + market.car + ')' : ''}}
             </mat-option>
           }
         </mat-select>
@@ -84,8 +84,14 @@
     <div class="form-row">
       <label>Sortierung:</label>
       <mat-radio-group formControlName="sortBy">
-        <mat-radio-button value="abc">Alphabetisch</mat-radio-button>
-        <mat-radio-button value="puNumber">PU-Nummer</mat-radio-button>
+        @if (reportForm.get('type')?.value === 'production') {
+          <mat-radio-button value="abc">Alphabetisch</mat-radio-button>
+          <mat-radio-button value="puNumber">PU-Nummer</mat-radio-button>
+        }
+        @if (reportForm.get('type')?.value === 'market') {
+          <mat-radio-button value="customer">Kunde</mat-radio-button>
+          <mat-radio-button value="orderNumber">Bestellnummer</mat-radio-button>
+        }
       </mat-radio-group>
     </div>
 

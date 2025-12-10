@@ -58,7 +58,7 @@ export class ReportDialogComponent implements OnInit {
       endDate: [new Date()],
       week: [moment().isoWeek()],
       year: [moment().year()],
-      sortBy: ['abc'] // 'abc' or 'puNumber'
+      sortBy: ['customer'] // 'abc' or 'puNumber'
     });
   }
 
@@ -75,8 +75,10 @@ export class ReportDialogComponent implements OnInit {
     this.reportForm.get('type')?.valueChanges.subscribe(type => {
       if (type === 'market') {
         this.reportForm.get('market')?.setValidators(Validators.required);
+        this.reportForm.patchValue({ sortBy: 'customer' });
       } else {
         this.reportForm.get('market')?.clearValidators();
+        this.reportForm.patchValue({ sortBy: 'abc' });
       }
       this.reportForm.get('market')?.updateValueAndValidity();
     });
