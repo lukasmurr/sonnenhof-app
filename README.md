@@ -1,59 +1,114 @@
-# SonnenhofManagementUi
+# Sonnenhof Management UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.4.
+Eine moderne, modulare Verwaltungsoberfläche zur Unterstützung der Abläufe auf dem Sonnenhof.
 
-## Development server
+Kurzbeschreibung
+-----------------
+Die Sonnenhof Management UI ist die All‑in‑One Lösung zur Digitalisierung des Sonnenhofs in Rudelstetten (bei Nördlingen). Sie bildet Funktionen zur Verwaltung von Märkten, Ständen, Mitarbeitenden, Bestellungen und weiteren Hofprozessen ab.
 
-To start a local development server, run:
+Über den Sonnenhof
+------------------
+Der Sonnenhof ist ein Familienbetrieb, der bereits in der zweiten Generation geführt wird. Die Hofgeschichte reicht zurück bis zur neuen Hofstelle 1969. Die heutigen Betreiber haben den Betrieb weiterentwickelt: Bau eines modernen Schlacht- und Zerlegebetriebs mit EU‑Zulassung, Direktvermarktung ab Hof und Belieferung von Wochenmärkten (z. B. München). Schwerpunkte sind Spargelanbau und Schweinehaltung; viele Produkte werden direkt an Endverbraucher verkauft.
 
-```bash
-ng serve
+Webseite: https://bauernshop.de
+
+Inhaltsverzeichnis
+------------------
+- [Features](#features)
+- [Projektstruktur](#projektstruktur)
+- [Voraussetzungen](#voraussetzungen)
+- [Schnellstart](#schnellstart)
+- [Build & Deployment](#build--deployment)
+- [Tests](#tests)
+- [Entwicklung & Contribution](#entwicklung--contribution)
+- [Lizenz](#lizenz)
+- [Kontakt](#kontakt)
+
+Features
+--------
+- Verwaltung von Märkten, Ständen und Produkten
+- Benutzer- und Berechtigungsverwaltung
+- Bestell- und Auftragsverwaltung
+- Integration von PDF-Exporten und weiteren Diensten
+- Modularer Aufbau, geeignet für Lazy‑Loading
+
+Projektstruktur (Kurz)
+----------------------
+- `src/` — Quellcode und statische Assets
+- `src/main.ts`, `src/index.html`, `src/styles.scss` — Einstieg und globale Styles
+- `src/app/` — Hauptapplikation, Routen und Konfiguration
+- `src/app/core/` — Kernservices, Guards, Direktiven, Modelle (`services/`, `guards/`, `models/`)
+- `src/app/modules/` — Feature‑Module (z. B. `butchery`, `farming`, `office`, `landing-page`, `login`, `settings`)
+- `src/assets/` — Icons, Bilder, statische Dateien
+- `src/environments/` — Umgebungs-spezifische Einstellungen (`environment.ts`, `environment.prod.ts`)
+
+> Hinweis: Die Struktur ist modular; Features können getrennt entwickelt und lazy‑loaded werden.
+
+Voraussetzungen
+--------------
+- Node.js (LTS empfohlen)
+- npm (oder pnpm / yarn)
+- Optional: global installiertes Angular CLI (`npm i -g @angular/cli`)
+
+Schnellstart
+------------
+1. Abhängigkeiten installieren:
+
+```powershell
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+2. Entwicklungsserver starten:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```powershell
+npm start
+# oder direkt
+ng serve --open
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+3. Anwendung öffnen: http://localhost:4200/
 
-```bash
-ng generate --help
+Build & Deployment
+------------------
+Produktion bauen:
+
+```powershell
+npm run build
+# oder mit Angular CLI
+ng build --configuration production
 ```
 
-## Building
+Das Ergebnis befindet sich im Ordner `dist/` und kann auf einem statischen Webserver oder in einem Container bereitgestellt werden. Bei Bedarf `baseHref` oder `deployUrl` anpassen.
 
-To build the project run:
+Tests
+-----
+- Unit-Tests (Karma/Jasmine):
 
-```bash
-ng build
+```powershell
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- E2E-Tests (sofern konfiguriert):
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+```powershell
+npm run e2e
 ```
 
-## Running end-to-end tests
+Entwicklung & Contribution
+--------------------------
+- Branching: Arbeit in Feature-Branches vom `development` Branch
+- PRs: aussagekräftige Beschreibung, Tests hinzufügen, lokal testen
+- Generieren von Komponenten/Modulen:
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```powershell
+ng generate component <name>
+ng generate module <name> --route <route> --module app
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Lizenz
+------
+Dieses Repository enthält die Datei `LICENSE-CC-BY-NC-SA`. Prüfen Sie diese Lizenz vor kommerzieller Nutzung.
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Kontakt
+-------
+Für Fragen oder Fehlerberichte öffne bitte ein Issue im Repository oder kontaktiere das Projektteam.
