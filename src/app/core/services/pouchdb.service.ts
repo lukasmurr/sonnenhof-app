@@ -18,6 +18,12 @@ export class CouchDbService {
 
     private initializeDatabase(): void {
         this.db = new PouchDB('sonnenhof_db'); // Lokale DB
+
+        // Increase max listeners to prevent warning when multiple components watch for changes
+        if (typeof this.db.setMaxListeners === 'function') {
+            this.db.setMaxListeners(100);
+        }
+
         const remoteUrl = environment.couchdb.remoteUrl;
 
         if (!remoteUrl) {
