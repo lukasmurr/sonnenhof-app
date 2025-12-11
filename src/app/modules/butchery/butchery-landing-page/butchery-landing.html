@@ -40,5 +40,15 @@
             </mat-card-content>
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>
+
+        <!-- Angebote Card -->
+        <mat-card class="section-card offers" (click)="navigateToSection('offers')" *appHasPermission="'offer.view'">
+            <div class="card-icon"><mat-icon>local_offer</mat-icon></div>
+            <mat-card-title>Angebote</mat-card-title>
+            <mat-card-content>
+                Planen Sie Wochenangebote und Aktionen.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
     </div>
 </div>

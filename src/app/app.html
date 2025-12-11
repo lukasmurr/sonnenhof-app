@@ -69,6 +69,10 @@
         <mat-icon matListItemIcon>inbox</mat-icon>
         <span matListItemTitle>Kisten</span>
       </a>
+      <a mat-list-item (click)="navigateAndClose('butchery/offers', sidenav)" *appHasPermission="'offer.view'">
+        <mat-icon matListItemIcon>local_offer</mat-icon>
+        <span matListItemTitle>Angebote</span>
+      </a>
 
       <mat-divider *appHasPermission="'butchery.view'"></mat-divider>
 

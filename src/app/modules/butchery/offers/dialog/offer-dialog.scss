@@ -1,0 +1,48 @@
+mat-dialog-content {
+    padding-top: 24px !important;
+}
+
+.row {
+    display: flex;
+    gap: 16px;
+    
+    mat-form-field {
+        flex: 1;
+    }
+}
+
+.full-width {
+    width: 100%;
+}
+
+.warnings {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: #fff3e0;
+    border-radius: 4px;
+    border: 1px solid #ffe0b2;
+    
+    .warning-item {
+        color: #e65100;
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+}
+
+.infos {
+    margin-top: 8px;
+    padding: 12px;
+    background-color: #e3f2fd;
+    border-radius: 4px;
+    
+    .info-item {
+        color: #0d47a1;
+        margin-bottom: 4px;
+    }
+}
+
+h3 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: #666;
+}

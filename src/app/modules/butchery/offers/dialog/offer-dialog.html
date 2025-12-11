@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>{{ data.offer ? 'Angebot bearbeiten' : 'Neues Angebot planen' }}</h2>
+<mat-dialog-content [formGroup]="form">
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Jahr</mat-label>
+            <input matInput type="number" formControlName="year">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Kalenderwoche</mat-label>
+            <input matInput type="number" formControlName="week">
+        </mat-form-field>
+    </div>
+
+    <h3>Produkt 1</h3>
+    <div class="row">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Produkt suchen</mat-label>
+            <input type="text" matInput formControlName="product1" [matAutocomplete]="auto1">
+            <mat-autocomplete #auto1="matAutocomplete">
+                @for (product of filteredProducts1 | async; track product._id) {
+                    <mat-option [value]="product.name">
+                        {{product.name}} ({{product.puNumber}})
+                    </mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Preis (€)</mat-label>
+            <input matInput type="number" formControlName="price1">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Verkauft</mat-label>
+            <input matInput type="number" formControlName="sold1">
+        </mat-form-field>
+    </div>
+
+    <h3>Produkt 2</h3>
+    <div class="row">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Produkt suchen</mat-label>
+            <input type="text" matInput formControlName="product2" [matAutocomplete]="auto2">
+            <mat-autocomplete #auto2="matAutocomplete">
+                @for (product of filteredProducts2 | async; track product._id) {
+                    <mat-option [value]="product.name">
+                        {{product.name}} ({{product.puNumber}})
+                    </mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Preis (€)</mat-label>
+            <input matInput type="number" formControlName="price2">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Verkauft</mat-label>
+            <input matInput type="number" formControlName="sold2">
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Notizen</mat-label>
+        <textarea matInput formControlName="notes"></textarea>
+    </mat-form-field>
+
+    @if (warnings.length > 0) {
+        <div class="warnings">
+            @for (warning of warnings; track warning) {
+                <div class="warning-item">{{ warning }}</div>
+            }
+        </div>
+    }
+
+    @if (lastOfferInfos.length > 0) {
+        <div class="infos">
+            @for (info of lastOfferInfos; track info) {
+                <div class="info-item">{{ info }}</div>
+            }
+        </div>
+    }
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">Speichern</button>
+</mat-dialog-actions>

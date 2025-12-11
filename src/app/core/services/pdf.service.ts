@@ -6,6 +6,7 @@ import { Market } from '../models/market.model';
 import { Order } from '../models/order.model';
 import { Product } from '../models/product.model';
 import { CrateRecord } from '../models/crate.model';
+import { Offer } from '../models/offer.model';
 
 @Injectable({
   providedIn: 'root'
@@ -162,6 +163,74 @@ export class PdfService {
     });
 
     doc.save(`kisten-historie-${crate.customerName.replace(/\s+/g, '_')}-${moment().format('YYYY-MM-DD')}.pdf`);
+  }
+
+  generateWeeklyOfferReport(offer: Offer) {
+    const doc = new jsPDF();
+    const title = `Wochenangebot KW ${offer.week} / ${offer.year}`;
+
+    doc.setFontSize(20);
+    doc.text(title, 14, 22);
+
+    doc.setFontSize(12);
+    doc.text(`Gültig für die Woche ${offer.week}`, 14, 32);
+
+    const tableData = offer.items.map(item => [
+      item.productName,
+      item.puNumber,
+      item.price ? `${item.price.toFixed(2)} €` : '-',
+      item.soldQuantity ? `${item.soldQuantity}` : '-'
+    ]);
+
+    autoTable(doc, {
+      head: [['Produkt', 'PU-Nummer', 'Preis', 'Verkauft']],
+      body: tableData,
+      startY: 40,
+      theme: 'grid',
+      headStyles: { fillColor: [66, 66, 66] },
+      styles: { fontSize: 12, cellPadding: 5 }
+    });
+
+    if (offer.notes) {
+      const finalY = (doc as any).lastAutoTable.finalY || 40;
+      doc.text('Notizen:', 14, finalY + 10);
+      doc.setFontSize(10);
+      doc.text(offer.notes, 14, finalY + 17);
+    }
+
+    doc.save(`angebot-kw${offer.week}-${offer.year}.pdf`);
+  }
+
+  generateOfferOverview(offers: Offer[], year: number) {
+    const doc = new jsPDF();
+    const title = `Angebotsübersicht ${year}`;
+
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+
+    // Sort by week
+    offers.sort((a, b) => a.week - b.week);
+
+    const tableData = offers.map(offer => {
+      const p1 = offer.items[0];
+      const p2 = offer.items[1];
+      return [
+        `KW ${offer.week}`,
+        `${p1?.productName || '-'} (${p1?.soldQuantity || 0})`,
+        `${p2?.productName || '-'} (${p2?.soldQuantity || 0})`
+      ];
+    });
+
+    autoTable(doc, {
+      head: [['Woche', 'Produkt 1 (Verkauf)', 'Produkt 2 (Verkauf)']],
+      body: tableData,
+      startY: 30,
+      theme: 'grid',
+      headStyles: { fillColor: [66, 66, 66] },
+      styles: { fontSize: 10, cellPadding: 3 }
+    });
+
+    doc.save(`angebotsuebersicht-${year}.pdf`);
   }
 
   generateProductionReport(orders: Order[], filter: any, products: Product[] = []) {

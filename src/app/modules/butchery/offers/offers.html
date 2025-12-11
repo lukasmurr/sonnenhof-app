@@ -1,0 +1,142 @@
+<div class="offers-container">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="headline">Angebotsplanung</h1>
+        <div class="spacer"></div>
+    </div>
+
+    <div class="offers-content">
+        <mat-card class="offers-card">
+            <mat-card-header>
+                <mat-card-title>Angebote</mat-card-title>
+                <mat-card-subtitle>Planen Sie hier die Wochenangebote</mat-card-subtitle>
+                <div class="header-actions">
+                    <mat-form-field appearance="outline" class="year-select" subscriptSizing="dynamic">
+                        <mat-label>Jahr</mat-label>
+                        <mat-select [(ngModel)]="selectedYear" (selectionChange)="onYearChange()">
+                            @for (year of availableYears; track year) {
+                                <mat-option [value]="year">{{year}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button mat-stroked-button (click)="printYearlyOverview()" style="margin-right: 8px;">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                        Jahresübersicht
+                    </button>
+                    <button mat-raised-button color="primary" (click)="openOfferDialog()"
+                        *appHasPermission="'offer.create'">
+                        <mat-icon>add</mat-icon>
+                        Neues Angebot
+                    </button>
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-tab-group>
+                    <mat-tab label="Kalenderansicht">
+                        <div class="calendar-grid">
+                            @for (weekItem of calendarWeeks; track weekItem.week) {
+                                <mat-card class="week-card" [class.empty]="!weekItem.offer">
+                                    <mat-card-header>
+                                        <mat-card-title>KW {{weekItem.week}}</mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        @if (weekItem.offer) {
+                                            <div class="product-item">
+                                                <strong>1:</strong> {{weekItem.offer.items[0]?.productName}}
+                                                @if (weekItem.offer.items[0]?.soldQuantity) {
+                                                    <span class="sold">({{weekItem.offer.items[0].soldQuantity}} verk.)</span>
+                                                }
+                                            </div>
+                                            <div class="product-item">
+                                                <strong>2:</strong> {{weekItem.offer.items[1]?.productName}}
+                                                @if (weekItem.offer.items[1]?.soldQuantity) {
+                                                    <span class="sold">({{weekItem.offer.items[1].soldQuantity}} verk.)</span>
+                                                }
+                                            </div>
+                                        } @else {
+                                            <div class="empty-state">
+                                                <button mat-button color="primary" (click)="createNewOffer(weekItem.week)" *appHasPermission="'offer.create'">
+                                                    <mat-icon>add</mat-icon> Angebot erstellen
+                                                </button>
+                                            </div>
+                                        }
+                                    </mat-card-content>
+                                    @if (weekItem.offer) {
+                                        <mat-card-actions align="end">
+                                            <button mat-icon-button (click)="printWeeklyReport(weekItem.offer!)" matTooltip="Drucken">
+                                                <mat-icon>print</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="openOfferDialog(weekItem.offer)" *appHasPermission="'offer.update'">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="warn" (click)="deleteOffer(weekItem.offer!)" *appHasPermission="'offer.delete'">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </mat-card-actions>
+                                    }
+                                </mat-card>
+                            }
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Tabellenansicht">
+                        <div class="table-container">
+                            <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+                                <!-- Week Column -->
+                                <ng-container matColumnDef="week">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> KW </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.week}} </td>
+                                </ng-container>
+
+                                <!-- Product 1 Column -->
+                                <ng-container matColumnDef="product1">
+                                    <th mat-header-cell *matHeaderCellDef> Produkt 1 </th>
+                                    <td mat-cell *matCellDef="let row"> 
+                                        {{row.items[0]?.productName}}
+                                        @if (row.items[0]?.price) { ({{row.items[0].price}} €) }
+                                    </td>
+                                </ng-container>
+
+                                <!-- Product 2 Column -->
+                                <ng-container matColumnDef="product2">
+                                    <th mat-header-cell *matHeaderCellDef> Produkt 2 </th>
+                                    <td mat-cell *matCellDef="let row"> 
+                                        {{row.items[1]?.productName}}
+                                        @if (row.items[1]?.price) { ({{row.items[1].price}} €) }
+                                    </td>
+                                </ng-container>
+
+                                <!-- Actions Column -->
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <div class="actions-row">
+                                            <button mat-icon-button (click)="printWeeklyReport(row)" matTooltip="Drucken">
+                                                <mat-icon>print</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="openOfferDialog(row)" matTooltip="Bearbeiten"
+                                                *appHasPermission="'offer.update'">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="warn" (click)="deleteOffer(row)"
+                                                matTooltip="Löschen" *appHasPermission="'offer.delete'">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[10, 25, 50]" aria-label="Angebote pro Seite"></mat-paginator>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
