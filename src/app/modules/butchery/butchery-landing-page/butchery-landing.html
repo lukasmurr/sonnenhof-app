@@ -30,5 +30,15 @@
             </mat-card-content>
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>
+
+        <!-- Kisten Card -->
+        <mat-card class="section-card crates" (click)="navigateToSection('crates')" *appHasPermission="'crate.view'">
+            <div class="card-icon"><mat-icon>inbox</mat-icon></div>
+            <mat-card-title>Kisten</mat-card-title>
+            <mat-card-content>
+                Verwalten Sie ausgeliehene rote Kisten.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
     </div>
 </div>

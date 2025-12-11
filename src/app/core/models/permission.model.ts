@@ -8,6 +8,7 @@ export type Permission =
     | 'user.manage'
     | 'vacation.view' | 'vacation.create_own' | 'vacation.update_own'
     | 'vacation.create_others' | 'vacation.update_others' | 'vacation.delete_others'
-    | 'stall.view' | 'stall.create' | 'stall.update' | 'stall.delete';
+    | 'stall.view' | 'stall.create' | 'stall.update' | 'stall.delete'
+    | 'crate.view' | 'crate.create' | 'crate.update' | 'crate.delete';
 
 export type UserGroup = 'admin' | 'office' | 'butchery' | 'sales';

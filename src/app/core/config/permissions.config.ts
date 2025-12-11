@@ -11,7 +11,8 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'user.manage',
         'vacation.view', 'vacation.create_own', 'vacation.update_own',
         'vacation.create_others', 'vacation.update_others', 'vacation.delete_others',
-        'stall.view', 'stall.create', 'stall.update', 'stall.delete'
+        'stall.view', 'stall.create', 'stall.update', 'stall.delete',
+        'crate.view', 'crate.create', 'crate.update', 'crate.delete'
     ],
     office: [
         'butchery.view', 'office.view', 'farming.view',
@@ -22,14 +23,16 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'tuev.view', 'tuev.create', 'tuev.update', 'tuev.delete',
         'vacation.view', 'vacation.create_own', 'vacation.update_own',
         'vacation.create_others', 'vacation.update_others', 'vacation.delete_others',
-        'stall.view', 'stall.create', 'stall.update', 'stall.delete'
+        'stall.view', 'stall.create', 'stall.update', 'stall.delete',
+        'crate.view', 'crate.create', 'crate.update', 'crate.delete'
     ],
     butchery: [
         'office.view',
         'butchery.view',
         'product.view',
         'order.view',
-        'vacation.view', 'vacation.create_own', 'vacation.update_own'
+        'vacation.view', 'vacation.create_own', 'vacation.update_own',
+        'crate.view', 'crate.create', 'crate.update', 'crate.delete'
     ],
     sales: [
         'office.view',

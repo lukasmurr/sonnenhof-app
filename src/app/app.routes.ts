@@ -38,6 +38,12 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/butchery/orders/orders').then(m => m.OrdersComponent)
     },
     {
+        path: 'butchery/crates',
+        canActivate: [permissionGuard],
+        data: { permission: 'crate.view' },
+        loadComponent: () => import('./modules/butchery/crates/crates').then(m => m.CratesComponent)
+    },
+    {
         path: 'butchery/production',
         canActivate: [permissionGuard],
         data: { permission: 'product.view' },

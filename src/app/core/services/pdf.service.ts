@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Market } from '../models/market.model';
 import { Order } from '../models/order.model';
 import { Product } from '../models/product.model';
+import { CrateRecord } from '../models/crate.model';
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +92,76 @@ export class PdfService {
     });
 
     doc.save(`Bestellbericht_${filter.market}_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
+  }
+
+  generateCrateOverview(crates: CrateRecord[]) {
+    const doc = new jsPDF();
+    const title = `Übersicht Rote Kisten - ${moment().format('DD.MM.YYYY')}`;
+
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+
+    const tableData = crates.map(crate => [
+      crate.customerName,
+      crate.count,
+      moment(crate.lastUpdated).format('DD.MM.YYYY HH:mm')
+    ]);
+
+    autoTable(doc, {
+      head: [['Kunde', 'Anzahl', 'Zuletzt aktualisiert']],
+      body: tableData,
+      startY: 30,
+      theme: 'grid',
+      headStyles: { fillColor: [66, 66, 66] },
+      styles: { fontSize: 10, cellPadding: 5 },
+      columnStyles: {
+        0: { cellWidth: 'auto' },
+        1: { cellWidth: 30, halign: 'center' },
+        2: { cellWidth: 50, halign: 'right' }
+      }
+    });
+
+    doc.save(`rote-kisten-uebersicht-${moment().format('YYYY-MM-DD')}.pdf`);
+  }
+
+  generateCustomerCrateReport(crate: CrateRecord) {
+    const doc = new jsPDF();
+    const title = `Kisten-Historie - ${crate.customerName}`;
+
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+    
+    doc.setFontSize(12);
+    doc.text(`Aktueller Bestand: ${crate.count} Kisten`, 14, 32);
+    doc.text(`Stand: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, 39);
+
+    const history = crate.history || [];
+    // Sort history by date descending (newest first)
+    history.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    const tableData = history.map(entry => [
+      moment(entry.date).format('DD.MM.YYYY HH:mm'),
+      entry.action === 'borrow' ? 'Ausgeliehen' : 'Zurückgegeben',
+      Math.abs(entry.change).toString()
+    ]);
+
+    autoTable(doc, {
+      head: [['Datum', 'Aktion', 'Anzahl']],
+      body: tableData,
+      startY: 45,
+      theme: 'grid',
+      headStyles: { fillColor: [66, 66, 66] },
+      styles: { fontSize: 10, cellPadding: 5 },
+      columnStyles: {
+        0: { cellWidth: 50 },
+        1: { cellWidth: 'auto' },
+        2: { cellWidth: 30, halign: 'right' }
+      }
+    });
+
+    doc.save(`kisten-historie-${crate.customerName.replace(/\s+/g, '_')}-${moment().format('YYYY-MM-DD')}.pdf`);
   }
 
   generateProductionReport(orders: Order[], filter: any, products: Product[] = []) {
