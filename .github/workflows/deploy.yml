@@ -1,4 +1,4 @@
-name: Deploy Angular to Server
+name: Deploy Angular and API to Server
 
 on:
   push:
@@ -9,15 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Use Node
+      # --- 1. Frontend (Angular) ---
+      - name: Use Node for Angular
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Install dependencies
+      - name: Install dependencies (Angular)
         run: npm ci
 
       - name: Inject Secrets into Environment
@@ -31,21 +32,39 @@ jobs:
       - name: Build Angular
         run: npm run build
 
-      - name: Copy dist to server
+      # --- 2. Backend (Node.js API) ---
+      - name: Install dependencies (Backend)
+        run: |
+          cd backend
+          # Installiere nur Production-Dependencies (kleiner & schneller)
+          npm ci --production
+
+      # --- 3. Deployment (Kopieren) ---
+      - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "dist/**"
-          target: "/data/compose/1/dist"
-          strip_components: 1
+          # Kopiere den "dist" Ordner UND den "backend" Ordner (inkl. node_modules)
+          source: "dist/**,backend/**"
+          target: "/data/compose/1"
+          # strip_components entfernt! So landen die Ordner als
+          # /data/compose/1/dist/browser/...
+          # /data/compose/1/backend/...
+          # auf dem Server. Das ist sauberer.
 
-      - name: Restart nginx container
+      # --- 4. Restart Services ---
+      - name: Restart containers
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            # Angular Container neu starten (lädt neue HTML/JS)
             docker restart angular-nginx
+            
+            # API Container neu starten (lädt neuen Node Code)
+            # "|| true" verhindert Fehler, falls der Container beim ersten Mal noch nicht läuft
+            docker restart sonnenhof-api || true

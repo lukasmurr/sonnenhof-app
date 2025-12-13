@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, firstValueFrom } from 'rxjs';
 import { User } from '../models/user.model';
 import { CouchDbService } from './pouchdb.service';
 
@@ -8,7 +9,7 @@ import { CouchDbService } from './pouchdb.service';
 })
 export class UserService {
 
-    constructor(private dbService: CouchDbService) { }
+    constructor(private dbService: CouchDbService, private http: HttpClient) { }
 
     getUsers(): Observable<User[]> {
         return this.dbService.watchDocs('user');
@@ -27,7 +28,22 @@ export class UserService {
 
         // In a real app, hash the password here.
         // For now, we store it as is (or base64 encoded if we wanted slight obfuscation)
-        return this.dbService.addDoc(user);
+        const result = await this.dbService.addDoc(user);
+
+        if (result && result.ok) {
+            this.sendAccountCreatedEmail(user).catch(err => console.error('Failed to send email', err));
+        }
+
+        return result;
+    }
+
+    private async sendAccountCreatedEmail(user: User): Promise<void> {
+        const apiUrl = 'http://localhost:3000/api/mail/account-created';
+        await firstValueFrom(this.http.post(apiUrl, {
+            email: user.email,
+            password: user.password,
+            name: user.name
+        }));
     }
 
     async updateUser(user: User): Promise<any> {

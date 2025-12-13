@@ -1,0 +1,10 @@
+{
+    "name": "sonnenhof-api",
+    "version": "1.0.0",
+    "main": "server.js",
+    "dependencies": {
+        "express": "^5.2.1",
+        "nodemailer": "7.0.11",
+        "cors": "^2.8.5"
+    }
+}
