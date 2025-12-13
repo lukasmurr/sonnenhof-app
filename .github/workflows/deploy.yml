@@ -46,13 +46,14 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
-          # Kopiere den "dist" Ordner UND den "backend" Ordner (inkl. node_modules)
-          source: "dist/**,backend/**"
+          # Kopiert dist/ und backend/ rekursiv
+          source: "dist,backend" 
+          # Zielordner auf dem Server
           target: "/data/compose/1"
-          # strip_components entfernt! So landen die Ordner als
-          # /data/compose/1/dist/browser/...
+          # WICHTIG: strip_components entfernen oder auf 0 setzen!
+          # Damit behält er die Struktur:
+          # /data/compose/1/dist/...
           # /data/compose/1/backend/...
-          # auf dem Server. Das ist sauberer.
 
       # --- 4. Restart Services ---
       - name: Restart containers
