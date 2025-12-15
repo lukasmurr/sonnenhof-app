@@ -58,8 +58,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
         this.dataSource.filterPredicate = (data: Product, filter: string) => {
             const searchStr = filter.toLowerCase();
-            return data.name.toLowerCase().includes(searchStr) ||
-                data.puNumber.toLowerCase().includes(searchStr);
+            const nameMatch = data.name ? data.name.toLowerCase().includes(searchStr) : false;
+            const puNumberMatch = data.puNumber ? String(data.puNumber).toLowerCase().includes(searchStr) : false;
+            return nameMatch || puNumberMatch;
         };
     }
 
