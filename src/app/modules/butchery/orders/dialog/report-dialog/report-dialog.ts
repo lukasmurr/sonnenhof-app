@@ -1,11 +1,12 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,7 +29,8 @@ import { ProductService } from '../../../../../core/services/product.service';
     MatSelectModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatRadioModule
+    MatRadioModule,
+    MatIconModule
 ],
   templateUrl: './report-dialog.html',
   styleUrls: ['./report-dialog.scss']
@@ -37,6 +39,9 @@ export class ReportDialogComponent implements OnInit {
   reportForm: FormGroup;
   markets: Market[] = [];
   products: Product[] = [];
+  filteredProducts: Product[] = [];
+  productSearch = new FormControl('');
+
   reportTypes = [
     { value: 'market', label: 'Markt/Fahrzeug Bericht' },
     { value: 'production', label: 'Produktionsbericht' }
@@ -69,6 +74,15 @@ export class ReportDialogComponent implements OnInit {
 
     this.productService.getProducts().subscribe(products => {
       this.products = products.sort((a, b) => a.name.localeCompare(b.name));
+      this.filteredProducts = this.products;
+    });
+
+    this.productSearch.valueChanges.subscribe(value => {
+      const filterValue = (value || '').toLowerCase();
+      this.filteredProducts = this.products.filter(product => 
+        product.name.toLowerCase().includes(filterValue) || 
+        (product.puNumber && product.puNumber.toLowerCase().includes(filterValue))
+      );
     });
 
     // Update validators based on type
