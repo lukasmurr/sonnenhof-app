@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -7,10 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
 import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 import { Market } from '../../../core/models/market.model';
@@ -29,6 +31,7 @@ import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
     standalone: true,
     imports: [
         CommonModule,
+        FormsModule,
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
@@ -39,6 +42,7 @@ import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
         MatCardModule,
         MatFormFieldModule,
         MatInputModule,
+        MatSelectModule,
         HasPermissionDirective
     ],
     templateUrl: './orders.html',
@@ -49,6 +53,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     dataSource: MatTableDataSource<Order>;
     markets: Market[] = [];
     products: Product[] = [];
+    isArchiveView = false;
+    selectedYear: number = moment().year();
+    availableYears: number[] = [];
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -59,6 +66,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         private productService: ProductService,
         private dialog: MatDialog,
         private router: Router,
+        private route: ActivatedRoute,
         private pdfService: PdfService,
         private authService: AuthService
     ) {
@@ -66,6 +74,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.isArchiveView = this.route.snapshot.data['isArchive'] || false;
         this.loadOrders();
         this.loadMarkets();
         this.loadProducts();
@@ -103,8 +112,47 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
     loadOrders() {
         this.orderService.getOrders().subscribe(orders => {
-            this.dataSource.data = orders;
+            const today = moment().startOf('day');
+
+            // Auto-archive orders
+            const ordersToArchive = orders.filter(o => 
+                !o.isArchived && 
+                o.orderNumber && 
+                moment(o.orderDate).isBefore(today)
+            );
+
+            if (ordersToArchive.length > 0) {
+                ordersToArchive.forEach(order => {
+                    const updatedOrder = { ...order, isArchived: true };
+                    this.orderService.updateOrder(updatedOrder);
+                });
+            }
+            
+            if (this.isArchiveView) {
+                const archivedOrders = orders.filter(o => o.isArchived);
+                
+                // Calculate available years from archived orders
+                const years = new Set(archivedOrders.map(o => moment(o.orderDate).year()));
+                this.availableYears = Array.from(years).sort((a, b) => b - a);
+                
+                // If selected year is not in available years, select the latest one
+                if (this.availableYears.length > 0 && !this.availableYears.includes(this.selectedYear)) {
+                    this.selectedYear = this.availableYears[0];
+                }
+
+                this.dataSource.data = archivedOrders.filter(o => moment(o.orderDate).year() === this.selectedYear);
+            } else {
+                this.dataSource.data = orders.filter(o => !o.isArchived);
+            }
         });
+    }
+
+    toggleArchiveView() {
+        if (this.isArchiveView) {
+            this.router.navigate(['/butchery/orders']);
+        } else {
+            this.router.navigate(['/butchery/orders/archive']);
+        }
     }
 
     loadMarkets() {

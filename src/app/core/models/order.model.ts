@@ -18,6 +18,7 @@ export interface Order {
     items: OrderItem[];
     orderNumber?: string;
     status?: 'open' | 'prepared' | 'completed';
+    isArchived?: boolean;
     createdAt?: string;
     updatedAt?: string;
 }

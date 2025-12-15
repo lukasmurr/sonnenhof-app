@@ -10,32 +10,48 @@
   <div class="orders-content">
     <mat-card class="orders-card">
       <mat-card-header>
-        <mat-card-title>Bestellungen</mat-card-title>
-        <mat-card-subtitle>Verwalten Sie hier Ihre Bestellungen</mat-card-subtitle>
+        <mat-card-title>{{ isArchiveView ? 'Bestellarchiv' : 'Bestellungen' }}</mat-card-title>
+        <mat-card-subtitle>{{ isArchiveView ? 'Archivierte Bestellungen' : 'Verwalten Sie hier Ihre Bestellungen' }}</mat-card-subtitle>
         <div class="header-actions">
+          <button mat-stroked-button (click)="toggleArchiveView()" style="margin-right: 8px;">
+            <mat-icon>{{ isArchiveView ? 'arrow_back' : 'archive' }}</mat-icon>
+            {{ isArchiveView ? 'Zurück' : 'Archiv' }}
+          </button>
           <button mat-stroked-button (click)="openReportDialog()" style="margin-right: 8px;">
             <mat-icon>picture_as_pdf</mat-icon>
             Bericht
           </button>
-          <button mat-raised-button color="primary" (click)="openOrderDialog()"
-            *appHasPermission="'order.create'">
-            <mat-icon>add</mat-icon>
-            Neue Bestellung
-          </button>
+          @if (!isArchiveView) {
+            <button mat-raised-button color="primary" (click)="openOrderDialog()"
+              *appHasPermission="'order.create'">
+              <mat-icon>add</mat-icon>
+              Neue Bestellung
+            </button>
+          }
         </div>
       </mat-card-header>
       <mat-card-content>
-        <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 16px;"
-          subscriptSizing="dynamic">
-          <mat-label>Suchen</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Nach Kunde, Markt oder Produkt suchen..."
-            #input>
-            <button mat-icon-button matSuffix (click)="printFilteredOrders()"
-              matTooltip="Suchergebnisse drucken">
+        <div class="filter-row" style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
+          @if (isArchiveView) {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 150px;">
+              <mat-label>Jahr</mat-label>
+              <mat-select [(ngModel)]="selectedYear" (selectionChange)="loadOrders()">
+                @for (year of availableYears; track year) {
+                  <mat-option [value]="year">{{year}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <mat-form-field appearance="outline" style="flex: 1;" subscriptSizing="dynamic">
+            <mat-label>Suchen</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Nach Kunde, Markt oder Produkt suchen..." #input>
+            <button mat-icon-button matSuffix (click)="printFilteredOrders()" matTooltip="Suchergebnisse drucken">
               <mat-icon>print</mat-icon>
             </button>
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
+        </div>
 
           <div class="table-container">
             <div class="table-scroll-wrapper">
