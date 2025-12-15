@@ -129,6 +129,20 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
+                // Check for order number uniqueness if present
+                if (result.orderNumber) {
+                    const exists = this.dataSource.data.some(o => 
+                        o.orderNumber === result.orderNumber && 
+                        o._id !== (order ? order._id : null) &&
+                        o.market === result.market &&
+                        moment(o.orderDate).isSame(moment(result.orderDate), 'day')
+                    );
+                    if (exists) {
+                        alert('Diese Bestellnummer existiert bereits für diesen Markt an diesem Tag.');
+                        return;
+                    }
+                }
+
                 if (order) {
                     // Update
                     const updatedOrder: Order = {
@@ -155,10 +169,16 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     markAsPrepared(order: Order): void {
         const orderNumber = prompt('Bitte geben Sie eine Bestellnummer ein:');
         if (orderNumber) {
-            // Check for uniqueness
-            const exists = this.dataSource.data.some(o => o.orderNumber === orderNumber && o._id !== order._id);
+            // Check for uniqueness for this market on this day
+            const exists = this.dataSource.data.some(o => 
+                o.orderNumber === orderNumber && 
+                o._id !== order._id &&
+                o.market === order.market &&
+                moment(o.orderDate).isSame(moment(order.orderDate), 'day')
+            );
+
             if (exists) {
-                alert('Diese Bestellnummer existiert bereits. Bitte wählen Sie eine andere.');
+                alert('Diese Bestellnummer existiert bereits für diesen Markt an diesem Tag. Bitte wählen Sie eine andere.');
                 return;
             }
 
