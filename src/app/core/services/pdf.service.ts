@@ -32,63 +32,50 @@ export class PdfService {
     doc.setFontSize(11);
     doc.setTextColor(100);
 
-    let allItems: any[] = [];
-
-    orders.forEach(order => {
-      order.items.forEach(item => {
-        allItems.push({
-          date: moment(order.orderDate).format('DD.MM.YYYY'),
-          customer: order.customerName,
-          product: item.productName,
-          quantity: `${item.quantity} ${item.unit}`,
-          notes: item.notes || '',
-          puNumber: this.getPuNumber(item.productName, products),
-          orderNumber: order.orderNumber
-        });
-      });
-    });
-
-    // Sort items
-    if (filter.sortBy === 'puNumber') {
-      allItems.sort((a, b) => {
-        const puA = a.puNumber || '';
-        const puB = b.puNumber || '';
-        return puA.localeCompare(puB, undefined, { numeric: true });
-      });
-    } else if (filter.sortBy === 'customer') {
-      allItems.sort((a, b) => {
-        const customerDiff = a.customer.localeCompare(b.customer);
-        if (customerDiff !== 0) return customerDiff;
-        return a.product.localeCompare(b.product);
-      });
+    // Sort orders
+    if (filter.sortBy === 'customer') {
+      orders.sort((a, b) => a.customerName.localeCompare(b.customerName));
     } else if (filter.sortBy === 'orderNumber') {
-      allItems.sort((a, b) => {
+      orders.sort((a, b) => {
         const orderA = a.orderNumber || '';
         const orderB = b.orderNumber || '';
-        const orderDiff = orderA.localeCompare(orderB, undefined, { numeric: true });
-        if (orderDiff !== 0) return orderDiff;
-        return a.product.localeCompare(b.product);
+        return orderA.localeCompare(orderB, undefined, { numeric: true });
       });
     } else {
-      // Default abc
-      allItems.sort((a, b) => a.product.localeCompare(b.product));
+      // Default sort by date then customer
+      orders.sort((a, b) => {
+        const dateDiff = moment(a.orderDate).diff(moment(b.orderDate));
+        if (dateDiff !== 0) return dateDiff;
+        return a.customerName.localeCompare(b.customerName);
+      });
     }
 
-    const tableData = allItems.map(item => [
-      item.date,
-      item.orderNumber || '',
-      item.customer,
-      item.product,
-      item.quantity,
-      item.notes
-    ]);
+    const tableData = orders.map(order => {
+      const products = order.items.map(i => i.productName).join('\n');
+      const quantities = order.items.map(i => `${i.quantity} ${i.unit}`).join('\n');
+      const notes = order.items.map(i => i.notes || '').join('\n');
+      
+      let customerInfo = order.customerName;
+      if (order.customerPhone) {
+        customerInfo += `\n${order.customerPhone}`;
+      }
+
+      return [
+        moment(order.orderDate).format('DD.MM.YYYY'),
+        order.orderNumber || '',
+        customerInfo,
+        products,
+        quantities,
+        notes
+      ];
+    });
 
     autoTable(doc, {
       head: [['Datum', 'Bestellnr.', 'Kunde', 'Produkt', 'Menge', 'Notiz']],
       body: tableData,
       startY: 30,
       theme: 'grid',
-      styles: { fontSize: 10 },
+      styles: { fontSize: 10, cellPadding: 3, valign: 'top' },
       headStyles: { fillColor: [66, 66, 66] }
     });
 
