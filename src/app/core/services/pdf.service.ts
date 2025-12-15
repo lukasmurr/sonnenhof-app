@@ -296,7 +296,7 @@ export class PdfService {
 
     const tableData = aggregatedItems.map(p => [
       p.name,
-      `${p.quantity} ${p.unit}`
+      `${Math.round(p.quantity * 100) / 100} ${p.unit}`
     ]);
 
     autoTable(doc, {
