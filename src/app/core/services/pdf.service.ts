@@ -245,8 +245,12 @@ export class PdfService {
       title += ` - KW ${filter.week} / ${filter.year}`;
     }
 
-    if (filter.product) {
-      title += ` (${filter.product})`;
+    if (filter.product && filter.product.length > 0) {
+      if (filter.product.length === 1) {
+        title += ` (${filter.product[0]})`;
+      } else {
+        title += ` (${filter.product.length} Produkte)`;
+      }
     }
 
     doc.setFontSize(18);
@@ -260,7 +264,7 @@ export class PdfService {
     orders.forEach(order => {
       order.items.forEach(item => {
         // Filter by product if specified
-        if (filter.product && item.productName !== filter.product) {
+        if (filter.product && filter.product.length > 0 && !filter.product.includes(item.productName)) {
           return;
         }
 

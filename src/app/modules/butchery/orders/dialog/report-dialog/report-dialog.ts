@@ -51,7 +51,7 @@ export class ReportDialogComponent implements OnInit {
     this.reportForm = this.fb.group({
       type: ['market', Validators.required],
       market: [''],
-      product: [''],
+      product: [[]],
       dateType: ['week'], // 'day', 'week', 'range'
       date: [new Date()],
       startDate: [new Date()],

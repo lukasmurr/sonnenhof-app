@@ -27,9 +27,8 @@
 
     @if (reportForm.get('type')?.value === 'production') {
       <mat-form-field appearance="outline">
-        <mat-label>Produkt (Optional)</mat-label>
-        <mat-select formControlName="product">
-          <mat-option [value]="''">Alle Produkte</mat-option>
+        <mat-label>Produkte (Leer = Alle)</mat-label>
+        <mat-select formControlName="product" multiple>
           @for (product of products; track product) {
             <mat-option [value]="product.name">
               {{product.name}}
