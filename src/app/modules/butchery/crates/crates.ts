@@ -16,6 +16,7 @@ import { CrateService } from '../../../core/services/crate.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { CrateDialogComponent } from './dialog/crate-dialog';
 import { DatePipe } from '@angular/common';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-crates',
@@ -152,11 +153,18 @@ export class CratesComponent implements OnInit, AfterViewInit {
     }
 
     deleteCrateRecord(record: CrateRecord) {
-        if (confirm(`Möchten Sie den Eintrag für ${record.customerName} wirklich löschen?`)) {
-            if (record._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Kisten-Eintrag löschen',
+                message: `Möchten Sie den Eintrag für ${record.customerName} wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && record._id) {
                 this.crateService.deleteCrateRecord(record._id);
             }
-        }
+        });
     }
 
     printCustomerReport(record: CrateRecord) {

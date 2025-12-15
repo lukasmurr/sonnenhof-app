@@ -18,6 +18,7 @@ import { Offer } from '../../../core/models/offer.model';
 import { OfferService } from '../../../core/services/offer.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { OfferDialogComponent } from './dialog/offer-dialog';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-offers',
@@ -141,11 +142,18 @@ export class OffersComponent implements OnInit, AfterViewInit {
     }
 
     deleteOffer(offer: Offer) {
-        if (confirm(`Möchten Sie das Angebot für KW ${offer.week}/${offer.year} wirklich löschen?`)) {
-            if (offer._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Angebot löschen',
+                message: `Möchten Sie das Angebot für KW ${offer.week}/${offer.year} wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && offer._id) {
                 this.offerService.deleteOffer(offer._id);
             }
-        }
+        });
     }
 
     printWeeklyReport(offer: Offer) {

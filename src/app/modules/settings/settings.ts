@@ -18,6 +18,7 @@ import { ProductService } from '../../core/services/product.service';
 import { UserService } from '../../core/services/user.service';
 import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog';
 import { UserDialogComponent } from './user-dialog/user-dialog';
+import { ConfirmationDialogComponent } from '../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
   selector: 'app-settings',
@@ -107,11 +108,18 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   }
 
   deleteUser(user: User): void {
-    if (confirm(`Möchten Sie den Benutzer ${user.name} wirklich löschen?`)) {
-      if (user._id) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Benutzer löschen',
+        message: `Möchten Sie den Benutzer ${user.name} wirklich löschen?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && user._id) {
         this.userService.deleteUser(user._id);
       }
-    }
+    });
   }
 
   toggleLock(user: User): void {

@@ -36,7 +36,8 @@
               "raf",
               "rgbcolor",
               "core-js",
-              "pouchdb"
+              "pouchdb",
+              "events"
             ]
           },
           "configurations": {

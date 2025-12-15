@@ -14,6 +14,7 @@ import { Employee } from '../../../core/models/employee.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { EmployeeDialogComponent } from './dialog/employee-dialog';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-employees',
@@ -93,10 +94,17 @@ export class EmployeesComponent implements OnInit {
     deleteEmployee(employee: Employee) {
         if (!this.authService.hasPermission('employee.delete')) return;
 
-        if (confirm(`Möchten Sie den Mitarbeiter "${employee.name}" wirklich löschen?`)) {
-            if (employee._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Mitarbeiter löschen',
+                message: `Möchten Sie den Mitarbeiter "${employee.name}" wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && employee._id) {
                 this.employeeService.deleteEmployee(employee._id);
             }
-        }
+        });
     }
 }

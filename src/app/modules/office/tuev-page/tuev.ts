@@ -19,6 +19,7 @@ import { TuevService } from '../../../core/services/tuev.service';
 import { RenewDialog } from './dialog/renew-dialog/renew-dialog';
 import { VehicleDialog } from './dialog/vehicle-dialog/vehicle-dialog';
 import { VehicleImageComponent } from './vehicle-image.component';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-tuev',
@@ -127,11 +128,20 @@ export class Tuev implements OnInit {
     }
 
     deleteVehicle(vehicle: Vehicle) {
-        if (confirm(`Möchten Sie das Fahrzeug ${vehicle.licensePlate} wirklich löschen?`)) {
-            this.tuevService.deleteVehicle(vehicle._id!).then(() => {
-                this.snackBar.open('Fahrzeug gelöscht', 'OK', { duration: 3000 });
-            });
-        }
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Fahrzeug löschen',
+                message: `Möchten Sie das Fahrzeug ${vehicle.licensePlate} wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && vehicle._id) {
+                this.tuevService.deleteVehicle(vehicle._id).then(() => {
+                    this.snackBar.open('Fahrzeug gelöscht', 'OK', { duration: 3000 });
+                });
+            }
+        });
     }
 
     isExpired(date: Date): boolean {

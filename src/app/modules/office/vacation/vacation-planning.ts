@@ -18,6 +18,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { VacationService } from '../../../core/services/vacation.service';
 import { VacationDialogComponent } from './dialog/vacation-dialog';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-vacation-planning',
@@ -274,10 +275,17 @@ export class VacationPlanningComponent implements OnInit {
     }
 
     deleteVacation(vacation: Vacation) {
-        if (confirm(`Möchten Sie den Urlaub von "${vacation.employeeName}" wirklich löschen?`)) {
-            if (vacation._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Urlaub löschen',
+                message: `Möchten Sie den Urlaub von "${vacation.employeeName}" wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && vacation._id) {
                 this.vacationService.deleteVacation(vacation._id);
             }
-        }
+        });
     }
 }

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, filter, map, switchMap, tap } from 'rxjs';
 import { Box, Pig, Stall } from '../../../../core/models/stall.model';
 import { StallService } from '../../../../core/services/stall.service';
+import { ConfirmationDialogComponent } from '../../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-stall-detail',
@@ -28,7 +29,8 @@ export class StallDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private stallService: StallService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog
     ) {
         this.stall$ = this.route.paramMap.pipe(
             switchMap(params => {
@@ -69,9 +71,21 @@ export class StallDetailComponent implements OnInit {
     removePig(box: Box): void {
         if (box.pigs.length > 0) {
             const pig = box.pigs[box.pigs.length - 1];
-            this.stallService.removePig(this.stallId!, box.id, pig.id)
-                .then(() => this.snackBar.open('Schwein entfernt', 'OK', { duration: 2000 }))
-                .catch(err => this.snackBar.open(err, 'OK', { duration: 2000 }));
+            
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+                data: {
+                    title: 'Schwein entfernen',
+                    message: `Möchten Sie wirklich ein Schwein aus Box ${box.id} entfernen?`
+                }
+            });
+
+            dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                    this.stallService.removePig(this.stallId!, box.id, pig.id)
+                        .then(() => this.snackBar.open('Schwein entfernt', 'OK', { duration: 2000 }))
+                        .catch(err => this.snackBar.open(err, 'OK', { duration: 2000 }));
+                }
+            });
         }
     }
 

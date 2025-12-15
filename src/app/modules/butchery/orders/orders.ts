@@ -25,6 +25,7 @@ import { PdfService } from '../../../core/services/pdf.service';
 import { ProductService } from '../../../core/services/product.service';
 import { OrderDialogComponent } from './dialog/order-dialog';
 import { ReportDialogComponent } from './dialog/report-dialog/report-dialog';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-orders',
@@ -207,11 +208,18 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     }
 
     deleteOrder(order: Order): void {
-        if (confirm(`Möchten Sie die Bestellung von "${order.customerName}" wirklich löschen?`)) {
-            if (order._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Bestellung löschen',
+                message: `Möchten Sie die Bestellung von "${order.customerName}" wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && order._id) {
                 this.orderService.deleteOrder(order._id);
             }
-        }
+        });
     }
 
     markAsPrepared(order: Order): void {

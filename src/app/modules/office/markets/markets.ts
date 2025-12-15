@@ -14,6 +14,7 @@ import { Market } from '../../../core/models/market.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { MarketService } from '../../../core/services/market.service';
 import { MarketDialogComponent } from './dialog/market-dialog';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-markets',
@@ -99,10 +100,17 @@ export class MarketsComponent implements OnInit, AfterViewInit {
     deleteMarket(market: Market): void {
         if (!this.authService.hasPermission('market.delete')) return;
 
-        if (confirm(`Möchten Sie den Markt "${market.name}" wirklich löschen?`)) {
-            if (market._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Markt löschen',
+                message: `Möchten Sie den Markt "${market.name}" wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && market._id) {
                 this.marketService.deleteMarket(market._id);
             }
-        }
+        });
     }
 }

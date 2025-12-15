@@ -16,6 +16,7 @@ import { Product } from '../../../core/models/product.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProductService } from '../../../core/services/product.service';
 import { ProductDialogComponent } from './dialog/product-dialog';
+import { ConfirmationDialogComponent } from '../../../core/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
     selector: 'app-products',
@@ -129,10 +130,17 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     deleteProduct(product: Product): void {
         if (!this.authService.hasPermission('product.delete')) return;
 
-        if (confirm(`Möchten Sie das Produkt "${product.name}" wirklich löschen?`)) {
-            if (product._id) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                title: 'Produkt löschen',
+                message: `Möchten Sie das Produkt "${product.name}" wirklich löschen?`
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && product._id) {
                 this.productService.deleteProduct(product._id);
             }
-        }
+        });
     }
 }
