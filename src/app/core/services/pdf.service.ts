@@ -50,24 +50,31 @@ export class PdfService {
       });
     }
 
-    const tableData = orders.map(order => {
-      const products = order.items.map(i => i.productName).join('\n');
-      const quantities = order.items.map(i => `${i.quantity} ${i.unit}`).join('\n');
-      const notes = order.items.map(i => i.notes || '').join('\n');
-      
-      let customerInfo = order.customerName;
-      if (order.customerPhone) {
-        customerInfo += `\n${order.customerPhone}`;
-      }
+    const tableData: any[] = [];
 
-      return [
-        moment(order.orderDate).format('DD.MM.YYYY'),
-        order.orderNumber || '',
-        customerInfo,
-        products,
-        quantities,
-        notes
-      ];
+    orders.forEach(order => {
+      order.items.forEach((item, index) => {
+        const row: any[] = [];
+        const isFirst = index === 0;
+        const rowSpan = order.items.length;
+
+        if (isFirst) {
+          row.push({ content: moment(order.orderDate).format('DD.MM.YYYY'), rowSpan: rowSpan, styles: { valign: 'middle' } });
+          row.push({ content: order.orderNumber || '', rowSpan: rowSpan, styles: { valign: 'middle' } });
+          
+          let customerInfo = order.customerName;
+          if (order.customerPhone) {
+            customerInfo += `\n${order.customerPhone}`;
+          }
+          row.push({ content: customerInfo, rowSpan: rowSpan, styles: { valign: 'middle' } });
+        }
+
+        row.push(item.productName);
+        row.push(`${item.quantity} ${item.unit}`);
+        row.push(item.notes || '');
+
+        tableData.push(row);
+      });
     });
 
     autoTable(doc, {
@@ -76,7 +83,10 @@ export class PdfService {
       startY: 30,
       theme: 'grid',
       styles: { fontSize: 10, cellPadding: 3, valign: 'top' },
-      headStyles: { fillColor: [66, 66, 66] }
+      headStyles: { fillColor: [66, 66, 66] },
+      columnStyles: {
+        4: { cellWidth: 25 } // Increase width for Quantity column
+      }
     });
 
     doc.save(`Bestellbericht_${filter.market}_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
