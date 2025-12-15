@@ -317,7 +317,7 @@ export class PdfService {
   }
 
 
-  generateFilteredOrdersReport(orders: Order[]) {
+  generateFilteredOrdersReport(orders: Order[], filterValue: string = '') {
     const doc = new jsPDF();
     const title = `Bestellbericht - Suchergebnisse`;
 
@@ -326,26 +326,41 @@ export class PdfService {
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.text(`Erstellt am: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, 30);
+    if (filterValue) {
+      doc.text(`Filter: "${filterValue}"`, 14, 36);
+    }
 
     const tableData: any[] = [];
+    const searchStr = filterValue.toLowerCase();
 
     orders.forEach(order => {
+      const orderMatches = 
+        (order.customerName && order.customerName.toLowerCase().includes(searchStr)) ||
+        (order.market && order.market.toLowerCase().includes(searchStr)) ||
+        (order.orderNumber && order.orderNumber.toLowerCase().includes(searchStr));
+
       order.items.forEach(item => {
-        tableData.push([
-          moment(order.orderDate).format('DD.MM.YYYY'),
-          order.customerName,
-          order.market,
-          item.productName,
-          `${item.quantity} ${item.unit}`,
-          item.notes || ''
-        ]);
+        const itemMatches = 
+            (item.productName && item.productName.toLowerCase().includes(searchStr)) ||
+            (item.notes && item.notes.toLowerCase().includes(searchStr));
+
+        if (orderMatches || itemMatches) {
+          tableData.push([
+            moment(order.orderDate).format('DD.MM.YYYY'),
+            order.customerName,
+            order.market,
+            item.productName,
+            `${item.quantity} ${item.unit}`,
+            item.notes || ''
+          ]);
+        }
       });
     });
 
     autoTable(doc, {
       head: [['Datum', 'Kunde', 'Markt', 'Produkt', 'Menge', 'Notiz']],
       body: tableData,
-      startY: 35,
+      startY: filterValue ? 42 : 35,
       theme: 'grid',
       styles: { fontSize: 10 },
       headStyles: { fillColor: [66, 66, 66] }

@@ -260,8 +260,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
     printFilteredOrders() {
         const filteredOrders = this.dataSource.filteredData;
+        const filterValue = this.dataSource.filter;
         if (filteredOrders.length > 0) {
-            this.pdfService.generateFilteredOrdersReport(filteredOrders);
+            this.pdfService.generateFilteredOrdersReport(filteredOrders, filterValue);
         }
     }
 }
