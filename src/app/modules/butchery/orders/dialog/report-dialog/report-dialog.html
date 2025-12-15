@@ -28,24 +28,26 @@
     @if (reportForm.get('type')?.value === 'production') {
       <mat-form-field appearance="outline">
         <mat-label>Produkte (Leer = Alle)</mat-label>
-        <mat-select formControlName="product" multiple>
-          <div class="search-container" style="padding: 8px; position: sticky; top: 0; background: white; z-index: 1;">
-            <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 0;" subscriptSizing="dynamic">
-              <mat-icon matPrefix>search</mat-icon>
-              <input matInput [formControl]="productSearch" placeholder="Suche..." (keydown)="$event.stopPropagation()">
-              @if (productSearch.value) {
-                <button mat-icon-button matSuffix (click)="productSearch.setValue(''); $event.stopPropagation()">
-                  <mat-icon>close</mat-icon>
-                </button>
-              }
-            </mat-form-field>
-          </div>
-          @for (product of filteredProducts; track product) {
-            <mat-option [value]="product.name">
+        <mat-chip-grid #chipGrid aria-label="Produktauswahl">
+          @for (product of selectedProducts; track product) {
+            <mat-chip-row (removed)="remove(product)">
               {{product.name}}
+              <button matChipRemove [attr.aria-label]="'entfernen ' + product.name">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        <input placeholder="Neues Produkt..." #productInput [formControl]="productSearch"
+          [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          @for (product of filteredProducts; track product) {
+            <mat-option [value]="product">
+              {{product.name}} ({{product.puNumber}})
             </mat-option>
           }
-        </mat-select>
+        </mat-autocomplete>
       </mat-form-field>
     }
 
