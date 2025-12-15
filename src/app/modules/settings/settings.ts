@@ -99,7 +99,12 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (result._id) {
-          this.userService.updateUser(result);
+          if (result.password) {
+            this.userService.resetUserPassword(result, result.password);
+          } else if (user) {
+            result.password = user.password;
+            this.userService.updateUser(result);
+          }
         } else {
           this.userService.addUser(result);
         }
@@ -135,8 +140,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.newPassword) {
-        const updatedUser = { ...user, password: result.newPassword };
-        this.userService.updateUser(updatedUser).then(() => {
+        this.userService.resetUserPassword(user, result.newPassword).then(() => {
           // Optional: Show success message
         });
       }

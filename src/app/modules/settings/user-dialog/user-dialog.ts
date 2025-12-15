@@ -60,7 +60,7 @@ export class UserDialogComponent {
       createdAt: [data?.createdAt],
       name: [data?.name || '', Validators.required],
       email: [data?.email || '', [Validators.required, Validators.email]],
-      password: [data?.password || '', this.isEditMode ? [] : [Validators.required]],
+      password: ['', this.isEditMode ? [] : [Validators.required]],
       group: [initialGroup, Validators.required],
       isLocked: [data?.isLocked || false]
     });
@@ -97,6 +97,10 @@ export class UserDialogComponent {
   onSave(): void {
     if (this.userForm.valid) {
       const formValue = this.userForm.getRawValue();
+
+      if (this.isEditMode && !formValue.password) {
+        delete formValue.password;
+      }
 
       const userData: User = {
         ...formValue

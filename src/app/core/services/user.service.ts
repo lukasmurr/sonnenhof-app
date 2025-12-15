@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
 import { User } from '../models/user.model';
 import { CouchDbService } from './pouchdb.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable({
     providedIn: 'root'
@@ -26,12 +27,16 @@ export class UserService {
             delete user._id;
         }
 
-        // In a real app, hash the password here.
-        // For now, we store it as is (or base64 encoded if we wanted slight obfuscation)
+        const plainPassword = user.password;
+        if (user.password) {
+            user.password = await bcrypt.hash(user.password, 10);
+        }
+
         const result = await this.dbService.addDoc(user);
 
         if (result && result.ok) {
-            this.sendAccountCreatedEmail(user).catch(err => console.error('Failed to send email', err));
+            const userForEmail = { ...user, password: plainPassword };
+            this.sendAccountCreatedEmail(userForEmail).catch(err => console.error('Failed to send email', err));
         }
 
         return result;
@@ -46,29 +51,40 @@ export class UserService {
         }));
     }
 
-    async updateUser(user: User): Promise<any> {
-        return this.dbService.updateDoc(user);
+    async resetUserPassword(user: User, newPassword: string): Promise<any> {
+        user.password = await bcrypt.hash(newPassword, 10);
+        return this.updateUser(user);
     }
 
-    async deleteUser(id: string): Promise<any> {
-        return this.dbService.deleteDoc(id);
+    async updateUser(user: User): Promise<any> {
+        return this.dbService.updateDoc(user);
     }
 
     async verifyCredentials(email: string, password: string): Promise<User | null> {
         const users = await this.dbService.getAllDocs('user');
         const user = users.find((u: User) =>
             u.email.toLowerCase() === email.toLowerCase() &&
-            u.password === password &&
             !u.isLocked
         );
-        return user || null;
+
+        if (user && user.password) {
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (isMatch) {
+                return user;
+            }
+        }
+        return null;
     }
 
     async changePassword(email: string, oldPass: string, newPass: string): Promise<boolean> {
         const user = await this.verifyCredentials(email, oldPass);
         if (user) {
-            user.password = newPass;
+            user.password = await bcrypt.hash(newPass, 10);
             await this.updateUser(user);
+            return true;
+        }
+        return false;
+    }       await this.updateUser(user);
             return true;
         }
         return false;
