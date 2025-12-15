@@ -108,24 +108,68 @@ export class TuevService implements OnDestroy {
     }
 
     // ===== Vehicle Management =====
-    public addVehicle(vehicle: Vehicle): Promise<any> {
-        const doc = {
+    public addVehicle(vehicle: Vehicle, file?: File): Promise<any> {
+        const doc: any = {
             ...vehicle,
             type: 'vehicle',
             _id: vehicle._id || this.couchDbService.generateId(),
             createdAt: new Date(),
             updatedAt: new Date()
         };
+
+        if (file) {
+            return this.fileToBase64(file).then(base64 => {
+                doc._attachments = {
+                    'vehicle-image': {
+                        content_type: file.type,
+                        data: base64
+                    }
+                };
+                return this.couchDbService.addDoc(doc);
+            });
+        }
+
         return this.couchDbService.addDoc(doc);
     }
 
-    public updateVehicle(vehicle: Vehicle): Promise<any> {
-        const doc = {
+    public updateVehicle(vehicle: Vehicle, file?: File): Promise<any> {
+        const doc: any = {
             ...vehicle,
             type: 'vehicle',
             updatedAt: new Date()
         };
+
+        if (file) {
+            return this.fileToBase64(file).then(base64 => {
+                // Preserve existing attachments if needed, but here we overwrite/set 'vehicle-image'
+                // If vehicle has _attachments stub, we need to be careful.
+                // Ideally we should merge, but for now let's assume we just set this one.
+                // If we provide data, PouchDB updates it.
+                doc._attachments = {
+                    ...doc._attachments,
+                    'vehicle-image': {
+                        content_type: file.type,
+                        data: base64
+                    }
+                };
+                return this.couchDbService.updateDoc(doc);
+            });
+        }
         return this.couchDbService.updateDoc(doc);
+    }
+
+    private fileToBase64(file: File): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                let encoded = reader.result as string;
+                // Remove data:image/jpeg;base64, prefix
+                encoded = encoded.split(',')[1];
+                resolve(encoded);
+            };
+            reader.onerror = error => reject(error);
+        });
     }
 
     public deleteVehicle(vehicleId: string): Promise<any> {

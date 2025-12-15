@@ -18,6 +18,7 @@ import { Vehicle } from '../../../core/models';
 import { TuevService } from '../../../core/services/tuev.service';
 import { RenewDialog } from './dialog/renew-dialog/renew-dialog';
 import { VehicleDialog } from './dialog/vehicle-dialog/vehicle-dialog';
+import { VehicleImageComponent } from './vehicle-image.component';
 
 @Component({
     selector: 'app-tuev',
@@ -38,14 +39,15 @@ import { VehicleDialog } from './dialog/vehicle-dialog/vehicle-dialog';
         MatSnackBarModule,
         MatTooltipModule,
         MatCardModule,
-        HasPermissionDirective
+        HasPermissionDirective,
+        VehicleImageComponent
     ],
     templateUrl: './tuev.html',
     styleUrls: ['./tuev.scss']
 })
 export class Tuev implements OnInit {
     vehicles: Vehicle[] = [];
-    displayedColumns: string[] = ['licensePlate', 'name', 'type', 'nextTuevDate', 'actions'];
+    displayedColumns: string[] = ['image', 'licensePlate', 'name', 'type', 'nextTuevDate', 'actions'];
 
     constructor(
         private tuevService: TuevService,
@@ -86,7 +88,8 @@ export class Tuev implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.tuevService.addVehicle(result).then(() => {
+                const { vehicle, file } = result;
+                this.tuevService.addVehicle(vehicle, file).then(() => {
                     this.snackBar.open('Fahrzeug erstellt', 'OK', { duration: 3000 });
                 });
             }
@@ -100,8 +103,9 @@ export class Tuev implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                const updatedVehicle = { ...vehicle, ...result };
-                this.tuevService.updateVehicle(updatedVehicle).then(() => {
+                const { vehicle: formValue, file } = result;
+                const updatedVehicle = { ...vehicle, ...formValue };
+                this.tuevService.updateVehicle(updatedVehicle, file).then(() => {
                     this.snackBar.open('Fahrzeug aktualisiert', 'OK', { duration: 3000 });
                 });
             }

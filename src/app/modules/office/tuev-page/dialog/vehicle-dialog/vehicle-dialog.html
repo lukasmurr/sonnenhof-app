@@ -55,6 +55,14 @@
           </mat-error>
         }
       </mat-form-field>
+
+      <div class="file-upload" style="margin-top: 16px; margin-bottom: 16px;">
+        <button type="button" mat-stroked-button (click)="fileInput.click()">
+          <mat-icon>image</mat-icon> Bild auswählen
+        </button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/*">
+        <span class="file-name" style="margin-left: 10px;" *ngIf="selectedFile">{{ selectedFile.name }}</span>
+      </div>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions align="end">

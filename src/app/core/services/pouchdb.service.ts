@@ -89,6 +89,10 @@ export class CouchDbService {
         });
     }
 
+    public getAttachment(docId: string, attachmentId: string): Promise<Blob> {
+        return this.db.getAttachment(docId, attachmentId);
+    }
+
     public getAllDocs(type?: string): Promise<any> {
         if (type) {
             return this.db.allDocs({ include_docs: true })

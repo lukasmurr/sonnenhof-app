@@ -1,4 +1,5 @@
 
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -6,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import * as _moment from 'moment';
@@ -19,6 +21,7 @@ const moment = _rollupMoment || _moment;
     selector: 'app-vehicle-dialog',
     standalone: true,
     imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
@@ -26,7 +29,8 @@ const moment = _rollupMoment || _moment;
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatIconModule
 ],
     providers: [CUSTOM_DATE_PROVIDERS],
     templateUrl: './vehicle-dialog.html',
@@ -34,6 +38,7 @@ const moment = _rollupMoment || _moment;
 })
 export class VehicleDialog implements OnInit {
     form: FormGroup;
+    selectedFile: File | null = null;
 
     constructor(
         private fb: FormBuilder,
@@ -65,13 +70,20 @@ export class VehicleDialog implements OnInit {
         }
     }
 
+    onFileSelected(event: any) {
+        const file = event.target.files[0];
+        if (file) {
+            this.selectedFile = file;
+        }
+    }
+
     save() {
         if (this.form.valid) {
             const formValue = this.form.value;
             if (formValue.nextTuevDate && moment.isMoment(formValue.nextTuevDate)) {
                 formValue.nextTuevDate = formValue.nextTuevDate.toDate();
             }
-            this.dialogRef.close(formValue);
+            this.dialogRef.close({ vehicle: formValue, file: this.selectedFile });
         }
     }
 
