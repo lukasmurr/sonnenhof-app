@@ -74,3 +74,8 @@ router-outlet + * {
   display: flex;
   flex-direction: column;
 }
+
+// Fix for cut-off labels in dialogs
+.mat-mdc-dialog-content {
+  padding-top: 10px !important;
+}
