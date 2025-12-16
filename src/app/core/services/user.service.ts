@@ -61,11 +61,30 @@ export class UserService {
     }
 
     async verifyCredentials(email: string, password: string): Promise<User | null> {
-        const users = await this.dbService.getAllDocs('user');
-        const user = users.find((u: User) =>
-            u.email.toLowerCase() === email.toLowerCase() &&
-            !u.isLocked
-        );
+        let user: User | undefined;
+        let remoteFetchSuccess = false;
+
+        // 1. Try Remote First (Security & Freshness)
+        // Always check server first to ensure we have the latest data (e.g. user locks, password changes)
+        try {
+            const remoteUsers = await this.dbService.getRemoteAllDocs('user');
+            user = remoteUsers.find((u: User) =>
+                u.email.toLowerCase() === email.toLowerCase() &&
+                !u.isLocked
+            );
+            remoteFetchSuccess = true;
+        } catch (error) {
+            console.warn('Remote login failed (offline?), checking local DB...');
+        }
+
+        // 2. If Remote failed (offline), try Local
+        if (!remoteFetchSuccess) {
+            const localUsers = await this.dbService.getAllDocs('user');
+            user = localUsers.find((u: User) =>
+                u.email.toLowerCase() === email.toLowerCase() &&
+                !u.isLocked
+            );
+        }
 
         if (user && user.password) {
             const isMatch = await bcrypt.compare(password, user.password);

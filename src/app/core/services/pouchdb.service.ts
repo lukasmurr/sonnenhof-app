@@ -8,6 +8,7 @@ import PouchDB from 'pouchdb';
 })
 export class CouchDbService {
     private db!: any;
+    private remoteDB: any;
     private dbInitialized$ = new BehaviorSubject<boolean>(false);
     public syncStatus$ = new BehaviorSubject<'online' | 'offline' | 'syncing'>('offline');
 
@@ -32,7 +33,7 @@ export class CouchDbService {
         }
 
         // 1. Remote DB als Instanz erstellen (mit Auth!)
-        const remoteDB = new PouchDB(remoteUrl, {
+        this.remoteDB = new PouchDB(remoteUrl, {
             auth: {
                 username: environment.couchdb.user,
                 password: environment.couchdb.password
@@ -42,7 +43,7 @@ export class CouchDbService {
         });
 
         // 2. Sync zwischen lokal (this.db) und remote (remoteDB) starten
-        this.db.sync(remoteDB, { // Hier das Objekt übergeben, nicht den String!
+        this.db.sync(this.remoteDB, { // Hier das Objekt übergeben, nicht den String!
             live: true,
             retry: true
         })
@@ -107,6 +108,26 @@ export class CouchDbService {
                 return result.rows
                     .map((row: any) => row.doc)
                     .filter((doc: any) => !doc._id.startsWith('_design')); // Filter Design Docs
+            });
+    }
+
+    public getRemoteAllDocs(type?: string): Promise<any> {
+        if (!this.remoteDB) {
+            return Promise.resolve([]);
+        }
+        if (type) {
+            return this.remoteDB.allDocs({ include_docs: true })
+                .then((result: any) => {
+                    return result.rows
+                        .map((row: any) => row.doc)
+                        .filter((doc: any) => doc.type === type && !doc._id.startsWith('_design'));
+                });
+        }
+        return this.remoteDB.allDocs({ include_docs: true })
+            .then((result: any) => {
+                return result.rows
+                    .map((row: any) => row.doc)
+                    .filter((doc: any) => !doc._id.startsWith('_design'));
             });
     }
 
