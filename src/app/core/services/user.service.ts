@@ -84,10 +84,10 @@ export class UserService {
             return true;
         }
         return false;
-    }       await this.updateUser(user);
-            return true;
-        }
-        return false;
+    }
+
+    async deleteUser(id: string): Promise<any> {
+        return this.dbService.deleteDoc(id);
     }
 
     async getUserByEmail(email: string): Promise<User | undefined> {
