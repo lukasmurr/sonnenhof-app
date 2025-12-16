@@ -57,6 +57,10 @@ export class UserService {
     }
 
     async updateUser(user: User): Promise<any> {
+        // Hash password if it's not already hashed (legacy support)
+        if (user.password && !user.password.startsWith('$2')) {
+            user.password = await bcrypt.hash(user.password, 10);
+        }
         return this.dbService.updateDoc(user);
     }
 
@@ -68,9 +72,19 @@ export class UserService {
         );
 
         if (user && user.password) {
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (isMatch) {
-                return user;
+            // Check if password is hashed
+            if (user.password.startsWith('$2')) {
+                const isMatch = await bcrypt.compare(password, user.password);
+                if (isMatch) {
+                    return user;
+                }
+            } else {
+                // Legacy plain text check and migration
+                if (user.password === password) {
+                    user.password = await bcrypt.hash(password, 10);
+                    await this.updateUser(user);
+                    return user;
+                }
             }
         }
         return null;
