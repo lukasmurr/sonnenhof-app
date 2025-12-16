@@ -10,6 +10,7 @@ export type Permission =
     | 'vacation.create_others' | 'vacation.update_others' | 'vacation.delete_others'
     | 'stall.view' | 'stall.create' | 'stall.update' | 'stall.delete'
     | 'crate.view' | 'crate.create' | 'crate.update' | 'crate.delete'
-    | 'offer.view' | 'offer.create' | 'offer.update' | 'offer.delete';
+    | 'offer.view' | 'offer.create' | 'offer.update' | 'offer.delete'
+    | 'vehicle-stock.view' | 'vehicle-stock.create' | 'vehicle-stock.manage' | 'vehicle-stock.prepare';
 
 export type UserGroup = 'admin' | 'office' | 'butchery' | 'sales';

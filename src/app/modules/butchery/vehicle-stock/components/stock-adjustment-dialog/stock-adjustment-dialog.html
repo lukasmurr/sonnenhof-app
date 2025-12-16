@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Anpassung: {{data.stock.marketName}} ({{data.stock.date}})</h2>
+<mat-dialog-content>
+    <table mat-table [dataSource]="items" class="full-width-table">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Produkt </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="target">
+            <th mat-header-cell *matHeaderCellDef> Soll </th>
+            <td mat-cell *matCellDef="let row"> {{row.targetQuantity}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reported">
+            <th mat-header-cell *matHeaderCellDef> Ist (Rücklauf) </th>
+            <td mat-cell *matCellDef="let row"> {{row.quantity}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="calculated">
+            <th mat-header-cell *matHeaderCellDef> Herzurichten (Kalk.) </th>
+            <td mat-cell *matCellDef="let row"> {{row.calculatedPrep}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="adjusted">
+            <th mat-header-cell *matHeaderCellDef> Herzurichten (Anpassung) </th>
+            <td mat-cell *matCellDef="let row">
+                <mat-form-field appearance="outline" class="small-input">
+                    <input matInput type="number" [(ngModel)]="row.adjustedPreparationQuantity"
+                        placeholder="{{row.calculatedPrep}}">
+                </mat-form-field>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+</mat-dialog-actions>

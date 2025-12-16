@@ -50,5 +50,15 @@
             </mat-card-content>
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>
+
+        <!-- Warenbestand Card -->
+        <mat-card class="section-card vehicle-stock" (click)="navigateToSection('vehicle-stock')" *appHasPermission="'vehicle-stock.view'">
+            <div class="card-icon"><mat-icon>local_shipping</mat-icon></div>
+            <mat-card-title>Warenbestand</mat-card-title>
+            <mat-card-content>
+                Erfassen und verwalten Sie den Warenbestand der Verkaufsautos.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
     </div>
 </div>

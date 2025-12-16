@@ -92,6 +92,37 @@ export class PdfService {
     doc.save(`Bestellbericht_${filter.market}_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
   }
 
+  generateStockPreparationReport(items: { name: string, totalTarget: number, totalPrep: number, unit: string }[], date: Date, marketName?: string) {
+    const doc = new jsPDF();
+    let title = `Herzurichtende Mengen - ${moment(date).format('DD.MM.YYYY')}`;
+    if (marketName) {
+      title += ` - ${marketName}`;
+    }
+
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Erstellt am: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, 30);
+
+    const tableData = items.map(item => [
+      item.name,
+      `${item.totalTarget} ${item.unit}`,
+      `${item.totalPrep} ${item.unit}`
+    ]);
+
+    autoTable(doc, {
+      head: [['Produkt', 'Soll (Gesamt)', 'Herzurichten']],
+      body: tableData,
+      startY: 35,
+      theme: 'grid',
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [66, 66, 66] }
+    });
+
+    doc.save(`Herzurichten_${moment(date).format('YYYYMMDD')}.pdf`);
+  }
+
   generateCrateOverview(crates: CrateRecord[]) {
     const doc = new jsPDF();
     const title = `Übersicht Rote Kisten - ${moment().format('DD.MM.YYYY')}`;

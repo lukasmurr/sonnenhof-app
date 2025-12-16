@@ -50,6 +50,30 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/butchery/crates/crates').then(m => m.CratesComponent)
     },
     {
+        path: 'butchery/vehicle-stock',
+        canActivate: [permissionGuard],
+        data: { permission: 'vehicle-stock.view' },
+        loadComponent: () => import('./modules/butchery/vehicle-stock/vehicle-stock').then(m => m.VehicleStockComponent),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./modules/butchery/vehicle-stock/components/stock-preparation/stock-preparation').then(m => m.StockPreparationComponent)
+            },
+            {
+                path: 'report',
+                loadComponent: () => import('./modules/butchery/vehicle-stock/components/stock-reporting/stock-reporting').then(m => m.StockReportingComponent)
+            },
+            {
+                path: 'report/:id',
+                loadComponent: () => import('./modules/butchery/vehicle-stock/components/stock-reporting/stock-reporting').then(m => m.StockReportingComponent)
+            },
+            {
+                path: 'management',
+                loadComponent: () => import('./modules/butchery/vehicle-stock/components/stock-management/stock-management').then(m => m.StockManagementComponent)
+            }
+        ]
+    },
+    {
         path: 'butchery/offers',
         canActivate: [permissionGuard],
         data: { permission: 'offer.view' },

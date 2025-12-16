@@ -73,6 +73,10 @@
         <mat-icon matListItemIcon>local_offer</mat-icon>
         <span matListItemTitle>Angebote</span>
       </a>
+      <a mat-list-item (click)="navigateAndClose('butchery/vehicle-stock', sidenav)" *appHasPermission="'vehicle-stock.view'">
+        <mat-icon matListItemIcon>local_shipping</mat-icon>
+        <span matListItemTitle>Warenbestand</span>
+      </a>
 
       <mat-divider *appHasPermission="'butchery.view'"></mat-divider>
 

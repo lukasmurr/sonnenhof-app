@@ -1,0 +1,100 @@
+<mat-card class="stock-card">
+    <div class="header-actions" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+        <button mat-icon-button routerLink="..">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h2 style="margin: 0;">Sollbestände verwalten</h2>
+    </div>
+    <div class="tab-content">
+        <mat-form-field appearance="outline">
+            <mat-label>Markt wählen</mat-label>
+            <mat-select (selectionChange)="onConfigMarketChange($event.value)">
+                @for (m of markets(); track m._id) {
+                <mat-option [value]="m._id">{{m.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        @if (selectedConfigMarketId()) {
+
+        <div class="add-item-section">
+            <h3>Neues Produkt hinzufügen</h3>
+            <div class="add-form-row">
+                <mat-form-field appearance="outline" class="product-select" subscriptSizing="dynamic">
+                    <mat-label>Produkt</mat-label>
+                    <mat-select [ngModel]="selectedProductToAdd()" (ngModelChange)="selectedProductToAdd.set($event)">
+                        @for (p of products(); track p._id) {
+                        <mat-option [value]="p._id">{{p.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
+                    <mat-label>Einheit</mat-label>
+                    <input matInput [ngModel]="newTargetUnit()" (ngModelChange)="newTargetUnit.set($event)"
+                        placeholder="z.B. kg">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
+                    <mat-label>Sollmenge</mat-label>
+                    <input matInput type="number" [ngModel]="newTargetQuantity()"
+                        (ngModelChange)="newTargetQuantity.set($event)" min="0">
+                </mat-form-field>
+
+                <button mat-mini-fab color="primary" (click)="addConfigItem()"
+                    [disabled]="!selectedProductToAdd() || newTargetQuantity() <= 0">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="config-list">
+            <h3>Konfigurierte Produkte</h3>
+            <table mat-table [dataSource]="configItems()" class="full-width-table">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Produkt </th>
+                    <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="unit">
+                    <th mat-header-cell *matHeaderCellDef> Einheit </th>
+                    <td mat-cell *matCellDef="let item">
+                        <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
+                            <input matInput [(ngModel)]="item.unit">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="target">
+                    <th mat-header-cell *matHeaderCellDef> Soll </th>
+                    <td mat-cell *matCellDef="let item">
+                        <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
+                            <input matInput type="number" [(ngModel)]="item.target" min="0">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let item">
+                        <button mat-icon-button color="warn" (click)="removeConfigItem(item.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            @if (configItems().length === 0) {
+            <p class="no-data">Keine Produkte konfiguriert.</p>
+            }
+        </div>
+        <div class="actions">
+            <button mat-raised-button color="primary" (click)="saveConfig()"
+                [disabled]="configItems().length === 0">Speichern</button>
+        </div>
+        }
+    </div>
+</mat-card>

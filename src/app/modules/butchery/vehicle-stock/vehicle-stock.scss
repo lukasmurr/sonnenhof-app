@@ -1,0 +1,61 @@
+.vehicle-stock-container {
+    min-height: 100%;
+    padding: 24px;
+    background: #f5f5f5;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .spacer {
+            width: 40px;
+        }
+
+        .headline {
+            flex: 1;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #3F51B5;
+            letter-spacing: 1px;
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+        }
+    }
+
+    .vehicle-stock-content {
+        max-width: 1200px;
+        margin: 0 auto;
+
+        ::ng-deep .mat-mdc-tab-group {
+            font-family: "Roboto", "Helvetica Neue", sans-serif;
+        }
+
+        ::ng-deep .mat-mdc-tab-body-content {
+            padding-top: 24px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .header {
+            .headline {
+                font-size: 30px;
+            }
+        }
+    }
+}
+
+:host-context(.dark-theme) {
+    .vehicle-stock-container {
+        background: #303030;
+    }
+
+    .headline {
+        color: #eceff1;
+    }
+}

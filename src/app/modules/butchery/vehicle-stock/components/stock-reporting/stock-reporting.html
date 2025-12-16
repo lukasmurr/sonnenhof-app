@@ -1,0 +1,74 @@
+<mat-card class="stock-card">
+    <div class="header-actions" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+        <button mat-icon-button routerLink="..">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h2 style="margin: 0;">Neue Meldung erfassen</h2>
+    </div>
+    <mat-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Markt & Datum</ng-template>
+                <div class="form-column">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Markt</mat-label>
+                        <mat-select formControlName="market">
+                            @for (m of markets(); track m._id) {
+                            <mat-option [value]="m._id">{{m.name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Datum</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="date">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button mat-button matStepperNext (click)="onStep1Next()">Weiter</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step>
+            <ng-template matStepLabel>Bestand erfassen</ng-template>
+            <div class="stock-list">
+                @for (control of stockFormArray.controls; track $index) {
+                <div [formGroup]="control" class="stock-item">
+                    <span class="item-name">{{control.get('name')?.value}}</span>
+                    <mat-form-field appearance="outline" class="qty-input">
+                        <mat-label>Menge</mat-label>
+                        <input matInput type="number" formControlName="quantity" min="0">
+                        <span matSuffix>{{control.get('unit')?.value}}</span>
+                    </mat-form-field>
+                </div>
+                }
+            </div>
+            <div>
+                <button mat-button matStepperPrevious>Zurück</button>
+                <button mat-button matStepperNext>Weiter</button>
+            </div>
+        </mat-step>
+
+        <mat-step>
+            <ng-template matStepLabel>Zusammenfassung</ng-template>
+            <h3>Zusammenfassung</h3>
+            <mat-list>
+                @for (item of stockFormArray.value; track $index) {
+                @if (item.quantity > 0) {
+                <mat-list-item>
+                    <span matListItemTitle>{{item.name}}</span>
+                    <span matListItemLine>{{item.quantity}} {{item.unit}}</span>
+                </mat-list-item>
+                }
+                }
+            </mat-list>
+            <div>
+                <button mat-button matStepperPrevious>Zurück</button>
+                <button mat-raised-button color="primary" (click)="submit(); stepper.reset()">Speichern</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</mat-card>

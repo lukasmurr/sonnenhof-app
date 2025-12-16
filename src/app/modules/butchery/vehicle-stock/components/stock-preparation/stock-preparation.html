@@ -1,0 +1,71 @@
+<mat-card class="stock-card">
+    <div class="nav-actions">
+        <button mat-raised-button color="primary" routerLink="report">Neue Meldung</button>
+        <button mat-stroked-button routerLink="management">Sollmenge verwalten</button>
+    </div>
+
+    <div class="header">
+        <mat-form-field appearance="outline">
+            <mat-label>Datum (Meldung)</mat-label>
+            <input matInput [matDatepicker]="picker" [ngModel]="selectedDate()"
+                (dateChange)="onDateChange($event.value)">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-checkbox [ngModel]="showAllPositions()" (ngModelChange)="showAllPositions.set($event)">
+            Zeige alle Positionen
+        </mat-checkbox>
+    </div>
+
+    <div class="prep-content">
+        <h2>Herzurichtende Mengen nach Markt</h2>
+
+        <mat-accordion>
+            @for (group of filteredMarketGroups(); track group.marketId) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{ group.marketName }}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{ group.items.length }} Positionen
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="panel-actions">
+                    <button mat-stroked-button (click)="adjustReport(group); $event.stopPropagation()">Anpassen</button>
+                    <button mat-raised-button color="primary" (click)="generatePdf(group); $event.stopPropagation()">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                        PDF Export
+                    </button>
+                </div>
+
+                <table mat-table [dataSource]="group.items" class="full-width-table">
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Produkt </th>
+                        <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="totalTarget">
+                        <th mat-header-cell *matHeaderCellDef> Soll </th>
+                        <td mat-cell *matCellDef="let row"> {{row.totalTarget}} {{row.unit}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="totalPrep">
+                        <th mat-header-cell *matHeaderCellDef> Herzurichten </th>
+                        <td mat-cell *matCellDef="let row"> {{row.totalPrep}} {{row.unit}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </mat-expansion-panel>
+            }
+        </mat-accordion>
+
+        @if (filteredMarketGroups().length === 0) {
+        <p class="no-data">Keine Daten für das gewählte Datum.</p>
+        }
+    </div>
+</mat-card>

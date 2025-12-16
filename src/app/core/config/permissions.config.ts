@@ -13,7 +13,8 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'vacation.create_others', 'vacation.update_others', 'vacation.delete_others',
         'stall.view', 'stall.create', 'stall.update', 'stall.delete',
         'crate.view', 'crate.create', 'crate.update', 'crate.delete',
-        'offer.view', 'offer.create', 'offer.update', 'offer.delete'
+        'offer.view', 'offer.create', 'offer.update', 'offer.delete',
+        'vehicle-stock.view', 'vehicle-stock.create', 'vehicle-stock.manage', 'vehicle-stock.prepare'
     ],
     office: [
         'butchery.view', 'office.view', 'farming.view',
@@ -26,7 +27,8 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'vacation.create_others', 'vacation.update_others', 'vacation.delete_others',
         'stall.view', 'stall.create', 'stall.update', 'stall.delete',
         'crate.view', 'crate.create', 'crate.update', 'crate.delete',
-        'offer.view', 'offer.create', 'offer.update', 'offer.delete'
+        'offer.view', 'offer.create', 'offer.update', 'offer.delete',
+        'vehicle-stock.view', 'vehicle-stock.manage'
     ],
     butchery: [
         'office.view',
@@ -36,11 +38,13 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'vacation.view', 'vacation.create_own', 'vacation.update_own',
         'crate.view',
         'offer.view',
+        'vehicle-stock.view', 'vehicle-stock.prepare'
     ],
     sales: [
         'office.view',
         'butchery.view',
         'order.view',
-        'vacation.view', 'vacation.create_own', 'vacation.update_own'
+        'vacation.view', 'vacation.create_own', 'vacation.update_own',
+        'vehicle-stock.view', 'vehicle-stock.create'
     ]
 };

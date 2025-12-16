@@ -5,6 +5,7 @@ export interface Product {
     puNumber: string;
     name: string;
     unit: 'Stück' | 'Kg';
+    stockUnit?: string;
     createdAt?: string;
     updatedAt?: string;
 }
