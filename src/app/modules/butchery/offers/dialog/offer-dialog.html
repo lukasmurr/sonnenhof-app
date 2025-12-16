@@ -11,50 +11,46 @@
         </mat-form-field>
     </div>
 
-    <h3>Produkt 1</h3>
-    <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Produkt suchen</mat-label>
-            <input type="text" matInput formControlName="product1" [matAutocomplete]="auto1">
-            <mat-autocomplete #auto1="matAutocomplete">
-                @for (product of filteredProducts1 | async; track product._id) {
-                    <mat-option [value]="product.name">
-                        {{product.name}} ({{product.puNumber}})
-                    </mat-option>
-                }
-            </mat-autocomplete>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Preis (€)</mat-label>
-            <input matInput type="number" formControlName="price1">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Verkauft</mat-label>
-            <input matInput type="number" formControlName="sold1">
-        </mat-form-field>
+    <div formArrayName="items">
+        @for (item of items.controls; track item; let i = $index) {
+            <div [formGroupName]="i">
+                <div class="product-header">
+                    <h3>Produkt {{ i + 1 }}</h3>
+                    @if (items.length > 1) {
+                        <button mat-icon-button color="warn" (click)="removeItem(i)" type="button" tabindex="-1">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    }
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Produkt suchen</mat-label>
+                        <input type="text" matInput formControlName="productName" [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            @for (product of filteredProducts[i] | async; track product._id) {
+                                <mat-option [value]="product.name">
+                                    {{product.name}} ({{product.puNumber}})
+                                </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Preis (€)</mat-label>
+                        <input matInput type="number" formControlName="price">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Verkauft</mat-label>
+                        <input matInput type="number" formControlName="soldQuantity">
+                    </mat-form-field>
+                </div>
+            </div>
+        }
     </div>
 
-    <h3>Produkt 2</h3>
-    <div class="row">
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Produkt suchen</mat-label>
-            <input type="text" matInput formControlName="product2" [matAutocomplete]="auto2">
-            <mat-autocomplete #auto2="matAutocomplete">
-                @for (product of filteredProducts2 | async; track product._id) {
-                    <mat-option [value]="product.name">
-                        {{product.name}} ({{product.puNumber}})
-                    </mat-option>
-                }
-            </mat-autocomplete>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Preis (€)</mat-label>
-            <input matInput type="number" formControlName="price2">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Verkauft</mat-label>
-            <input matInput type="number" formControlName="sold2">
-        </mat-form-field>
+    <div class="add-button-container">
+        <button mat-stroked-button (click)="addItem()" type="button">
+            <mat-icon>add</mat-icon> Weiteres Produkt hinzufügen
+        </button>
     </div>
 
     <mat-form-field appearance="outline" class="full-width">

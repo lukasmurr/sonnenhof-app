@@ -61,6 +61,8 @@ export const routes: Routes = [
             },
             {
                 path: 'report',
+                canActivate: [permissionGuard],
+                data: { permission: 'vehicle-stock.create' },
                 loadComponent: () => import('./modules/butchery/vehicle-stock/components/stock-reporting/stock-reporting').then(m => m.StockReportingComponent)
             },
             {
@@ -69,6 +71,8 @@ export const routes: Routes = [
             },
             {
                 path: 'management',
+                canActivate: [permissionGuard],
+                data: { permission: 'vehicle-stock.manage' },
                 loadComponent: () => import('./modules/butchery/vehicle-stock/components/stock-management/stock-management').then(m => m.StockManagementComponent)
             }
         ]

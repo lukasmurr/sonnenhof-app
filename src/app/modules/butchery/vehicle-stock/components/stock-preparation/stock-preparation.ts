@@ -19,6 +19,7 @@ import { MarketService } from '../../../../../core/services/market.service';
 import { PdfService } from '../../../../../core/services/pdf.service';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
 import { StockAdjustmentDialogComponent } from '../stock-adjustment-dialog/stock-adjustment-dialog';
+import { HasPermissionDirective } from "src/app/core/directives/has-permission.directive";
 
 interface MarketPrepGroup {
     marketId: string;
@@ -31,20 +32,21 @@ interface MarketPrepGroup {
     selector: 'app-stock-preparation',
     standalone: true,
     imports: [
-        CommonModule,
-        FormsModule,
-        RouterModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatButtonModule,
-        MatTableModule,
-        MatIconModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatExpansionModule
-    ],
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    HasPermissionDirective
+],
     templateUrl: './stock-preparation.html',
     styleUrls: ['./stock-preparation.scss']
 })

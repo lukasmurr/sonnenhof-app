@@ -43,7 +43,7 @@ import { ConfirmationDialogComponent } from '../../../core/components/confirmati
     styleUrls: ['./offers.scss']
 })
 export class OffersComponent implements OnInit, AfterViewInit {
-    displayedColumns: string[] = ['week', 'product1', 'product2', 'actions'];
+    displayedColumns: string[] = ['week', 'products', 'actions'];
     dataSource: MatTableDataSource<Offer>;
     
     offers = signal<Offer[]>([]);
