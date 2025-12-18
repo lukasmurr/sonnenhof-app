@@ -16,7 +16,8 @@ export class PermissionService {
             { value: 'admin', label: 'Admin' },
             { value: 'office', label: 'Büro' },
             { value: 'butchery', label: 'Metzgerei' },
-            { value: 'sales', label: 'Verkauf' }
+            { value: 'sales', label: 'Verkauf' },
+            { value: 'car', label: 'Fahrzeug' }
         ];
     }
 }
