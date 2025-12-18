@@ -128,7 +128,7 @@
             </div>
           </mat-tab>
 
-          <mat-tab label="Anträge verwalten" *appHasPermission="'vacation.create_others'">
+          <mat-tab label="Anträge verwalten" *appHasPermission="'vacation.update_others'">
             <div class="table-container">
               <div class="table-scroll-wrapper">
                 <table mat-table [dataSource]="pendingDataSource" #pendingSort="matSort" matSort

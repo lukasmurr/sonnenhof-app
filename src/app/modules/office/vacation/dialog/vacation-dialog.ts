@@ -43,10 +43,10 @@ export class VacationDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: VacationDialogData
     ) {
         const initialEmployeeId = data.vacation?.employeeId ||
-            (!data.canSeeAll && data.currentEmployeeId ? data.currentEmployeeId : '');
+            (!data.canCreateForOthers && data.currentEmployeeId ? data.currentEmployeeId : '');
 
         this.form = this.fb.group({
-            employeeId: [{ value: initialEmployeeId, disabled: !data.canSeeAll }, Validators.required],
+            employeeId: [{ value: initialEmployeeId, disabled: !data.canCreateForOthers }, Validators.required],
             leaveType: [data.vacation?.leaveType || 'vacation', Validators.required],
             startDate: [data.vacation?.startDate ? new Date(data.vacation.startDate) : (data.preselectedDate || ''), Validators.required],
             endDate: [data.vacation?.endDate ? new Date(data.vacation.endDate) : (data.preselectedDate || ''), Validators.required],
@@ -90,7 +90,7 @@ export class VacationDialogComponent implements OnInit {
                 employeeName: selectedEmployee?.name || 'Unbekannt',
                 startDate: startDate.toISOString(),
                 endDate: endDate.toISOString(),
-                status: this.data.canSeeAll ? 'approved' : 'pending'
+                status: this.data.canApprove ? 'approved' : 'pending'
             };
             this.dialogRef.close(vacationData);
         }

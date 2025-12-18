@@ -59,7 +59,8 @@ export class VacationPlanningComponent implements OnInit {
     allVacations: Vacation[] = [];
 
     // Permission properties
-    canSeeAll: boolean = false;
+    canCreateForOthers: boolean = false; // can create vacation entries for other employees
+    canApprove: boolean = false; // can approve/reject other employees' requests
     currentEmployeeId: string | null = null;
     pendingVacations: Vacation[] = [];
 
@@ -79,9 +80,10 @@ export class VacationPlanningComponent implements OnInit {
     }
 
     async checkPermissionsAndLoad() {
-        this.canSeeAll = this.authService.hasPermission('vacation.create_others');
+        this.canCreateForOthers = this.authService.hasPermission('vacation.create_others');
+        this.canApprove = this.authService.hasPermission('vacation.update_others');
 
-        if (!this.canSeeAll) {
+        if (!this.canCreateForOthers && !this.canApprove) {
             const userEmail = this.authService.getCurrentUser();
             if (userEmail) {
                 const employees = await firstValueFrom(this.employeeService.getEmployees());
@@ -97,7 +99,7 @@ export class VacationPlanningComponent implements OnInit {
 
     loadVacations() {
         this.vacationService.getVacations().subscribe(vacations => {
-            if (this.canSeeAll) {
+            if (this.canApprove) {
                 this.allVacations = vacations;
                 this.pendingVacations = vacations.filter(v => v.status === 'pending');
             } else if (this.currentEmployeeId) {
@@ -255,7 +257,8 @@ export class VacationPlanningComponent implements OnInit {
             data: {
                 vacation,
                 preselectedDate,
-                canSeeAll: this.canSeeAll,
+                canCreateForOthers: this.canCreateForOthers,
+                canApprove: this.canApprove,
                 currentEmployeeId: this.currentEmployeeId
             }
         });

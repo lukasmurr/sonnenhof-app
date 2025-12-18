@@ -11,6 +11,6 @@ export type Permission =
     | 'stall.view' | 'stall.create' | 'stall.update' | 'stall.delete'
     | 'crate.view' | 'crate.create' | 'crate.update' | 'crate.delete'
     | 'offer.view' | 'offer.create' | 'offer.update' | 'offer.delete'
-    | 'vehicle-stock.view' | 'vehicle-stock.create' | 'vehicle-stock.manage' | 'vehicle-stock.prepare';
+    | 'vehicle-stock.view' | 'vehicle-stock.create' | 'vehicle-stock.manage';
 
-export type UserGroup = 'admin' | 'office' | 'butchery' | 'sales';
+export type UserGroup = 'admin' | 'office' | 'car' | 'butchery' | 'sales';
