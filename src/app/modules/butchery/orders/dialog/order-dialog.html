@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>{{ data.isReorder ? 'Nachbestellung hinzufügen' : (data.order ? 'Bestellung bearbeiten' :
-'NeueBestellung') }}</h2>
+'Neue Bestellung') }}</h2>
 <mat-dialog-content>
   @if (form.get('status')?.value === 'prepared' && !data.isReorder) {
     <div

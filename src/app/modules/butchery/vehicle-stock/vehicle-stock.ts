@@ -1,8 +1,8 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
     selector: 'app-vehicle-stock',
@@ -17,9 +17,9 @@ import { RouterModule } from '@angular/router';
     styleUrls: ['./vehicle-stock.scss']
 })
 export class VehicleStockComponent {
-    constructor(private location: Location) { }
+    constructor(private router: Router) { }
 
     goBack() {
-        this.location.back();
+        this.router.navigate(['/butchery']);
     }
 }
