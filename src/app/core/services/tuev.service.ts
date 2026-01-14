@@ -118,10 +118,10 @@ export class TuevService implements OnDestroy {
         };
 
         if (file) {
-            return this.fileToBase64(file).then(base64 => {
+            return this.compressAndConvertToBase64(file).then(base64 => {
                 doc._attachments = {
                     'vehicle-image': {
-                        content_type: file.type,
+                        content_type: 'image/jpeg', // Always converting to jpeg
                         data: base64
                     }
                 };
@@ -140,7 +140,7 @@ export class TuevService implements OnDestroy {
         };
 
         if (file) {
-            return this.fileToBase64(file).then(base64 => {
+            return this.compressAndConvertToBase64(file).then(base64 => {
                 // Preserve existing attachments if needed, but here we overwrite/set 'vehicle-image'
                 // If vehicle has _attachments stub, we need to be careful.
                 // Ideally we should merge, but for now let's assume we just set this one.
@@ -148,7 +148,7 @@ export class TuevService implements OnDestroy {
                 doc._attachments = {
                     ...doc._attachments,
                     'vehicle-image': {
-                        content_type: file.type,
+                        content_type: 'image/jpeg', // Always converting to jpeg
                         data: base64
                     }
                 };
@@ -158,17 +158,48 @@ export class TuevService implements OnDestroy {
         return this.couchDbService.updateDoc(doc);
     }
 
-    private fileToBase64(file: File): Promise<string> {
+    private compressAndConvertToBase64(file: File, maxWidth: number = 800, maxHeight: number = 800, quality: number = 0.7): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => {
-                let encoded = reader.result as string;
-                // Remove data:image/jpeg;base64, prefix
-                encoded = encoded.split(',')[1];
-                resolve(encoded);
+            reader.onload = (event: any) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Calculate new dimensions
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0, width, height);
+                        // Convert to PEG with quality setting
+                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        // Remove data:image/jpeg;base64, prefix
+                        const base64 = dataUrl.split(',')[1];
+                        resolve(base64);
+                    } else {
+                        reject(new Error('Canvas context is null'));
+                    }
+                };
+                img.onerror = (error) => reject(error);
             };
-            reader.onerror = error => reject(error);
+            reader.onerror = (error) => reject(error);
         });
     }
 
