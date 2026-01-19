@@ -33,7 +33,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
     car: [
         'office.view',
         'butchery.view',
-        'order.view', 'order.create', 'order.update'
+        'order.view', 'order.create', 'order.update',
         'vacation.view', 'vacation.create_others',
         'vehicle-stock.view', 'vehicle-stock.create'
     ],
