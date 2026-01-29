@@ -15,6 +15,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'crate.view', 'crate.create', 'crate.update', 'crate.delete',
         'offer.view', 'offer.create', 'offer.update', 'offer.delete',
         'vehicle-stock.view', 'vehicle-stock.create', 'vehicle-stock.manage',
+        'purchasing-price.view', 'purchasing-price.create', 'purchasing-price.update', 'purchasing-price.delete',
     ],
     office: [
         'butchery.view', 'office.view', 'farming.view',
@@ -28,7 +29,8 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'stall.view', 'stall.create', 'stall.update', 'stall.delete',
         'crate.view', 'crate.create', 'crate.update', 'crate.delete',
         'offer.view', 'offer.create', 'offer.update', 'offer.delete',
-        'vehicle-stock.view', 'vehicle-stock.manage', 'vehicle-stock.create'
+        'vehicle-stock.view', 'vehicle-stock.manage', 'vehicle-stock.create',
+        'purchasing-price.view', 'purchasing-price.create', 'purchasing-price.update', 'purchasing-price.delete'
     ],
     car: [
         'office.view',

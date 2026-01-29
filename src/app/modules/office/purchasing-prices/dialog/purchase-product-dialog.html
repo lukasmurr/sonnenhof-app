@@ -1,0 +1,88 @@
+<h2 mat-dialog-title>{{ data.product ? 'Produkt bearbeiten' : 'Neues Produkt' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="product-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Produktname">
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>Name ist erforderlich</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Kategorie</mat-label>
+      <mat-select formControlName="category">
+        @for (category of categories; track category) {
+          <mat-option [value]="category">{{category}}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('category')?.hasError('required')) {
+        <mat-error>Kategorie ist erforderlich</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="supplier-section">
+      <mat-form-field appearance="outline" class="supplier-field">
+        <mat-label>Lieferant</mat-label>
+        <mat-select formControlName="supplierId">
+          @for (supplier of suppliers(); track supplier._id) {
+            <mat-option [value]="supplier._id">{{supplier.name}}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('supplierId')?.hasError('required')) {
+          <mat-error>Lieferant ist erforderlich</mat-error>
+        }
+      </mat-form-field>
+      <button mat-icon-button type="button" (click)="toggleNewSupplierForm()" matTooltip="Neuen Lieferanten anlegen">
+        <mat-icon>{{ showNewSupplierForm() ? 'close' : 'add' }}</mat-icon>
+      </button>
+    </div>
+
+    @if (showNewSupplierForm()) {
+      <div class="new-supplier-form">
+        <h4>Neuer Lieferant</h4>
+        <form [formGroup]="newSupplierForm">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" placeholder="Lieferant Name">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Telefon</mat-label>
+            <input matInput formControlName="phone" placeholder="0123 456789">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>E-Mail</mat-label>
+            <input matInput formControlName="email" placeholder="kontakt@lieferant.de">
+          </mat-form-field>
+          <button mat-stroked-button type="button" (click)="saveNewSupplier()" [disabled]="newSupplierForm.invalid">
+            <mat-icon>save</mat-icon>
+            Lieferant speichern
+          </button>
+        </form>
+      </div>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Einheit</mat-label>
+      <mat-select formControlName="unit">
+        @for (unit of units; track unit) {
+          <mat-option [value]="unit">{{unit}}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('unit')?.hasError('required')) {
+        <mat-error>Einheit ist erforderlich</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Kommentar</mat-label>
+      <textarea matInput formControlName="comment" placeholder="Optionaler Kommentar"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">
+    Speichern
+  </button>
+</mat-dialog-actions>

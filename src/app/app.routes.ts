@@ -163,6 +163,18 @@ export const routes: Routes = [
         data: { permission: 'vacation.view' },
         loadComponent: () => import('./modules/office/vacation/vacation-planning').then(m => m.VacationPlanningComponent)
     },
+    {
+        path: 'office/purchasing-prices',
+        canActivate: [permissionGuard],
+        data: { permission: 'purchasing-price.view' },
+        loadComponent: () => import('./modules/office/purchasing-prices/purchasing-prices').then(m => m.PurchasingPricesComponent)
+    },
+    {
+        path: 'office/purchasing-prices/:id',
+        canActivate: [permissionGuard],
+        data: { permission: 'purchasing-price.view' },
+        loadComponent: () => import('./modules/office/purchasing-prices/detail/purchasing-price-detail').then(m => m.PurchasingPriceDetailComponent)
+    },
 
     // Farming
     {

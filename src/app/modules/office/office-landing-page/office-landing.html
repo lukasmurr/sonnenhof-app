@@ -51,5 +51,16 @@
             </mat-card-content>
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>
+
+        <!-- Einkaufspreise Card -->
+        <mat-card class="section-card purchasing-prices" (click)="navigateToSection('purchasing-prices')"
+            *appHasPermission="'purchasing-price.view'">
+            <div class="card-icon"><mat-icon>payments</mat-icon></div>
+            <mat-card-title>Einkaufspreise</mat-card-title>
+            <mat-card-content>
+                Produktpreise und Lieferanten verwalten.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
     </div>
 </div>

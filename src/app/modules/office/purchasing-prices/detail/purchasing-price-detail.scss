@@ -1,0 +1,338 @@
+.purchasing-price-detail-container {
+    min-height: 100%;
+    padding: 24px;
+    background: #f5f5f5;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .spacer {
+            width: 40px;
+        }
+
+        .headline {
+            flex: 1;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #3F51B5;
+            letter-spacing: 1px;
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+        }
+    }
+
+    .detail-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr;
+        }
+
+        mat-card {
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+            mat-card-header {
+                margin-bottom: 16px;
+            }
+        }
+
+        .info-card {
+            .info-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+
+                @media (max-width: 600px) {
+                    grid-template-columns: 1fr;
+                }
+
+                .info-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+
+                    &.full-width {
+                        grid-column: 1 / -1;
+                    }
+
+                    .label {
+                        font-size: 0.85rem;
+                        color: #666;
+                        font-weight: 500;
+                    }
+
+                    .value {
+                        font-size: 1rem;
+                        color: #333;
+                    }
+                }
+            }
+        }
+
+        .stats-card {
+            .stats-grid {
+                display: flex;
+                gap: 32px;
+                flex-wrap: wrap;
+
+                .stat-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+
+                    .stat-label {
+                        font-size: 0.85rem;
+                        color: #666;
+                        font-weight: 500;
+                    }
+
+                    .stat-value {
+                        font-size: 1.5rem;
+                        font-weight: 600;
+                        color: #333;
+
+                        &.primary {
+                            color: #3F51B5;
+                        }
+
+                        &.positive {
+                            color: #f44336;
+                        }
+
+                        &.negative {
+                            color: #4caf50;
+                        }
+                    }
+                }
+            }
+        }
+
+        .chart-card {
+            grid-column: 1 / -1;
+
+            .chart-container {
+                position: relative;
+                height: 200px;
+                padding: 20px 40px 20px 0;
+
+                .price-chart {
+                    width: 100%;
+                    height: 100%;
+
+                    .grid-line {
+                        stroke: #e0e0e0;
+                        stroke-width: 0.5;
+                        stroke-dasharray: 2, 2;
+                    }
+
+                    .price-line {
+                        stroke: #3F51B5;
+                        stroke-width: 2;
+                        stroke-linecap: round;
+                        stroke-linejoin: round;
+                    }
+
+                    .data-point {
+                        fill: #3F51B5;
+                        cursor: pointer;
+
+                        &:hover {
+                            fill: #303f9f;
+                            r: 4;
+                        }
+                    }
+                }
+
+                .chart-labels {
+                    position: absolute;
+                    right: 0;
+                    top: 20px;
+                    bottom: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    font-size: 0.75rem;
+                    color: #666;
+                    text-align: right;
+                    width: 35px;
+                }
+            }
+
+            .empty-chart {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 48px 24px;
+                color: #999;
+
+                mat-icon {
+                    font-size: 48px;
+                    width: 48px;
+                    height: 48px;
+                    margin-bottom: 16px;
+                }
+
+                p {
+                    margin: 0;
+                    text-align: center;
+                }
+            }
+        }
+
+        .add-price-card {
+            .price-form {
+                display: flex;
+                gap: 16px;
+                align-items: flex-start;
+                flex-wrap: wrap;
+
+                mat-form-field {
+                    flex: 1;
+                    min-width: 150px;
+                }
+
+                button {
+                    margin-top: 4px;
+                }
+            }
+        }
+
+        .history-card {
+            grid-column: 1 / -1;
+
+            mat-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+            }
+
+            .table-container {
+                .table-scroll-wrapper {
+                    overflow: auto;
+                }
+
+                mat-paginator {
+                    font-size: 12px;
+
+                    ::ng-deep .mat-mdc-paginator-container {
+                        min-height: 48px;
+                    }
+                }
+
+                table {
+                    width: 100%;
+
+                    .mat-column-actions {
+                        width: 1%;
+                        white-space: nowrap;
+                        padding-right: 0;
+                    }
+
+                    th.mat-column-actions {
+                        text-align: left;
+                    }
+
+                    td.mat-column-actions {
+                        text-align: right;
+
+                        .actions-row {
+                            display: flex;
+                            justify-content: flex-end;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .loading {
+        display: flex;
+        justify-content: center;
+        padding: 48px;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .header {
+            .headline {
+                font-size: 30px;
+            }
+        }
+    }
+}
+
+:host-context(.dark-theme) {
+    .purchasing-price-detail-container {
+        background: #303030;
+    }
+
+    .headline {
+        color: #eceff1;
+    }
+
+    mat-card {
+        background: #424242;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .info-item {
+        .label {
+            color: #b0bec5 !important;
+        }
+
+        .value {
+            color: #eceff1 !important;
+        }
+    }
+
+    .stat-item {
+        .stat-label {
+            color: #b0bec5 !important;
+        }
+
+        .stat-value {
+            color: #eceff1 !important;
+
+            &.primary {
+                color: #90caf9 !important;
+            }
+        }
+    }
+
+    .chart-container {
+        .grid-line {
+            stroke: #555 !important;
+        }
+
+        .price-line {
+            stroke: #90caf9 !important;
+        }
+
+        .data-point {
+            fill: #90caf9 !important;
+        }
+
+        .chart-labels {
+            color: #b0bec5 !important;
+        }
+    }
+
+    .empty-chart {
+        color: #757575 !important;
+    }
+}

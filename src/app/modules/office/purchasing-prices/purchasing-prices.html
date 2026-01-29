@@ -1,0 +1,100 @@
+<div class="purchasing-prices-container">
+  <div class="header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="headline">Einkaufspreise</h1>
+    <div class="spacer"></div>
+  </div>
+
+  <div class="purchasing-prices-content">
+    <mat-card class="purchasing-prices-card">
+      <mat-card-header>
+        <mat-card-title>Produkte</mat-card-title>
+        <mat-card-subtitle>Verwalten Sie hier Ihre Einkaufsprodukte und deren Preise</mat-card-subtitle>
+        <div class="header-actions">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
+            <mat-label>Suchen</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Name, Kategorie, Lieferant...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="openProductDialog()"
+            *appHasPermission="'purchasing-price.create'">
+            <mat-icon>add</mat-icon>
+            Neues Produkt
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-container">
+          <div class="table-scroll-wrapper">
+            <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Produkt </th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="product-name" (click)="viewProductDetail(row)">{{row.name}}</span>
+                </td>
+              </ng-container>
+
+              <!-- Category Column -->
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Kategorie </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-chip [highlighted]="getCategoryColor(row.category) === 'primary'">
+                    {{row.category}}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Supplier Column -->
+              <ng-container matColumnDef="supplier">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Lieferant </th>
+                <td mat-cell *matCellDef="let row"> {{row.supplierName}} </td>
+              </ng-container>
+
+              <!-- Unit Column -->
+              <ng-container matColumnDef="unit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Einheit </th>
+                <td mat-cell *matCellDef="let row"> {{row.unit}} </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="actions-row">
+                    <button mat-icon-button (click)="viewProductDetail(row)"
+                      matTooltip="Details & Preisverlauf">
+                      <mat-icon>trending_up</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="openProductDialog(row)"
+                      matTooltip="Bearbeiten" *appHasPermission="'purchasing-price.update'">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteProduct(row)"
+                      matTooltip="Löschen" *appHasPermission="'purchasing-price.delete'">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="5">Keine Produkte gefunden</td>
+              </tr>
+            </table>
+          </div>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
+          aria-label="Produkte pro Seite"></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

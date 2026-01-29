@@ -1,0 +1,213 @@
+<div class="purchasing-price-detail-container">
+  <div class="header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="headline">{{ product()?.name || 'Produkt' }}</h1>
+    <div class="spacer"></div>
+  </div>
+
+  @if (product()) {
+    <div class="detail-content">
+      <!-- Product Info Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>Produktinformationen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Kategorie</span>
+              <span class="value">{{ product()?.category }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Lieferant</span>
+              <span class="value">{{ supplier()?.name || 'Unbekannt' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Einheit</span>
+              <span class="value">{{ product()?.unit }}</span>
+            </div>
+            @if (product()?.comment) {
+              <div class="info-item full-width">
+                <span class="label">Kommentar</span>
+                <span class="value">{{ product()?.comment }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Statistics Card -->
+      <mat-card class="stats-card">
+        <mat-card-header>
+          <mat-card-title>Preisstatistik</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">Aktueller Preis</span>
+              <span class="stat-value primary">{{ formatCurrency(latestPrice()) }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Durchschnitt</span>
+              <span class="stat-value">{{ formatCurrency(averagePrice()) }}</span>
+            </div>
+            @if (priceChange()) {
+              <div class="stat-item">
+                <span class="stat-label">Änderung</span>
+                <span class="stat-value" [class.positive]="priceChange()!.change > 0" [class.negative]="priceChange()!.change < 0">
+                  {{ priceChange()!.change > 0 ? '+' : '' }}{{ formatCurrency(priceChange()!.change) }}
+                  ({{ priceChange()!.percentage > 0 ? '+' : '' }}{{ priceChange()!.percentage }}%)
+                </span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Chart Card -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Preisverlauf</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (priceEntries().length > 1) {
+            <div class="chart-container">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="price-chart">
+                <!-- Grid lines -->
+                <line x1="0" y1="25" x2="100" y2="25" class="grid-line" />
+                <line x1="0" y1="50" x2="100" y2="50" class="grid-line" />
+                <line x1="0" y1="75" x2="100" y2="75" class="grid-line" />
+                
+                <!-- Price line -->
+                <path [attr.d]="getChartPath()" class="price-line" fill="none" />
+                
+                <!-- Data points -->
+                @for (point of chartData().points; track point.date) {
+                  <circle [attr.cx]="point.x" [attr.cy]="point.y" r="2" class="data-point">
+                    <title>{{ point.date | date:'dd.MM.yyyy' }}: {{ formatCurrency(point.price) }}</title>
+                  </circle>
+                }
+              </svg>
+              <div class="chart-labels">
+                <span class="max-label">{{ formatCurrency(chartData().maxPrice) }}</span>
+                <span class="min-label">{{ formatCurrency(chartData().minPrice) }}</span>
+              </div>
+            </div>
+          } @else {
+            <div class="empty-chart">
+              <mat-icon>show_chart</mat-icon>
+              <p>Mindestens 2 Preiseinträge für die Darstellung erforderlich</p>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Add Price Entry Card -->
+      <mat-card class="add-price-card" *appHasPermission="'purchasing-price.create'">
+        <mat-card-header>
+          <mat-card-title>Neuen Preis erfassen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="priceForm" class="price-form" (ngSubmit)="addPriceEntry()">
+            <mat-form-field appearance="outline">
+              <mat-label>Preis (€)</mat-label>
+              <input matInput type="number" formControlName="price" placeholder="0.00" step="0.01">
+              @if (priceForm.get('price')?.hasError('required')) {
+                <mat-error>Preis ist erforderlich</mat-error>
+              }
+              @if (priceForm.get('price')?.hasError('min')) {
+                <mat-error>Preis muss größer als 0 sein</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Menge ({{ product()?.unit }})</mat-label>
+              <input matInput type="number" formControlName="quantity" placeholder="0" step="0.1">
+              @if (priceForm.get('quantity')?.hasError('required')) {
+                <mat-error>Menge ist erforderlich</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Datum</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (priceForm.get('date')?.hasError('required')) {
+                <mat-error>Datum ist erforderlich</mat-error>
+              }
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="submit" [disabled]="priceForm.invalid">
+              <mat-icon>add</mat-icon>
+              Preis hinzufügen
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Price History Table -->
+      <mat-card class="history-card">
+        <mat-card-header>
+          <mat-card-title>Preisverlauf</mat-card-title>
+          <mat-card-subtitle>Alle erfassten Preise</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-container">
+            <div class="table-scroll-wrapper">
+              <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+                <!-- Date Column -->
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.date | date:'dd.MM.yyyy' }} </td>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Preis </th>
+                  <td mat-cell *matCellDef="let row"> {{ formatCurrency(row.price) }} </td>
+                </ng-container>
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Menge </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.quantity }} {{ product()?.unit }} </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+                  <td mat-cell *matCellDef="let row">
+                    <div class="actions-row">
+                      <button mat-icon-button color="warn" (click)="deletePriceEntry(row)"
+                        matTooltip="Löschen" *appHasPermission="'purchasing-price.delete'">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">Keine Preiseinträge vorhanden</td>
+                </tr>
+              </table>
+            </div>
+
+            <mat-paginator [pageSizeOptions]="[10, 25, 50]"
+            aria-label="Einträge pro Seite"></mat-paginator>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else {
+    <div class="loading">
+      <p>Produkt wird geladen...</p>
+    </div>
+  }
+</div>

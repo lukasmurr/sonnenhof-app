@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,13 +8,12 @@ import { HasPermissionDirective } from '../../../core/directives/has-permission.
 
 @Component({
     selector: 'app-office-landing',
-    standalone: true,
     imports: [MatCardModule, MatIconModule, MatButtonModule, HasPermissionDirective],
     templateUrl: './office-landing.html',
     styleUrls: ['./office-landing.scss']
 })
 export class OfficeLanding {
-    constructor(private router: Router) { }
+    private router = inject(Router);
 
     public navigateToSection(section: string): void {
         this.router.navigate(['/office', section]);
