@@ -1,0 +1,220 @@
+<h2 mat-dialog-title>
+    <div class="title-row">
+        <mat-icon>grid_view</mat-icon>
+        <span>{{ box().name }}</span>
+        <span class="status-chip" [class]="box().status">{{ getStatusLabel(box().status) }}</span>
+    </div>
+</h2>
+
+<mat-dialog-content>
+    <mat-tab-group>
+        <!-- Overview Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>info</mat-icon>
+                Übersicht
+            </ng-template>
+
+            <div class="tab-content">
+                <div class="overview-grid">
+                    <div class="stat-card">
+                        <mat-icon>pets</mat-icon>
+                        <div class="stat-value">{{ box().currentCount }} / {{ box().capacity }}</div>
+                        <div class="stat-label">Belegung</div>
+                        <mat-progress-bar 
+                            [mode]="'determinate'" 
+                            [value]="fillLevel() * 100"
+                            [color]="fillColor()">
+                        </mat-progress-bar>
+                    </div>
+
+                    @if (box().currentBatch) {
+                        <div class="stat-card">
+                            <mat-icon>schedule</mat-icon>
+                            <div class="stat-value">{{ daysInSystem() }} Tage</div>
+                            <div class="stat-label">Im System</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <mat-icon>tag</mat-icon>
+                            <div class="stat-value">{{ box().currentBatch!.batchId || box().currentBatch!.id }}</div>
+                            <div class="stat-label">Chargen-ID</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <mat-icon>event</mat-icon>
+                            <div class="stat-value">{{ formatDate(box().currentBatch!.arrivalDate || box().currentBatch!.checkInDate).split(',')[0] }}</div>
+                            <div class="stat-label">Ankunft</div>
+                        </div>
+                    }
+                </div>
+
+                @if (box().currentBatch?.notes) {
+                    <div class="notes-section">
+                        <h4>Notizen</h4>
+                        <p>{{ box().currentBatch!.notes }}</p>
+                    </div>
+                }
+
+                @if (box().markers.length > 0) {
+                    <div class="markers-section">
+                        <h4>Aktive Markierungen</h4>
+                        <div class="marker-list">
+                            @for (marker of box().markers; track marker.id) {
+                                <div class="marker-item" [class]="marker.type">
+                                    <mat-icon>{{ getMarkerIcon(marker.type) }}</mat-icon>
+                                    <div class="marker-content">
+                                        <span class="marker-type">{{ getMarkerLabel(marker.type) }}</span>
+                                        <span class="marker-desc">{{ marker.description }}</span>
+                                        <span class="marker-date">{{ formatDate(marker.createdAt) }}</span>
+                                    </div>
+                                    <button mat-icon-button color="warn" 
+                                            matTooltip="Entfernen"
+                                            (click)="removeMarker(marker.id)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (box().currentCount === 0) {
+                    <div class="empty-state">
+                        <mat-icon>check_circle</mat-icon>
+                        <span>Box ist leer und bereit für neue Tiere</span>
+                    </div>
+                }
+            </div>
+        </mat-tab>
+
+        <!-- Actions Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>build</mat-icon>
+                Aktionen
+            </ng-template>
+
+            <div class="tab-content">
+                @if (box().currentCount > 0) {
+                    <div class="action-section">
+                        <h4>Tiere entfernen</h4>
+                        <form [formGroup]="removePigForm" (ngSubmit)="removePigs()" class="remove-form">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Anzahl</mat-label>
+                                <input matInput type="number" formControlName="count" min="1" [max]="box().currentCount">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Grund</mat-label>
+                                <mat-select formControlName="reason">
+                                    <mat-option value="death">Abgang/Tod</mat-option>
+                                    <mat-option value="transfer">Umstallen</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button mat-raised-button color="warn" type="submit" 
+                                    [disabled]="removePigForm.invalid">
+                                <mat-icon>remove_circle</mat-icon>
+                                Entfernen
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="action-section">
+                        <h4>Umstallen</h4>
+                        <button mat-raised-button color="primary" (click)="startTransfer()">
+                            <mat-icon>swap_horiz</mat-icon>
+                            Transfer starten
+                        </button>
+                    </div>
+                }
+
+                <div class="action-section">
+                    <h4>Markierung hinzufügen</h4>
+                    <form [formGroup]="markerForm" (ngSubmit)="addMarker()" class="marker-form">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Typ</mat-label>
+                            <mat-select formControlName="type">
+                                @for (type of markerTypes; track type.value) {
+                                    <mat-option [value]="type.value">
+                                        <mat-icon>{{ type.icon }}</mat-icon>
+                                        {{ type.label }}
+                                    </mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Beschreibung</mat-label>
+                            <textarea matInput formControlName="description" rows="2"></textarea>
+                        </mat-form-field>
+
+                        <button mat-raised-button color="accent" type="submit" 
+                                [disabled]="markerForm.invalid">
+                            <mat-icon>add</mat-icon>
+                            Markierung setzen
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- History Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>history</mat-icon>
+                Verlauf
+            </ng-template>
+
+            <div class="tab-content">
+                @if (logs().length > 0) {
+                    <mat-list class="history-list">
+                        @for (log of logs(); track log.id) {
+                            <mat-list-item>
+                                <mat-icon matListItemIcon>{{ getLogIcon(log.eventType) }}</mat-icon>
+                                <div matListItemTitle>{{ getLogLabel(log.eventType) }}</div>
+                                <div matListItemLine>
+                                    @switch (log.eventType) {
+                                        @case ('check-in') {
+                                            {{ log.count || log.quantity }} Tiere eingestallt
+                                        }
+                                        @case ('transfer') {
+                                            {{ log.count || log.quantity }} Tiere umgestallt
+                                            @if (log.targetBoxId) { → Box {{ log.targetBoxId }} }
+                                        }
+                                        @case ('transfer-in') {
+                                            {{ log.count || log.quantity }} Tiere transferiert
+                                        }
+                                        @case ('transfer-out') {
+                                            {{ log.count || log.quantity }} Tiere transferiert
+                                        }
+                                        @case ('slaughter') {
+                                            {{ log.count || log.quantity }} Tiere zur Schlachtung
+                                        }
+                                        @case ('death') {
+                                            {{ log.count || log.quantity }} Abgänge
+                                        }
+                                        @default {
+                                            {{ log.notes }}
+                                        }
+                                    }
+                                </div>
+                                <div matListItemMeta>{{ formatDate(log.timestamp) }}</div>
+                            </mat-list-item>
+                        }
+                    </mat-list>
+                } @else {
+                    <div class="empty-state">
+                        <mat-icon>history</mat-icon>
+                        <span>Noch keine Einträge vorhanden</span>
+                    </div>
+                }
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Schließen</button>
+</mat-dialog-actions>

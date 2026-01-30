@@ -190,6 +190,12 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/farming/stall/stall-overview/stall-overview').then(m => m.StallOverviewComponent)
     },
     {
+        path: 'farming/stall/dashboard',
+        canActivate: [permissionGuard],
+        data: { permission: 'stall.view' },
+        loadComponent: () => import('./modules/farming/stall/stall-dashboard/stall-dashboard').then(m => m.StallDashboardComponent)
+    },
+    {
         path: 'farming/stall/:id',
         canActivate: [permissionGuard],
         data: { permission: 'stall.view' },

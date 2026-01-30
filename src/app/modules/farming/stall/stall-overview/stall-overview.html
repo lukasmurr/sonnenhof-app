@@ -1,36 +1,111 @@
 <div class="stall-overview-wrapper">
-  <div class="header">
-    <button mat-icon-button (click)="goBack()">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <h1 class="headline">Stall Übersicht</h1>
-    <div class="spacer"></div>
-  </div>
+    <div class="header">
+        <div class="header-left">
+            <button mat-icon-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <h1 class="headline">Stallübersicht</h1>
+        <div class="header-right">
+            <button mat-icon-button (click)="refresh()" matTooltip="Aktualisieren">
+                <mat-icon>refresh</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" routerLink="/farming/stall/dashboard">
+                <mat-icon>dashboard</mat-icon>
+                Dashboard
+            </button>
+        </div>
+    </div>
 
-  <div class="card-grid">
-    @for (stall of stalls$ | async; track stall) {
-      <mat-card class="stall-card" (click)="openStall(stall._id)">
-        <mat-card-header>
-          <mat-card-title>{{ stall.name }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="stat-row">
+    <div class="summary-bar">
+        <div class="summary-item">
             <mat-icon>pets</mat-icon>
-            <span>Schweine gesamt: {{ getTotalPigs(stall) }}</span>
-          </div>
-          <div class="stat-row">
-            <mat-icon>grid_view</mat-icon>
-            <span>Boxen: {{ stall.boxes.length }}</span>
-          </div>
-          <div class="stat-row">
-            <mat-icon>check_box</mat-icon>
-            <span>Belegt: {{ getOccupiedBoxes(stall) }}</span>
-          </div>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>Öffnen</button>
-        </mat-card-actions>
-      </mat-card>
-    }
-  </div>
+            <span class="value">{{ totalPigs() }}</span>
+            <span class="label">Tiere gesamt</span>
+        </div>
+        <div class="summary-item">
+            <mat-icon>home</mat-icon>
+            <span class="value">{{ totalCapacity() }}</span>
+            <span class="label">Kapazität</span>
+        </div>
+    </div>
+
+    <div class="card-grid">
+        @for (item of stallsWithStats(); track item.stall.id) {
+            <mat-card class="stall-card" (click)="openStall(item.stall.id)">
+                <div class="card-header">
+                    <mat-icon [class]="item.stall.stallType">{{ getStallTypeIcon(item.stall.stallType) }}</mat-icon>
+                    <div class="title-section">
+                        <h2>{{ item.stall.name }}</h2>
+                        <span class="type-badge">{{ getStallTypeLabel(item.stall.stallType) }}</span>
+                    </div>
+                    @if (item.slaughterCount > 0) {
+                        <span class="alert-badge" matTooltip="Schlachtempfehlungen">
+                            {{ item.slaughterCount }}
+                        </span>
+                    }
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat">
+                        <mat-icon>pets</mat-icon>
+                        <span class="value">{{ item.stats.totalPigs }}</span>
+                        <span class="label">Tiere</span>
+                    </div>
+                    <div class="stat">
+                        <mat-icon>grid_view</mat-icon>
+                        <span class="value">{{ item.stats.occupiedBoxes }} / {{ item.stats.totalBoxes }}</span>
+                        <span class="label">Boxen</span>
+                    </div>
+                    <div class="stat">
+                        <mat-icon>schedule</mat-icon>
+                        <span class="value">{{ item.stats.averageDaysInSystem }}</span>
+                        <span class="label">Ø Tage</span>
+                    </div>
+                </div>
+
+                <div class="occupancy-section">
+                    <mat-progress-bar 
+                        [mode]="'determinate'" 
+                        [value]="item.stats.occupancyRate * 100"
+                        [color]="getOccupancyColor(item.stats.occupancyRate)">
+                    </mat-progress-bar>
+                    <span class="percentage">{{ formatPercentage(item.stats.occupancyRate) }}</span>
+                </div>
+
+                <div class="chips-row">
+                    @if (item.fillSuggestionCount > 0) {
+                        <span class="chip suggestion">
+                            <mat-icon>auto_awesome</mat-icon>
+                            {{ item.fillSuggestionCount }} Empfehlungen
+                        </span>
+                    }
+                    @if (item.stats.emptyBoxes > 0) {
+                        <span class="chip empty">
+                            <mat-icon>check_circle</mat-icon>
+                            {{ item.stats.emptyBoxes }} leer
+                        </span>
+                    }
+                    @if (item.stats.boxesWithMarkers > 0) {
+                        <span class="chip marker">
+                            <mat-icon>flag</mat-icon>
+                            {{ item.stats.boxesWithMarkers }}
+                        </span>
+                    }
+                </div>
+
+                <mat-card-actions align="end">
+                    <button mat-button color="primary">
+                        <mat-icon>open_in_new</mat-icon>
+                        Öffnen
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        } @empty {
+            <div class="empty-state">
+                <mat-icon>info</mat-icon>
+                <p>Keine Ställe konfiguriert</p>
+            </div>
+        }
+    </div>
 </div>

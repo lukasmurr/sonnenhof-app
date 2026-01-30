@@ -1,43 +1,94 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Stall } from '../../../../core/models/stall.model';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, RouterModule } from '@angular/router';
+import { Stall, StallStats } from '../../../../core/models/stall.model';
 import { StallService } from '../../../../core/services/stall.service';
+
+interface StallWithStats {
+    stall: Stall;
+    stats: StallStats;
+    slaughterCount: number;
+    fillSuggestionCount: number;
+}
 
 @Component({
     selector: 'app-stall-overview',
-    standalone: true,
-    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule],
+    imports: [
+        RouterModule,
+        MatCardModule, 
+        MatIconModule, 
+        MatButtonModule,
+        MatProgressBarModule,
+        MatChipsModule,
+        MatTooltipModule
+    ],
     templateUrl: './stall-overview.html',
-    styleUrls: ['./stall-overview.scss']
+    styleUrls: ['./stall-overview.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StallOverviewComponent implements OnInit {
-    stalls$: Observable<Stall[]>;
+    private readonly stallService = inject(StallService);
+    private readonly router = inject(Router);
 
-    constructor(private stallService: StallService, private router: Router) {
-        this.stalls$ = this.stallService.getStalls();
-    }
+    readonly stallsWithStats = signal<StallWithStats[]>([]);
+
+    readonly totalPigs = computed(() => {
+        return this.stallsWithStats().reduce((sum, s) => sum + s.stats.totalPigs, 0);
+    });
+
+    readonly totalCapacity = computed(() => {
+        return this.stallsWithStats().reduce((sum, s) => sum + s.stats.totalCapacity, 0);
+    });
 
     ngOnInit(): void {
+        this.loadStalls();
+    }
+
+    private loadStalls(): void {
+        const stalls = this.stallService.getAllStalls();
+        const stallsWithStats: StallWithStats[] = stalls.map(stall => ({
+            stall,
+            stats: this.stallService.getStallStats(stall.id),
+            slaughterCount: this.stallService.getSlaughterSuggestions(stall.id).length,
+            fillSuggestionCount: this.stallService.getAutoFillSuggestions(stall.id).length
+        }));
+        
+        this.stallsWithStats.set(stallsWithStats);
     }
 
     openStall(stallId: string): void {
         this.router.navigate(['/farming/stall', stallId]);
     }
 
-    getTotalPigs(stall: Stall): number {
-        return stall.boxes.reduce((sum, box) => sum + box.pigs.length, 0);
+    getStallTypeLabel(type: 'pre-fattening' | 'finishing'): string {
+        return type === 'pre-fattening' ? 'Vormast' : 'Endmast';
     }
 
-    getOccupiedBoxes(stall: Stall): number {
-        return stall.boxes.filter(box => box.pigs.length > 0).length;
+    getStallTypeIcon(type: 'pre-fattening' | 'finishing'): string {
+        return type === 'pre-fattening' ? 'child_care' : 'pets';
+    }
+
+    getOccupancyColor(rate: number): string {
+        const percentage = rate * 100;
+        if (percentage < 50) return 'primary';
+        if (percentage < 80) return 'accent';
+        return 'warn';
+    }
+
+    formatPercentage(rate: number): string {
+        return (rate * 100).toFixed(1) + '%';
     }
 
     goBack(): void {
         this.router.navigate(['/farming']);
+    }
+
+    refresh(): void {
+        this.loadStalls();
     }
 }

@@ -1,0 +1,141 @@
+<div class="dashboard-wrapper">
+    <div class="header">
+        <div class="header-left">
+            <button mat-icon-button routerLink="/farming/stall" matTooltip="Zurück zur Übersicht">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <h1 class="headline">Stall Dashboard</h1>
+        <div class="header-right">
+            <button mat-icon-button (click)="refresh()" matTooltip="Aktualisieren">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <mat-card class="kpi-card total-pigs">
+            <mat-icon>pets</mat-icon>
+            <div class="kpi-value">{{ totalPigs() }}</div>
+            <div class="kpi-label">Tiere gesamt</div>
+            <mat-progress-bar 
+                [mode]="'determinate'" 
+                [value]="overallOccupancy()"
+                [color]="getOccupancyColor(overallOccupancy())">
+            </mat-progress-bar>
+            <div class="kpi-sub">{{ formatPercentage(overallOccupancy()) }} Auslastung</div>
+        </mat-card>
+
+        <mat-card class="kpi-card capacity">
+            <mat-icon>home</mat-icon>
+            <div class="kpi-value">{{ totalCapacity() }}</div>
+            <div class="kpi-label">Gesamtkapazität</div>
+        </mat-card>
+
+        <mat-card class="kpi-card slaughter">
+            <mat-icon>content_cut</mat-icon>
+            <div class="kpi-value">{{ totalSlaughterReady() }}</div>
+            <div class="kpi-label">Schlachtreif</div>
+            <div class="kpi-sub">Boxen empfohlen</div>
+        </mat-card>
+
+        <mat-card class="kpi-card empty">
+            <mat-icon>check_circle</mat-icon>
+            <div class="kpi-value">{{ totalEmptyBoxes() }}</div>
+            <div class="kpi-label">Leere Boxen</div>
+        </mat-card>
+
+        <mat-card class="kpi-card days">
+            <mat-icon>schedule</mat-icon>
+            <div class="kpi-value">{{ averageDaysInSystem() }}</div>
+            <div class="kpi-label">Ø Tage im System</div>
+        </mat-card>
+    </div>
+
+    <!-- Stall Overview Cards -->
+    <h2 class="section-title">Ställe im Überblick</h2>
+    <div class="stall-cards">
+        @for (summary of stallSummaries(); track summary.stall.id) {
+            <mat-card class="stall-card" [routerLink]="['/farming/stall', summary.stall.id]">
+                <div class="stall-header">
+                    <mat-icon [class]="summary.stall.stallType">{{ getStallTypeIcon(summary.stall.stallType) }}</mat-icon>
+                    <div class="stall-title">
+                        <h3>{{ summary.stall.name }}</h3>
+                        <span class="stall-type">{{ getStallTypeLabel(summary.stall.stallType) }}</span>
+                    </div>
+                    @if (summary.slaughterSuggestions.length > 0) {
+                        <span class="badge slaughter" matTooltip="Schlachtempfehlungen">
+                            {{ summary.slaughterSuggestions.length }}
+                        </span>
+                    }
+                </div>
+
+                <div class="stall-stats">
+                    <div class="stat">
+                        <mat-icon>pets</mat-icon>
+                        <span class="value">{{ summary.stats.totalPigs }}</span>
+                        <span class="label">Tiere</span>
+                    </div>
+                    <div class="stat">
+                        <mat-icon>grid_view</mat-icon>
+                        <span class="value">{{ summary.stats.occupiedBoxes }} / {{ summary.stats.totalBoxes }}</span>
+                        <span class="label">Boxen belegt</span>
+                    </div>
+                    <div class="stat">
+                        <mat-icon>schedule</mat-icon>
+                        <span class="value">{{ summary.stats.averageDaysInSystem }}</span>
+                        <span class="label">Ø Tage</span>
+                    </div>
+                </div>
+
+                <div class="occupancy-bar">
+                    <mat-progress-bar 
+                        [mode]="'determinate'" 
+                        [value]="summary.stats.occupancyRate * 100"
+                        [color]="getOccupancyColor(summary.stats.occupancyRate * 100)">
+                    </mat-progress-bar>
+                    <span class="occupancy-label">
+                        {{ formatPercentage(summary.stats.occupancyRate * 100) }}
+                    </span>
+                </div>
+
+                <mat-divider></mat-divider>
+
+                <div class="stall-actions">
+                    @if (summary.fillSuggestions.length > 0) {
+                        <div class="suggestion-chip fill">
+                            <mat-icon>auto_awesome</mat-icon>
+                            {{ summary.fillSuggestions.length }} Befüll-Empfehlungen
+                        </div>
+                    }
+                    @if (summary.stats.boxesWithMarkers > 0) {
+                        <div class="suggestion-chip marker">
+                            <mat-icon>flag</mat-icon>
+                            {{ summary.stats.boxesWithMarkers }} Markierungen
+                        </div>
+                    }
+                    @if (summary.fillSuggestions.length === 0 && summary.stats.boxesWithMarkers === 0) {
+                        <div class="suggestion-chip ok">
+                            <mat-icon>check</mat-icon>
+                            Alles in Ordnung
+                        </div>
+                    }
+                </div>
+            </mat-card>
+        }
+    </div>
+
+    <!-- Quick Actions -->
+    <h2 class="section-title">Schnellaktionen</h2>
+    <div class="quick-actions">
+        <button mat-raised-button color="primary" routerLink="/farming/stall">
+            <mat-icon>grid_view</mat-icon>
+            Stallübersicht
+        </button>
+        <button mat-raised-button routerLink="/farming">
+            <mat-icon>agriculture</mat-icon>
+            Zurück zum Farming
+        </button>
+    </div>
+</div>

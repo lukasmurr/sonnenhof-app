@@ -1,0 +1,212 @@
+<h2 mat-dialog-title>
+    <mat-icon>login</mat-icon>
+    Einstallen - {{ stall().name }}
+</h2>
+
+<mat-dialog-content>
+    <mat-stepper orientation="vertical" linear>
+        <!-- Step 1: Batch Information -->
+        <mat-step [stepControl]="batchForm">
+            <ng-template matStepLabel>Chargen-Information</ng-template>
+            
+            <form [formGroup]="batchForm" class="batch-form">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Chargen-ID</mat-label>
+                    <input matInput formControlName="batchId" placeholder="B20240101-001">
+                    <mat-icon matSuffix>tag</mat-icon>
+                    <mat-hint>Automatisch generiert, kann angepasst werden</mat-hint>
+                </mat-form-field>
+
+                <div class="form-row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Anzahl Tiere</mat-label>
+                        <input matInput type="number" formControlName="totalCount" min="1">
+                        <mat-icon matSuffix>pets</mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Herkunft</mat-label>
+                        <input matInput formControlName="origin" placeholder="z.B. Zuchtbetrieb Müller">
+                        <mat-icon matSuffix>place</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Notizen</mat-label>
+                    <textarea matInput formControlName="notes" rows="2" 
+                              placeholder="Optionale Bemerkungen..."></textarea>
+                </mat-form-field>
+
+                <div class="step-actions">
+                    <button mat-button matStepperNext [disabled]="batchForm.invalid">
+                        Weiter
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </form>
+        </mat-step>
+
+        <!-- Step 2: Box Selection -->
+        <mat-step>
+            <ng-template matStepLabel>Box auswählen</ng-template>
+
+            <div class="box-selection">
+                @if (suggestions().length > 0) {
+                    <div class="suggestions-section">
+                        <h4>
+                            <mat-icon>auto_awesome</mat-icon>
+                            Empfohlene Boxen
+                        </h4>
+                        <div class="suggestion-chips">
+                            @for (sug of suggestions(); track sug.boxId) {
+                                <button mat-stroked-button 
+                                        class="suggestion-chip"
+                                        [class.selected]="selectedBoxIds().includes(sug.boxId)"
+                                        (click)="selectBox(sug.boxId)"
+                                        [matTooltip]="sug.reason">
+                                    <mat-icon>lightbulb</mat-icon>
+                                    {{ sug.boxName }}
+                                    <span class="space-info">{{ sug.suggestedCount }} Plätze</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="all-boxes-section">
+                    <h4>Alle verfügbaren Boxen</h4>
+                    <div class="box-grid">
+                        @for (box of availableBoxes(); track box.id) {
+                            <div class="box-option"
+                                 [class.selected]="selectedBoxIds().includes(box.id)"
+                                 [class.suggested]="isSuggested(box.id)"
+                                 [class.full]="box.currentCount === box.capacity"
+                                 (click)="selectBox(box.id)">
+                                <div class="box-header">
+                                    <span class="box-name">{{ box.name }}</span>
+                                    @if (isSuggested(box.id)) {
+                                        <mat-icon class="recommended-icon" 
+                                                  [matTooltip]="getSuggestionReason(box.id)">
+                                            star
+                                        </mat-icon>
+                                    }
+                                </div>
+                                <div class="box-capacity">
+                                    {{ box.currentCount }} / {{ box.capacity }}
+                                </div>
+                                <mat-progress-bar 
+                                    [mode]="'determinate'" 
+                                    [value]="getBoxFillLevel(box) * 100"
+                                    [color]="getBoxFillColor(box)">
+                                </mat-progress-bar>
+                                <div class="available-space">
+                                    {{ box.capacity - box.currentCount }} frei
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @if (selectedBoxes().length > 0) {
+                    <div class="selection-summary">
+                        <mat-icon>check_circle</mat-icon>
+                        <div class="summary-text">
+                            <strong>{{ selectedBoxes().length }} Boxen ausgewählt</strong>
+                            <div>Gesamtkapazität: {{ totalCapacitySelected() }}</div>
+                            @if (remainingPigs() > 0) {
+                                <div class="warning">Noch {{ remainingPigs() }} Tiere zuzuweisen</div>
+                            } @else {
+                                <div class="success">Alle Tiere können untergebracht werden</div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="step-actions">
+                    <button mat-button matStepperPrevious>
+                        <mat-icon>arrow_back</mat-icon>
+                        Zurück
+                    </button>
+                    <button mat-button matStepperNext [disabled]="selectedBoxIds().length === 0">
+                        Weiter
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-step>
+
+        <!-- Step 3: Confirmation -->
+        <mat-step>
+            <ng-template matStepLabel>Bestätigung</ng-template>
+
+            <div class="confirmation">
+                <div class="summary-card">
+                    <h3>Zusammenfassung</h3>
+                    
+                    <div class="summary-row">
+                        <mat-icon>tag</mat-icon>
+                        <span class="label">Chargen-ID:</span>
+                        <span class="value">{{ batchForm.get('batchId')?.value }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <mat-icon>pets</mat-icon>
+                        <span class="label">Anzahl Tiere:</span>
+                        <span class="value">{{ batchForm.get('totalCount')?.value }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <mat-icon>place</mat-icon>
+                        <span class="label">Herkunft:</span>
+                        <span class="value">{{ batchForm.get('origin')?.value }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <mat-icon>grid_view</mat-icon>
+                        <span class="label">Ziel-Boxen:</span>
+                        <div class="value-list">
+                            @for (box of selectedBoxes(); track box.id) {
+                                <div class="box-item">
+                                    {{ box.name }} ({{ box.capacity - box.currentCount }} Plätze frei)
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @if (batchForm.get('notes')?.value) {
+                        <div class="summary-row notes">
+                            <mat-icon>notes</mat-icon>
+                            <span class="label">Notizen:</span>
+                            <span class="value">{{ batchForm.get('notes')?.value }}</span>
+                        </div>
+                    }
+                </div>
+
+                @if (remainingPigs() > 0) {
+                    <div class="warning-message">
+                        <mat-icon>warning</mat-icon>
+                        <span>
+                            Achtung: Die ausgewählten Boxen haben nur Platz für {{ totalCapacitySelected() }} Tiere.
+                            Es bleiben {{ remainingPigs() }} Tiere übrig!
+                        </span>
+                    </div>
+                }
+
+                <div class="step-actions">
+                    <button mat-button matStepperPrevious>
+                        <mat-icon>arrow_back</mat-icon>
+                        Zurück
+                    </button>
+                    <button mat-raised-button color="primary" (click)="checkIn()">
+                        <mat-icon>check</mat-icon>
+                        Einstallen bestätigen
+                    </button>
+                </div>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Abbrechen</button>
+</mat-dialog-actions>

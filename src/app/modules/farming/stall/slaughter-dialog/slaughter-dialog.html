@@ -1,0 +1,140 @@
+<h2 mat-dialog-title>
+    <mat-icon>content_cut</mat-icon>
+    Schlachtung - {{ stall().name }}
+</h2>
+
+<mat-dialog-content>
+    <div class="slaughter-content">
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button mat-stroked-button (click)="selectAllSuggested()" 
+                    [disabled]="suggestions().length === 0">
+                <mat-icon>auto_awesome</mat-icon>
+                Empfohlene auswählen
+            </button>
+            <button mat-stroked-button (click)="selectAll()">
+                <mat-icon>select_all</mat-icon>
+                Alle auswählen
+            </button>
+            <button mat-stroked-button (click)="clearSelection()">
+                <mat-icon>clear_all</mat-icon>
+                Auswahl löschen
+            </button>
+        </div>
+
+        <!-- Suggestions Info -->
+        @if (suggestions().length > 0) {
+            <div class="suggestions-info">
+                <mat-icon>lightbulb</mat-icon>
+                <span>
+                    {{ suggestions().length }} Box(en) werden zur Schlachtung empfohlen
+                    (basierend auf Verweildauer und Kapazität)
+                </span>
+            </div>
+        }
+
+        <!-- Box List -->
+        <div class="box-list">
+            @for (bs of boxSelections(); track bs.box.id; let i = $index) {
+                <div class="box-item" 
+                     [class.selected]="bs.selected"
+                     [class.suggested]="bs.isSuggested">
+                    <mat-checkbox 
+                        [checked]="bs.selected"
+                        (change)="toggleSelection(i)">
+                    </mat-checkbox>
+
+                    <div class="box-info">
+                        <div class="box-header">
+                            <span class="box-name">{{ bs.box.name }}</span>
+                            @if (bs.isSuggested && bs.suggestion) {
+                                <span class="priority-chip"
+                                      [style.background-color]="getPriorityColor(bs.suggestion.priority)">
+                                    {{ getPriorityLabel(bs.suggestion.priority) }}
+                                </span>
+                            }
+                        </div>
+                        <div class="box-details">
+                            <span class="detail">
+                                <mat-icon>pets</mat-icon>
+                                {{ bs.box.currentCount }} Tiere
+                            </span>
+                            <span class="detail">
+                                <mat-icon>schedule</mat-icon>
+                                {{ bs.daysInSystem }} Tage
+                            </span>
+                            @if (bs.box.currentBatch) {
+                                <span class="detail">
+                                    <mat-icon>tag</mat-icon>
+                                    {{ bs.box.currentBatch.batchId }}
+                                </span>
+                            }
+                        </div>
+                        @if (bs.isSuggested && bs.suggestion) {
+                            <div class="suggestion-reason">
+                                <mat-icon>info</mat-icon>
+                                {{ bs.suggestion.reason }}
+                            </div>
+                        }
+                    </div>
+
+                    <div class="count-control">
+                        <label>Anzahl:</label>
+                        <input type="number" 
+                               [value]="bs.count"
+                               [min]="1"
+                               [max]="bs.box.currentCount"
+                               [disabled]="!bs.selected"
+                               (input)="updateCount(i, $any($event.target).valueAsNumber)">
+                        <span class="max-label">/ {{ bs.box.currentCount }}</span>
+                    </div>
+                </div>
+            } @empty {
+                <div class="empty-state">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Keine belegten Boxen vorhanden</span>
+                </div>
+            }
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Summary -->
+        <div class="summary-section">
+            <div class="summary-header">
+                <h3>Zusammenfassung</h3>
+                <div class="total-count">
+                    <mat-icon>pets</mat-icon>
+                    <span class="count">{{ totalSelectedCount() }}</span>
+                    <span class="label">Tiere zur Schlachtung</span>
+                </div>
+            </div>
+
+            @if (selectedBoxes().length > 0) {
+                <div class="selected-boxes">
+                    @for (bs of selectedBoxes(); track bs.box.id) {
+                        <span class="selected-chip">
+                            {{ bs.box.name }}: {{ bs.count }}
+                        </span>
+                    }
+                </div>
+            }
+
+            <mat-form-field appearance="outline" class="notes-field">
+                <mat-label>Notizen zur Schlachtung</mat-label>
+                <textarea matInput [formControl]="notesControl" rows="2"
+                          placeholder="Optionale Bemerkungen..."></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Abbrechen</button>
+    <button mat-raised-button color="warn" 
+            [disabled]="!hasSelection()"
+            (click)="confirmSlaughter()">
+        <mat-icon>content_cut</mat-icon>
+        Schlachtung bestätigen
+    </button>
+</mat-dialog-actions>

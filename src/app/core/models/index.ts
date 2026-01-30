@@ -5,6 +5,7 @@ export * from './notification.model';
 export * from './permission.model';
 export * from './calendar-day.model';
 export * from './vacation-dialog-data.model';
+export * from './stall.model';
 
 
 

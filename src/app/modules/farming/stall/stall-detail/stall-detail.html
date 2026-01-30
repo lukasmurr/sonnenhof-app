@@ -1,64 +1,142 @@
-@if (stall$ | async; as stall) {
+@if (stall(); as stall) {
   <div class="stall-detail-wrapper">
     <div class="header">
-      <button mat-icon-button (click)="goBack()">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
+      <div class="header-left">
+        <button mat-icon-button (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
       <h1 class="headline">{{ stall.name }}</h1>
-      <div class="spacer"></div>
-      <div class="legend">
-        <span class="legend-item recommended"><span class="dot"></span> Empfohlen zur Schlachtung</span>
-        @if (moveSourceBoxId) {
-          <span class="legend-item moving"><span class="dot"></span> Ziel wählen</span>
+      <div class="header-right">
+        @if (isTransferMode()) {
+          <button mat-raised-button color="warn" (click)="cancelTransfer()">
+            <mat-icon>close</mat-icon>
+            Transfer abbrechen
+          </button>
+        }
+
+        @if (nfcSupported() && !isTransferMode()) {
+          <button mat-icon-button [matTooltip]="nfcScanning() ? 'NFC aktiv' : 'NFC bereit'" 
+            [class.nfc-active]="nfcScanning()">
+            <mat-icon>nfc</mat-icon>
+          </button>
         }
       </div>
     </div>
-    <div class="box-grid">
-      @for (box of stall.boxes; track box) {
-        <mat-card class="box-card" [class.recommended]="isRecommended(box)"
-          [class.moving-source]="moveSourceBoxId === box.id"
-          [class.moving-target]="moveSourceBoxId && moveSourceBoxId !== box.id && box.pigs.length === 0"
-          (click)="moveSourceBoxId && moveSourceBoxId !== box.id && box.pigs.length === 0 ? selectTarget(box) : null">
-          <mat-card-header>
-            <mat-card-title>{{ box.name }}</mat-card-title>
-            <span class="capacity">{{ box.pigs.length }} / {{ box.capacity }}</span>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="pig-icons">
-              @for (pig of box.pigs; track pig) {
-                <mat-icon class="pig-icon">pets</mat-icon>
-              }
-              @if (box.pigs.length === 0) {
-                <span class="empty-text">Leer</span>
-              }
-            </div>
-            @if (box.pigs.length > 0) {
-              <div class="stats">
-                <span>Ø Alter: {{ getAverageAge(box) }} Tage</span>
-              </div>
-            }
-          </mat-card-content>
-          @if (!moveSourceBoxId) {
-            <mat-card-actions>
-              <button mat-icon-button color="primary" (click)="addPig(box)"
-                [disabled]="box.pigs.length >= box.capacity" title="Schwein hinzufügen">
-                <mat-icon>add</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="removePig(box)" [disabled]="box.pigs.length === 0"
-                title="Schwein entfernen">
-                <mat-icon>remove</mat-icon>
-              </button>
-              <button mat-icon-button (click)="startMove(box)" [disabled]="box.pigs.length === 0" title="Umstallen">
-                <mat-icon>swap_horiz</mat-icon>
-              </button>
-              <button mat-icon-button color="accent" (click)="slaughterBox(box)" [disabled]="box.pigs.length === 0"
-                title="Schlachten">
-                <mat-icon>restaurant</mat-icon>
-              </button>
-            </mat-card-actions>
-          }
-        </mat-card>
+
+    <div class="legend">
+      <div class="legend-item empty"><span class="dot"></span> Leer</div>
+      <div class="legend-item low"><span class="dot"></span> &lt;33%</div>
+      <div class="legend-item medium"><span class="dot"></span> 33-66%</div>
+      <div class="legend-item high"><span class="dot"></span> 66-99%</div>
+      <div class="legend-item full"><span class="dot"></span> Voll</div>
+      @if (slaughterSuggestionIds().length > 0) {
+        <div class="legend-item recommended"><span class="dot"></span> Schlachtempfehlung</div>
+      }
+      @if (isTransferMode()) {
+        <div class="legend-item transfer-source"><span class="dot"></span> Quelle</div>
+        <div class="legend-item transfer-target"><span class="dot"></span> Ziel wählen</div>
       }
     </div>
+
+    @if (stall.stallType === 'pre-fattening') {
+      <div class="stall-info-badge">
+        <mat-icon>input</mat-icon>
+        <span>Vormaststall - Neue Schweine können hier eingestallt werden</span>
+      </div>
+    }
+
+    <div class="stall-layout">
+      @for (row of stall.rows; track row.id) {
+        <div class="stall-row" [attr.data-position]="row.position">
+          <div class="row-header">
+            <h3>{{ row.name }}</h3>
+            <span class="box-count">{{ row.boxes.length }} Boxen</span>
+          </div>
+          <div class="box-grid">
+            @for (box of row.boxes; track box.id) {
+              <div class="box-card" 
+                [class]="getBoxColorClass(box)"
+                [class.recommended]="isSlaughterRecommended(box)"
+                [class.has-markers]="hasMarkers(box)"
+                [class.large-box]="box.isLargeBox"
+                (click)="openBoxDetail(box)">
+                
+                <div class="box-header">
+                  <span class="box-name">{{ box.name }}</span>
+                  @if (box.currentBatch) {
+                    <span class="pig-count">{{ box.currentBatch.quantity }}</span>
+                  }
+                </div>
+
+                <div class="box-content">
+                  @if (box.currentBatch && box.currentBatch.quantity > 0) {
+                    <div class="pig-visual">
+                      @for (i of getPigIcons(box.currentBatch.quantity); track $index) {
+                        <mat-icon class="pig-icon">pets</mat-icon>
+                      }
+                      @if (box.currentBatch.quantity > 21) {
+                        <span class="more-count">+{{ box.currentBatch.quantity - 21 }}</span>
+                      }
+                    </div>
+                    <div class="box-stats">
+                      <span class="days">{{ getDaysInStall(box.currentBatch) }} Tage</span>
+                    </div>
+                  } @else if (box.status === 'needs-cleaning') {
+                    <div class="status-message">
+                      <mat-icon>cleaning_services</mat-icon>
+                      <span>Reinigung erforderlich</span>
+                    </div>
+                  } @else {
+                    <div class="status-message empty">
+                      <mat-icon>check_circle</mat-icon>
+                      <span>Verfügbar</span>
+                    </div>
+                  }
+                </div>
+
+                @if (!box.isLargeBox) {
+                  <mat-progress-bar 
+                    [mode]="'determinate'" 
+                    [value]="getBoxFillPercentage(box)"
+                    class="fill-bar">
+                  </mat-progress-bar>
+                }
+
+                @if (box.markers.length > 0) {
+                  <div class="markers">
+                    @for (marker of box.markers; track marker.id) {
+                      <mat-icon class="marker-icon" [matTooltip]="getMarkerLabel(marker)">{{ getMarkerIcon(marker) }}</mat-icon>
+                    }
+                  </div>
+                }
+
+                @if (!isTransferMode()) {
+                  <div class="box-actions">
+                    @if (stall.stallType === 'pre-fattening' && (!box.currentBatch || box.currentBatch.quantity === 0)) {
+                      <button mat-icon-button color="primary" (click)="openCheckInDialog(box, $event)" matTooltip="Einstallen">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    }
+                    @if (box.currentBatch && box.currentBatch.quantity > 0) {
+                      <button mat-icon-button (click)="startTransfer(box, $event)" matTooltip="Umstallen">
+                        <mat-icon>swap_horiz</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" (click)="openSlaughterDialog(box, $event)" matTooltip="Schlachten">
+                        <mat-icon>restaurant</mat-icon>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="loading">
+    <p>Stall wird geladen...</p>
   </div>
 }

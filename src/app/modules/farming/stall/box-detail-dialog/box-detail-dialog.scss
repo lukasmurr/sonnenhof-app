@@ -1,0 +1,243 @@
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    mat-icon {
+        color: #3F51B5;
+    }
+
+    .status-chip {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-weight: 500;
+        margin-left: auto;
+
+        &.empty {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        &.occupied {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        &.needs-cleaning {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        &.maintenance {
+            background: #fff3e0;
+            color: #e65100;
+        }
+    }
+}
+
+mat-dialog-content {
+    min-width: 500px;
+    max-width: 600px;
+}
+
+.tab-content {
+    padding: 20px 0;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+
+    mat-icon {
+        color: #3F51B5;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 4px;
+    }
+
+    mat-progress-bar {
+        margin-top: 12px;
+        border-radius: 4px;
+    }
+}
+
+.notes-section {
+    background: #e3f2fd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+
+    h4 {
+        margin: 0 0 8px;
+        color: #1565c0;
+        font-size: 0.9rem;
+    }
+
+    p {
+        margin: 0;
+        color: #333;
+    }
+}
+
+.markers-section {
+    h4 {
+        margin: 0 0 12px;
+        color: #666;
+        font-size: 0.9rem;
+    }
+}
+
+.marker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.marker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f5f5f5;
+
+    &.health {
+        background: #ffebee;
+        mat-icon { color: #e53935; }
+    }
+
+    &.treatment {
+        background: #e8f5e9;
+        mat-icon { color: #43a047; }
+    }
+
+    &.attention {
+        background: #fff3e0;
+        mat-icon { color: #fb8c00; }
+    }
+
+    &.custom {
+        background: #e3f2fd;
+        mat-icon { color: #1e88e5; }
+    }
+
+    .marker-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .marker-type {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .marker-desc {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .marker-date {
+            font-size: 0.75rem;
+            color: #999;
+        }
+    }
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px;
+    color: #81c784;
+    text-align: center;
+
+    mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+    }
+
+    span {
+        font-size: 0.95rem;
+        color: #666;
+    }
+}
+
+.action-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 12px;
+
+    h4 {
+        margin: 0 0 16px;
+        color: #333;
+        font-size: 1rem;
+    }
+}
+
+.remove-form,
+.marker-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+
+    mat-form-field {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .full-width {
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    button {
+        margin-top: 4px;
+    }
+}
+
+.history-list {
+    mat-list-item {
+        margin-bottom: 8px;
+        background: #fafafa;
+        border-radius: 8px;
+    }
+}
+
+// Responsive
+@media (max-width: 600px) {
+    mat-dialog-content {
+        min-width: auto;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+}
