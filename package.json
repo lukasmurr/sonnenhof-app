@@ -38,7 +38,7 @@
     "@types/pouchdb": "^6.4.2",
     "bcryptjs": "^3.0.3",
     "events": "^3.3.0",
-    "jspdf": "^4.0.0",
+    "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",
     "moment": "^2.30.1",
     "pouchdb": "^9.0.0",
