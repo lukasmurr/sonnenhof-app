@@ -126,7 +126,8 @@ export class OffersComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                if (offer) {
+                // treat as update only when offer has an _id (existing record)
+                if (offer && offer._id) {
                     // Update
                     const updatedOffer: Offer = {
                         ...offer,
@@ -134,7 +135,7 @@ export class OffersComponent implements OnInit, AfterViewInit {
                     };
                     this.offerService.updateOffer(updatedOffer);
                 } else {
-                    // Create
+                    // Create new
                     this.offerService.addOffer(result);
                 }
             }
