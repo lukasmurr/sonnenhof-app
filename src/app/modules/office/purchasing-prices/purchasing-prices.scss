@@ -178,8 +178,21 @@
             }
         }
 
+        .purchasing-prices-content .purchasing-prices-card {
+            mat-card-header {
+                align-items: flex-start;
+
+                .header-actions {
+                    margin-left: 0;
+                    justify-content: flex-start;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+            }
+        }
+
         .header-actions {
-            flex-direction: column;
             width: 100%;
 
             .search-field {

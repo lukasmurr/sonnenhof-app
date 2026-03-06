@@ -190,6 +190,20 @@
 
                 mat-card-header {
                     margin-bottom: 16px;
+                    align-items: flex-start;
+                    gap: 12px;
+
+                    .header-actions {
+                        margin-left: 0;
+                        width: 100%;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 8px;
+
+                        button {
+                            max-width: 100%;
+                        }
+                    }
                 }
 
                 .table-container {

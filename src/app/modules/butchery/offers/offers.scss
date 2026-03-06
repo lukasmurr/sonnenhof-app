@@ -229,6 +229,20 @@
             }
         }
 
+        .offers-content .offers-card {
+            mat-card-header {
+                align-items: flex-start;
+
+                .header-actions {
+                    margin-left: 0;
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+            }
+        }
+
         .offers-content .offers-card .table-container {
             .desktop-table-view {
                 display: none;

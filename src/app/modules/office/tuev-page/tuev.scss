@@ -191,6 +191,21 @@
             }
         }
 
+        .tuev-content .tuev-card {
+            mat-card-header {
+                align-items: flex-start;
+                gap: 12px;
+
+                .header-actions {
+                    margin-left: 0;
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+            }
+        }
+
         .tuev-content .tuev-card .table-container {
             .desktop-table-view {
                 display: none;

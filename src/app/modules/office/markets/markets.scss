@@ -158,6 +158,21 @@
             }
         }
 
+        .markets-content .markets-card {
+            mat-card-header {
+                align-items: flex-start;
+                gap: 12px;
+
+                .header-actions {
+                    margin-left: 0;
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+            }
+        }
+
         .markets-content .markets-card .table-container {
             .desktop-table-view {
                 display: none;
