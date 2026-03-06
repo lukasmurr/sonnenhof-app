@@ -50,6 +50,10 @@
 
             .table-container {
 
+                .mobile-list-view {
+                    display: none;
+                }
+
                 .table-scroll-wrapper {
                     overflow: auto;
                 }
@@ -89,15 +93,114 @@
                         }
                     }
                 }
+
+                .mobile-products-grid {
+                    display: grid;
+                    gap: 12px;
+                    margin-bottom: 8px;
+                }
+
+                .mobile-product-card {
+                    border: 1px solid rgba(63, 81, 181, 0.15);
+                    border-radius: 12px;
+                    padding: 12px;
+                    background: #fafbff;
+                }
+
+                .mobile-product-head {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 8px;
+                    margin-bottom: 10px;
+
+                    h3 {
+                        margin: 0;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        line-height: 1.3;
+                    }
+
+                    .product-chip {
+                        flex-shrink: 0;
+                        border-radius: 999px;
+                        background: rgba(63, 81, 181, 0.12);
+                        color: #303f9f;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        padding: 4px 10px;
+                    }
+                }
+
+                .mobile-product-meta {
+                    display: flex;
+                    align-items: baseline;
+                    gap: 6px;
+                    margin-bottom: 10px;
+
+                    .label {
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        letter-spacing: 0.04em;
+                        color: #6a6a6a;
+                    }
+
+                    .value {
+                        font-size: 0.95rem;
+                        font-weight: 500;
+                    }
+                }
+
+                .mobile-product-actions {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+
+                    button {
+                        min-width: 0;
+                    }
+                }
+
+                .mobile-empty-state {
+                    margin-bottom: 8px;
+                    padding: 16px;
+                    text-align: center;
+                    border: 1px dashed rgba(0, 0, 0, 0.2);
+                    border-radius: 12px;
+                    color: #666;
+                }
             }
         }
     }
 
     @media (max-width: 768px) {
+        padding: 16px;
+
         .header {
+            margin-bottom: 20px;
 
             .headline {
                 font-size: 30px;
+            }
+        }
+
+        .products-content {
+            .products-card {
+                padding: 16px;
+
+                mat-card-header {
+                    margin-bottom: 16px;
+                }
+
+                .table-container {
+                    .desktop-table-view {
+                        display: none;
+                    }
+
+                    .mobile-list-view {
+                        display: block;
+                    }
+                }
             }
         }
     }
@@ -115,5 +218,30 @@
     .products-card {
         background: #424242;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+        .table-container {
+            .mobile-product-card {
+                background: #4a4a4a;
+                border-color: rgba(144, 164, 255, 0.35);
+            }
+
+            .mobile-product-head {
+                .product-chip {
+                    background: rgba(144, 164, 255, 0.2);
+                    color: #d7deff;
+                }
+            }
+
+            .mobile-product-meta {
+                .label {
+                    color: #c4c4c4;
+                }
+            }
+
+            .mobile-empty-state {
+                border-color: rgba(255, 255, 255, 0.25);
+                color: #d4d4d4;
+            }
+        }
     }
 }

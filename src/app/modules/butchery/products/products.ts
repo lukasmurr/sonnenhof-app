@@ -1,5 +1,6 @@
 
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, OnInit, ViewChild, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -40,6 +41,9 @@ import { ConfirmationDialogComponent } from '../../../core/components/confirmati
 export class ProductsComponent implements OnInit, AfterViewInit {
     displayedColumns: string[] = ['puNumber', 'name', 'unit', 'actions'];
     dataSource: MatTableDataSource<Product>;
+    mobileProducts: Product[] = [];
+
+    private readonly destroyRef = inject(DestroyRef);
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -90,6 +94,13 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.dataSource
+            .connect()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(products => {
+                this.mobileProducts = products;
+            });
     }
 
     loadProducts() {
@@ -142,5 +153,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
                 this.productService.deleteProduct(product._id);
             }
         });
+    }
+
+    trackByProduct(index: number, product: Product): string | number {
+        return product._id ?? product.puNumber ?? product.name ?? index;
     }
 }

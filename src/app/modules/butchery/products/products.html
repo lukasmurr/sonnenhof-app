@@ -30,7 +30,7 @@
                 </mat-form-field>
 
                 <div class="table-container">
-                    <div class="table-scroll-wrapper">
+                    <div class="table-scroll-wrapper desktop-table-view">
                         <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
                             <!-- PU Number Column -->
@@ -76,6 +76,39 @@
                                 <td class="mat-cell" colspan="4">Keine Daten vorhanden</td>
                             </tr>
                         </table>
+                    </div>
+
+                    <div class="mobile-list-view" aria-label="Produkte als Kartenansicht">
+                        @if (mobileProducts.length > 0) {
+                            <div class="mobile-products-grid">
+                                @for (product of mobileProducts; track trackByProduct($index, product)) {
+                                    <article class="mobile-product-card">
+                                        <div class="mobile-product-head">
+                                            <h3>{{ product.name }}</h3>
+                                            <span class="product-chip">PU {{ product.puNumber }}</span>
+                                        </div>
+                                        <div class="mobile-product-meta">
+                                            <span class="label">Einheit</span>
+                                            <span class="value">{{ product.unit }}</span>
+                                        </div>
+                                        <div class="mobile-product-actions">
+                                            <button mat-stroked-button (click)="openProductDialog(product)"
+                                                *appHasPermission="'product.update'" aria-label="Produkt bearbeiten">
+                                                <mat-icon>edit</mat-icon>
+                                                Bearbeiten
+                                            </button>
+                                            <button mat-stroked-button color="warn" (click)="deleteProduct(product)"
+                                                *appHasPermission="'product.delete'" aria-label="Produkt löschen">
+                                                <mat-icon>delete</mat-icon>
+                                                Löschen
+                                            </button>
+                                        </div>
+                                    </article>
+                                }
+                            </div>
+                        } @else {
+                            <div class="mobile-empty-state">Keine Daten vorhanden</div>
+                        }
                     </div>
 
                     <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
