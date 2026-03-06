@@ -10,13 +10,6 @@
             <mat-card-title>Metzgerei</mat-card-title>
         </mat-card>
 
-        <mat-card class="landing-card" (click)="navigate('production-plan')" *appHasPermission="'production-plan.view'">
-            <div class="card-icon">
-                <mat-icon aria-hidden="true">factory</mat-icon>
-            </div>
-            <mat-card-title>Produktionsplan</mat-card-title>
-        </mat-card>
-
         <mat-card class="landing-card" (click)="navigate('office')" *appHasPermission="'office.view'">
             <div class="card-icon">
                 <img src="assets/icons/office.svg" alt="Büro">
