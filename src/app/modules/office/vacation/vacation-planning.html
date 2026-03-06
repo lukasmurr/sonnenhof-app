@@ -63,7 +63,7 @@
 
           <mat-tab label="Tabelle">
             <div class="table-container">
-              <div class="table-scroll-wrapper">
+              <div class="table-scroll-wrapper desktop-table-view">
                 <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
                   <!-- Employee Column -->
@@ -123,6 +123,36 @@
                   </tr>
                 </table>
               </div>
+
+              <div class="mobile-list-view" aria-label="Urlaubseinträge als Kartenansicht">
+                @if (dataSource.data.length > 0) {
+                  <div class="mobile-cards-grid">
+                    @for (row of dataSource.data; track row._id || $index) {
+                      <article class="mobile-item-card">
+                        <div class="mobile-item-head">
+                          <h3>{{ row.employeeName }}</h3>
+                          <span class="chip" [style.background]="getStatusColor(row.status)">{{ getStatusLabel(row.status) }}</span>
+                        </div>
+                        <p class="meta">{{ getLeaveTypeLabel(row.leaveType) }}</p>
+                        <p class="meta">{{ row.startDate | date:'dd.MM.yyyy' }} - {{ row.endDate | date:'dd.MM.yyyy' }}</p>
+                        <div class="mobile-item-actions">
+                          <button mat-stroked-button (click)="openVacationDialog(row)">
+                            <mat-icon>edit</mat-icon>
+                            Bearbeiten
+                          </button>
+                          <button mat-stroked-button color="warn" (click)="deleteVacation(row)" *appHasPermission="'vacation.delete_others'">
+                            <mat-icon>delete</mat-icon>
+                            Löschen
+                          </button>
+                        </div>
+                      </article>
+                    }
+                  </div>
+                } @else {
+                  <div class="mobile-empty-state">Keine Urlaubseinträge gefunden</div>
+                }
+              </div>
+
               <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
               aria-label="Einträge pro Seite"></mat-paginator>
             </div>
@@ -130,7 +160,7 @@
 
           <mat-tab label="Anträge verwalten" *appHasPermission="'vacation.update_others'">
             <div class="table-container">
-              <div class="table-scroll-wrapper">
+              <div class="table-scroll-wrapper desktop-table-view">
                 <table mat-table [dataSource]="pendingDataSource" #pendingSort="matSort" matSort
                   class="full-width-table">
 
@@ -189,6 +219,39 @@
                   </tr>
                 </table>
               </div>
+
+              <div class="mobile-list-view" aria-label="Anträge als Kartenansicht">
+                @if (pendingDataSource.data.length > 0) {
+                  <div class="mobile-cards-grid">
+                    @for (row of pendingDataSource.data; track row._id || $index) {
+                      <article class="mobile-item-card">
+                        <div class="mobile-item-head">
+                          <h3>{{ row.employeeName }}</h3>
+                          <span class="chip">Antrag</span>
+                        </div>
+                        <p class="meta">{{ getLeaveTypeLabel(row.leaveType) }}</p>
+                        <p class="meta">{{ row.startDate | date:'dd.MM.yyyy' }} - {{ row.endDate | date:'dd.MM.yyyy' }}</p>
+                        @if (row.notes) {
+                          <p class="meta">Notiz: {{ row.notes }}</p>
+                        }
+                        <div class="mobile-item-actions">
+                          <button mat-stroked-button (click)="approveVacation(row)" style="color: #66bb6a;">
+                            <mat-icon>check_circle</mat-icon>
+                            Genehmigen
+                          </button>
+                          <button mat-stroked-button (click)="rejectVacation(row)" style="color: #ef5350;">
+                            <mat-icon>cancel</mat-icon>
+                            Ablehnen
+                          </button>
+                        </div>
+                      </article>
+                    }
+                  </div>
+                } @else {
+                  <div class="mobile-empty-state">Keine ausstehenden Anträge vorhanden</div>
+                }
+              </div>
+
               <mat-paginator #pendingPaginator [pageSizeOptions]="[10, 25, 50, 100]"
               aria-label="Einträge pro Seite"></mat-paginator>
             </div>

@@ -26,6 +26,36 @@
     width: 100%;
 }
 
+.desktop-table-view {
+    width: 100%;
+}
+
+.mobile-list-view {
+    display: none;
+}
+
+.mobile-cards-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.mobile-item-card {
+    border: 1px solid rgba(63, 81, 181, 0.15);
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: #fafbff;
+
+    h4 {
+        margin: 0 0 6px;
+        font-size: 0.95rem;
+    }
+
+    p {
+        margin: 0 0 2px;
+        font-size: 0.9rem;
+    }
+}
+
 .no-data {
     text-align: center;
     color: gray;
@@ -36,6 +66,12 @@
     .stock-card {
         background: #424242;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .mobile-item-card {
+        background: #4a4a4a;
+        border-color: rgba(144, 164, 255, 0.35);
+        color: #eceff1;
     }
 }
 
@@ -49,4 +85,14 @@
 
 mat-expansion-panel {
     margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .desktop-table-view {
+        display: none;
+    }
+
+    .mobile-list-view {
+        display: block;
+    }
 }

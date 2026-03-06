@@ -22,7 +22,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="table-container">
-          <div class="table-scroll-wrapper">
+          <div class="table-scroll-wrapper desktop-table-view">
             <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
               <!-- Name Column -->
@@ -78,6 +78,44 @@
                 <td class="mat-cell" colspan="4">Keine Mitarbeiter gefunden</td>
               </tr>
             </table>
+          </div>
+
+          <div class="mobile-list-view" aria-label="Mitarbeiter als Kartenansicht">
+            @if (dataSource.filteredData.length > 0) {
+              <div class="mobile-cards-grid">
+                @for (row of dataSource.filteredData; track row._id || $index) {
+                  <article class="mobile-item-card">
+                    <div class="mobile-item-head">
+                      <h3>{{ row.name }}</h3>
+                      <span class="meta-chip">{{ row.birthDate | date:'dd.MM.yyyy' }}</span>
+                    </div>
+                    <div class="meta-list">
+                      @if (row.mobile) {
+                        <p>Mobil: {{ row.mobile }}</p>
+                      }
+                      @if (row.landline) {
+                        <p>Festnetz: {{ row.landline }}</p>
+                      }
+                      @if (row.email) {
+                        <p>Email: {{ row.email }}</p>
+                      }
+                    </div>
+                    <div class="mobile-item-actions">
+                      <button mat-stroked-button (click)="openEmployeeDialog(row)" *appHasPermission="'employee.update'">
+                        <mat-icon>edit</mat-icon>
+                        Bearbeiten
+                      </button>
+                      <button mat-stroked-button color="warn" (click)="deleteEmployee(row)" *appHasPermission="'employee.delete'">
+                        <mat-icon>delete</mat-icon>
+                        Löschen
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="mobile-empty-state">Keine Mitarbeiter gefunden</div>
+            }
           </div>
 
           <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"

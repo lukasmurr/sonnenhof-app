@@ -22,7 +22,7 @@
 
       <mat-card-content>
         <div class="table-container">
-          <div class="table-scroll-wrapper">
+          <div class="table-scroll-wrapper desktop-table-view">
             <table mat-table [dataSource]="vehicles" class="mat-elevation-z8">
               <!-- Image Column -->
               <ng-container matColumnDef="image">
@@ -92,6 +92,46 @@
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+          </div>
+
+          <div class="mobile-list-view" aria-label="Fahrzeuge als Kartenansicht">
+            @if (vehicles.length > 0) {
+              <div class="mobile-cards-grid">
+                @for (vehicle of vehicles; track vehicle._id || $index) {
+                  <article class="mobile-item-card">
+                    <div class="mobile-item-head">
+                      <h3>{{ vehicle.licensePlate }}</h3>
+                      <span class="chip">{{ vehicle.nextTuevDate | date:'MM.yyyy' }}</span>
+                    </div>
+                    <p class="meta">{{ vehicle.name }} | {{ getVehicleTypeLabel(vehicle.vehicleType) }}</p>
+                    <div class="mobile-status">
+                      @if (vehicle.nextTuevDate && isExpired(vehicle.nextTuevDate)) {
+                        <span class="badge badge-expired">Abgelaufen</span>
+                      }
+                      @if (vehicle.nextTuevDate && isSoonExpired(vehicle.nextTuevDate)) {
+                        <span class="badge badge-soon">Bald fällig</span>
+                      }
+                    </div>
+                    <div class="mobile-item-actions">
+                      <button mat-stroked-button (click)="openRenewDialog(vehicle)" *appHasPermission="'tuev.update'">
+                        <mat-icon>add_task</mat-icon>
+                        Erneuern
+                      </button>
+                      <button mat-stroked-button (click)="openEditVehicleDialog(vehicle)" *appHasPermission="'tuev.update'">
+                        <mat-icon>edit</mat-icon>
+                        Bearbeiten
+                      </button>
+                      <button mat-stroked-button color="warn" (click)="deleteVehicle(vehicle)" *appHasPermission="'tuev.delete'">
+                        <mat-icon>delete</mat-icon>
+                        Löschen
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="mobile-empty-state">Keine Fahrzeuge vorhanden</div>
+            }
           </div>
         </div>
       </mat-card-content>

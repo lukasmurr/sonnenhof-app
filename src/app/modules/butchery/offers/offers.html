@@ -79,7 +79,7 @@
                     </mat-tab>
                     <mat-tab label="Tabellenansicht">
                         <div class="table-container">
-                            <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+                            <table mat-table [dataSource]="dataSource" matSort class="full-width-table desktop-table-view">
 
                                 <!-- Week Column -->
                                 <ng-container matColumnDef="week">
@@ -123,6 +123,43 @@
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
+
+                            <div class="mobile-list-view" aria-label="Angebote als Kartenansicht">
+                                @if (dataSource.data.length > 0) {
+                                    <div class="mobile-cards-grid">
+                                        @for (row of dataSource.data; track row._id || $index) {
+                                            <article class="mobile-item-card">
+                                                <div class="mobile-item-head">
+                                                    <h3>KW {{ row.week }}</h3>
+                                                    <span class="chip">{{ row.year }}</span>
+                                                </div>
+                                                <div class="mobile-products-list">
+                                                    @for (item of row.items; track item) {
+                                                        <p>{{ item.productName }} @if (item.price) { ({{ item.price }} EUR) }</p>
+                                                    }
+                                                </div>
+                                                <div class="mobile-item-actions">
+                                                    <button mat-stroked-button (click)="printWeeklyReport(row)">
+                                                        <mat-icon>print</mat-icon>
+                                                        Drucken
+                                                    </button>
+                                                    <button mat-stroked-button (click)="openOfferDialog(row)" *appHasPermission="'offer.update'">
+                                                        <mat-icon>edit</mat-icon>
+                                                        Bearbeiten
+                                                    </button>
+                                                    <button mat-stroked-button color="warn" (click)="deleteOffer(row)" *appHasPermission="'offer.delete'">
+                                                        <mat-icon>delete</mat-icon>
+                                                        Löschen
+                                                    </button>
+                                                </div>
+                                            </article>
+                                        }
+                                    </div>
+                                } @else {
+                                    <div class="mobile-empty-state">Keine Angebote vorhanden</div>
+                                }
+                            </div>
+
                             <mat-paginator [pageSizeOptions]="[10, 25, 50]" aria-label="Angebote pro Seite"></mat-paginator>
                         </div>
                     </mat-tab>

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Anpassung: {{data.stock.marketName}} ({{data.stock.date}})</h2>
 <mat-dialog-content>
-    <table mat-table [dataSource]="items" class="full-width-table">
+    <table mat-table [dataSource]="items" class="full-width-table desktop-table-view">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Produkt </th>
             <td mat-cell *matCellDef="let row"> {{row.name}} </td>
@@ -34,6 +34,26 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <div class="mobile-list-view" aria-label="Anpassung als Kartenansicht">
+        @if (items.length > 0) {
+            <div class="mobile-cards-grid">
+                @for (row of items; track row.itemId || $index) {
+                    <article class="mobile-item-card">
+                        <h3>{{ row.name }}</h3>
+                        <p>Soll: {{ row.targetQuantity }}</p>
+                        <p>Ist: {{ row.quantity }}</p>
+                        <p>Kalkuliert: {{ row.calculatedPrep }}</p>
+                        <mat-form-field appearance="outline" class="small-input">
+                            <mat-label>Anpassung</mat-label>
+                            <input matInput type="number" [(ngModel)]="row.adjustedPreparationQuantity"
+                                placeholder="{{row.calculatedPrep}}">
+                        </mat-form-field>
+                    </article>
+                }
+            </div>
+        }
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button (click)="cancel()">Abbrechen</button>

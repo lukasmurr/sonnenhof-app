@@ -22,7 +22,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="table-container">
-          <div class="table-scroll-wrapper">
+          <div class="table-scroll-wrapper desktop-table-view">
             <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
               <!-- Name Column -->
@@ -93,6 +93,36 @@
                 <td class="mat-cell" colspan="7">Keine Märkte vorhanden</td>
               </tr>
             </table>
+          </div>
+
+          <div class="mobile-list-view" aria-label="Märkte als Kartenansicht">
+            @if (dataSource.data.length > 0) {
+              <div class="mobile-cards-grid">
+                @for (row of dataSource.data; track row._id || $index) {
+                  <article class="mobile-item-card">
+                    <div class="mobile-item-head">
+                      <h3>{{ row.name }}</h3>
+                      <span class="chip">{{ row.day }}</span>
+                    </div>
+                    <p class="meta">{{ row.address }}</p>
+                    <p class="meta">{{ row.startTime }} - {{ row.endTime }} @if (row.car) { | Auto {{ row.car }} }</p>
+                    <p class="meta">Grillhänger: {{ row.hasGrillTrailer ? 'Ja' : 'Nein' }}</p>
+                    <div class="mobile-item-actions">
+                      <button mat-stroked-button (click)="openMarketDialog(row)" *appHasPermission="'market.update'">
+                        <mat-icon>edit</mat-icon>
+                        Bearbeiten
+                      </button>
+                      <button mat-stroked-button color="warn" (click)="deleteMarket(row)" *appHasPermission="'market.delete'">
+                        <mat-icon>delete</mat-icon>
+                        Löschen
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="mobile-empty-state">Keine Märkte vorhanden</div>
+            }
           </div>
 
           <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Märkte pro Seite"></mat-paginator>

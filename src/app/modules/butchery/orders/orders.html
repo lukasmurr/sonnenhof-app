@@ -54,7 +54,7 @@
         </div>
 
           <div class="table-container">
-            <div class="table-scroll-wrapper">
+            <div class="table-scroll-wrapper desktop-table-view">
               <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
                 <!-- Date Column -->
@@ -142,6 +142,56 @@
                   <td class="mat-cell" colspan="5">Keine Daten vorhanden</td>
                 </tr>
               </table>
+            </div>
+
+            <div class="mobile-list-view" aria-label="Bestellungen als Kartenansicht">
+              @if (dataSource.filteredData.length > 0) {
+                <div class="mobile-cards-grid">
+                  @for (row of dataSource.filteredData; track row._id || $index) {
+                    <article class="mobile-item-card" [class.prepared-order]="row.status === 'prepared'">
+                      <div class="mobile-item-head">
+                        <h3>{{ row.customerName }}</h3>
+                        <span class="chip">{{ row.orderDate | date:'dd.MM.yyyy' }}</span>
+                      </div>
+                      <p class="meta">Markt: {{ row.market }}</p>
+                      @if (row.customerPhone) {
+                        <p class="meta">Telefon: {{ row.customerPhone }}</p>
+                      }
+                      <div class="mobile-products-list">
+                        @for (item of row.items; track item) {
+                          <p>{{ item.quantity }} {{ item.unit }} {{ item.productName }} @if (item.notes) { ({{ item.notes }}) }</p>
+                        }
+                      </div>
+                      <div class="mobile-item-actions">
+                        @if (row.status !== 'prepared') {
+                          <button mat-stroked-button (click)="markAsPrepared(row)">
+                            <mat-icon>check_circle_outline</mat-icon>
+                            Herrichten
+                          </button>
+                        }
+                        <button mat-stroked-button (click)="printOrder(row)">
+                          <mat-icon>print</mat-icon>
+                          Drucken
+                        </button>
+                        <button mat-stroked-button (click)="openOrderDialog(row, true)">
+                          <mat-icon>post_add</mat-icon>
+                          Nachbestellung
+                        </button>
+                        <button mat-stroked-button (click)="openOrderDialog(row)" *appHasPermission="'order.update'">
+                          <mat-icon>edit</mat-icon>
+                          Bearbeiten
+                        </button>
+                        <button mat-stroked-button color="warn" (click)="deleteOrder(row)" *appHasPermission="'order.delete'">
+                          <mat-icon>delete</mat-icon>
+                          Löschen
+                        </button>
+                      </div>
+                    </article>
+                  }
+                </div>
+              } @else {
+                <div class="mobile-empty-state">Keine Daten vorhanden</div>
+              }
             </div>
 
             <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"

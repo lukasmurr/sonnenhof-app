@@ -50,7 +50,7 @@
 
         <div class="config-list">
             <h3>Konfigurierte Produkte</h3>
-            <table mat-table [dataSource]="configItems()" class="full-width-table">
+            <table mat-table [dataSource]="configItems()" class="full-width-table desktop-table-view">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Produkt </th>
                     <td mat-cell *matCellDef="let item"> {{item.name}} </td>
@@ -86,6 +86,36 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+
+            <div class="mobile-list-view" aria-label="Konfigurierte Produkte als Kartenansicht">
+                @if (configItems().length > 0) {
+                    <div class="mobile-cards-grid">
+                        @for (item of configItems(); track item.id || $index) {
+                            <article class="mobile-item-card">
+                                <div class="mobile-item-head">
+                                    <h3>{{ item.name }}</h3>
+                                </div>
+                                <div class="mobile-item-fields">
+                                    <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
+                                        <mat-label>Einheit</mat-label>
+                                        <input matInput [(ngModel)]="item.unit">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
+                                        <mat-label>Soll</mat-label>
+                                        <input matInput type="number" [(ngModel)]="item.target" min="0">
+                                    </mat-form-field>
+                                </div>
+                                <div class="mobile-item-actions">
+                                    <button mat-stroked-button color="warn" (click)="removeConfigItem(item.id)">
+                                        <mat-icon>delete</mat-icon>
+                                        Entfernen
+                                    </button>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                }
+            </div>
 
             @if (configItems().length === 0) {
             <p class="no-data">Keine Produkte konfiguriert.</p>

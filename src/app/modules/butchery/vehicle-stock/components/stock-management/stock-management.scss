@@ -44,6 +44,10 @@
     gap: 8px;
     margin-bottom: 24px;
 
+    .mobile-list-view {
+        display: none;
+    }
+
     table {
         width: 100%;
         background: transparent;
@@ -62,6 +66,37 @@
             text-align: right;
             padding-right: 0;
         }
+    }
+
+    .mobile-cards-grid {
+        display: grid;
+        gap: 12px;
+    }
+
+    .mobile-item-card {
+        border: 1px solid rgba(63, 81, 181, 0.15);
+        border-radius: 12px;
+        padding: 12px;
+        background: #fafbff;
+    }
+
+    .mobile-item-head {
+        margin-bottom: 10px;
+
+        h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+    }
+
+    .mobile-item-fields {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .mobile-item-actions {
+        margin-top: 8px;
     }
 }
 
@@ -95,5 +130,24 @@
         background: #424242;
         border-color: #555;
         color: #eceff1;
+    }
+
+    .config-list {
+        .mobile-item-card {
+            background: #4a4a4a;
+            border-color: rgba(144, 164, 255, 0.35);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .config-list {
+        .desktop-table-view {
+            display: none;
+        }
+
+        .mobile-list-view {
+            display: block;
+        }
     }
 }

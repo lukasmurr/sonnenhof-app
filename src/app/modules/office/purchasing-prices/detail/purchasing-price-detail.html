@@ -156,7 +156,7 @@
         </mat-card-header>
         <mat-card-content>
           <div class="table-container">
-            <div class="table-scroll-wrapper">
+            <div class="table-scroll-wrapper desktop-table-view">
               <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
                 <!-- Date Column -->
@@ -197,6 +197,30 @@
                   <td class="mat-cell" colspan="4">Keine Preiseinträge vorhanden</td>
                 </tr>
               </table>
+            </div>
+
+            <div class="mobile-list-view" aria-label="Preisverlauf als Kartenansicht">
+              @if (dataSource.data.length > 0) {
+                <div class="mobile-cards-grid">
+                  @for (row of dataSource.data; track row._id || $index) {
+                    <article class="mobile-item-card">
+                      <div class="mobile-item-head">
+                        <h3>{{ row.date | date:'dd.MM.yyyy' }}</h3>
+                        <span class="chip">{{ formatCurrency(row.price) }}</span>
+                      </div>
+                      <p class="meta">Menge: {{ row.quantity }} {{ product()?.unit }}</p>
+                      <div class="mobile-item-actions">
+                        <button mat-stroked-button color="warn" (click)="deletePriceEntry(row)" *appHasPermission="'purchasing-price.delete'">
+                          <mat-icon>delete</mat-icon>
+                          Löschen
+                        </button>
+                      </div>
+                    </article>
+                  }
+                </div>
+              } @else {
+                <div class="mobile-empty-state">Keine Preiseinträge vorhanden</div>
+              }
             </div>
 
             <mat-paginator [pageSizeOptions]="[10, 25, 50]"

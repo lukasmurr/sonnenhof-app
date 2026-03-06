@@ -222,8 +222,68 @@
             }
 
             .table-container {
+                .mobile-list-view {
+                    display: none;
+                }
+
                 .table-scroll-wrapper {
                     overflow: auto;
+                }
+
+                .mobile-cards-grid {
+                    display: grid;
+                    gap: 12px;
+                    margin-bottom: 8px;
+                }
+
+                .mobile-item-card {
+                    border: 1px solid rgba(63, 81, 181, 0.15);
+                    border-radius: 12px;
+                    padding: 12px;
+                    background: #fafbff;
+                }
+
+                .mobile-item-head {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 8px;
+
+                    h3 {
+                        margin: 0;
+                        font-size: 1rem;
+                    }
+
+                    .chip {
+                        border-radius: 999px;
+                        background: rgba(63, 81, 181, 0.12);
+                        color: #303f9f;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        padding: 4px 10px;
+                    }
+                }
+
+                .meta {
+                    margin: 0 0 8px;
+                    color: #666;
+                    font-size: 0.9rem;
+                }
+
+                .mobile-item-actions {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+
+                .mobile-empty-state {
+                    margin-bottom: 8px;
+                    padding: 16px;
+                    text-align: center;
+                    border: 1px dashed rgba(0, 0, 0, 0.2);
+                    border-radius: 12px;
+                    color: #666;
                 }
 
                 mat-paginator {
@@ -268,9 +328,21 @@
     }
 
     @media (max-width: 768px) {
+        padding: 16px;
+
         .header {
             .headline {
                 font-size: 30px;
+            }
+        }
+
+        .detail-content .history-card .table-container {
+            .desktop-table-view {
+                display: none;
+            }
+
+            .mobile-list-view {
+                display: block;
             }
         }
     }
@@ -334,5 +406,26 @@
 
     .empty-chart {
         color: #757575 !important;
+    }
+
+    .table-container {
+        .mobile-item-card {
+            background: #4a4a4a;
+            border-color: rgba(144, 164, 255, 0.35);
+        }
+
+        .mobile-item-head .chip {
+            background: rgba(144, 164, 255, 0.2);
+            color: #d7deff;
+        }
+
+        .meta {
+            color: #d0d0d0;
+        }
+
+        .mobile-empty-state {
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #d4d4d4;
+        }
     }
 }

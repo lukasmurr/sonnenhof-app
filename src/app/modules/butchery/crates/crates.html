@@ -33,7 +33,7 @@
                 </mat-form-field>
 
                 <div class="table-container">
-                    <div class="table-scroll-wrapper">
+                    <div class="table-scroll-wrapper desktop-table-view">
                         <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
 
                             <!-- Customer Name Column -->
@@ -90,6 +90,49 @@
                                 <td class="mat-cell" colspan="4">Keine Daten vorhanden</td>
                             </tr>
                         </table>
+                    </div>
+
+                    <div class="mobile-list-view" aria-label="Kisten als Kartenansicht">
+                        @if (dataSource.filteredData.length > 0) {
+                            <div class="mobile-cards-grid">
+                                @for (row of dataSource.filteredData; track row._id || $index) {
+                                    <article class="mobile-item-card">
+                                        <div class="mobile-item-head">
+                                            <h3>{{ row.customerName }}</h3>
+                                            <span class="chip">{{ row.count }} Kisten</span>
+                                        </div>
+                                        <p class="meta">Zuletzt aktualisiert: {{ row.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</p>
+                                        <div class="mobile-item-actions">
+                                            <button mat-stroked-button (click)="printCustomerReport(row)">
+                                                <mat-icon>print</mat-icon>
+                                                Historie
+                                            </button>
+                                            <button mat-stroked-button (click)="openTransactionDialog(row, 'borrow')"
+                                                *appHasPermission="'crate.update'">
+                                                <mat-icon>add_circle</mat-icon>
+                                                Ausleihen
+                                            </button>
+                                            <button mat-stroked-button (click)="openTransactionDialog(row, 'return')"
+                                                *appHasPermission="'crate.update'">
+                                                <mat-icon>remove_circle</mat-icon>
+                                                Zurückgeben
+                                            </button>
+                                            <button mat-stroked-button (click)="openCrateDialog(row)" *appHasPermission="'crate.update'">
+                                                <mat-icon>edit</mat-icon>
+                                                Bearbeiten
+                                            </button>
+                                            <button mat-stroked-button color="warn" (click)="deleteCrateRecord(row)"
+                                                *appHasPermission="'crate.delete'">
+                                                <mat-icon>delete</mat-icon>
+                                                Löschen
+                                            </button>
+                                        </div>
+                                    </article>
+                                }
+                            </div>
+                        } @else {
+                            <div class="mobile-empty-state">Keine Daten vorhanden</div>
+                        }
                     </div>
 
                     <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"

@@ -21,7 +21,7 @@
             </mat-card-header>
             <mat-card-content>
                 <div class="table-container">
-                    <table mat-table [dataSource]="dataSource" class="full-width-table">
+                    <table mat-table [dataSource]="dataSource" class="full-width-table desktop-table-view">
                         <!-- Name Column -->
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -82,6 +82,48 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
+
+                    <div class="mobile-list-view" aria-label="Benutzer als Kartenansicht">
+                        @if (dataSource.data.length > 0) {
+                            <div class="mobile-cards-grid">
+                                @for (user of dataSource.data; track user._id || $index) {
+                                    <article class="mobile-item-card">
+                                        <div class="mobile-item-head">
+                                            <h3>{{ user.name }}</h3>
+                                            <span class="role-badge" [class.role-admin]="user.group === 'admin'" [class.role-user]="user.group !== 'admin'">
+                                                {{ getGroupLabel(user.group || 'sales') }}
+                                            </span>
+                                        </div>
+                                        <p class="meta">{{ user.email }}</p>
+                                        <p class="meta" [class.status-locked]="user.isLocked" [class.status-active]="!user.isLocked">
+                                            {{ user.isLocked ? 'Gesperrt' : 'Aktiv' }}
+                                        </p>
+                                        <div class="mobile-item-actions">
+                                            <button mat-stroked-button (click)="openUserDialog(user)">
+                                                <mat-icon>edit</mat-icon>
+                                                Bearbeiten
+                                            </button>
+                                            <button mat-stroked-button (click)="toggleLock(user)">
+                                                <mat-icon>{{user.isLocked ? 'lock_open' : 'lock'}}</mat-icon>
+                                                {{ user.isLocked ? 'Entsperren' : 'Sperren' }}
+                                            </button>
+                                            <button mat-stroked-button (click)="changePassword(user)">
+                                                <mat-icon>key</mat-icon>
+                                                Passwort
+                                            </button>
+                                            <button mat-stroked-button color="warn" (click)="deleteUser(user)">
+                                                <mat-icon>delete</mat-icon>
+                                                Löschen
+                                            </button>
+                                        </div>
+                                    </article>
+                                }
+                            </div>
+                        } @else {
+                            <div class="mobile-empty-state">Keine Benutzer vorhanden</div>
+                        }
+                    </div>
+
                     <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
                         aria-label="Benutzer pro Seite"></mat-paginator>
                 </div>

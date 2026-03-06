@@ -41,7 +41,7 @@
                     </button>
                 </div>
 
-                <table mat-table [dataSource]="group.items" class="full-width-table">
+                <table mat-table [dataSource]="group.items" class="full-width-table desktop-table-view">
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> Produkt </th>
                         <td mat-cell *matCellDef="let row"> {{row.name}} </td>
@@ -60,6 +60,20 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
+
+                <div class="mobile-list-view" aria-label="Herzurichtende Mengen als Kartenansicht">
+                    @if (group.items.length > 0) {
+                        <div class="mobile-cards-grid">
+                            @for (row of group.items; track row.itemId || $index) {
+                                <article class="mobile-item-card">
+                                    <h4>{{ row.name }}</h4>
+                                    <p>Soll: {{ row.totalTarget }} {{ row.unit }}</p>
+                                    <p>Herzurichten: {{ row.totalPrep }} {{ row.unit }}</p>
+                                </article>
+                            }
+                        </div>
+                    }
+                </div>
             </mat-expansion-panel>
             }
         </mat-accordion>
