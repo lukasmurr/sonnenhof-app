@@ -6,6 +6,7 @@ import { Market } from '../models/market.model';
 import { Order } from '../models/order.model';
 import { CouchDbService } from './pouchdb.service';
 import { PdfService } from './pdf.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -35,7 +36,7 @@ export class OrderService {
     }
 
     private async sendOrderCreatedEmail(order: Order, market?: Market): Promise<void> {
-        const apiUrl = 'http://localhost:3000/api/mail/order-created';
+        const apiUrl = `${environment.mailApiBaseUrl}/order-created`;
         const pdf = this.pdfService.getOrderPdfBase64(order, market);
 
         await firstValueFrom(this.http.post(apiUrl, {

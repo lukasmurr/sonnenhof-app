@@ -4,6 +4,7 @@ import { Observable, firstValueFrom } from 'rxjs';
 import { User } from '../models/user.model';
 import { CouchDbService } from './pouchdb.service';
 import * as bcrypt from 'bcryptjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +44,7 @@ export class UserService {
     }
 
     private async sendAccountCreatedEmail(user: User): Promise<void> {
-        const apiUrl = 'http://localhost:3000/api/mail/account-created';
+        const apiUrl = `${environment.mailApiBaseUrl}/account-created`;
         await firstValueFrom(this.http.post(apiUrl, {
             email: user.email,
             password: user.password,
