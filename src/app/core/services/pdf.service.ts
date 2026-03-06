@@ -401,6 +401,26 @@ export class PdfService {
   }
 
   generateOrderPdf(order: Order, market?: Market) {
+    const doc = this.buildOrderPdf(order, market);
+    doc.save(this.getOrderPdfFileName(order));
+  }
+
+  getOrderPdfBase64(order: Order, market?: Market): { fileName: string; base64: string } {
+    const doc = this.buildOrderPdf(order, market);
+    const dataUri = doc.output('datauristring');
+    const base64 = dataUri.split(',')[1] || '';
+
+    return {
+      fileName: this.getOrderPdfFileName(order),
+      base64
+    };
+  }
+
+  private getOrderPdfFileName(order: Order): string {
+    return `Bestellung_${order.customerName.replace(/\s+/g, '_')}_${moment(order.orderDate).format('YYYYMMDD')}.pdf`;
+  }
+
+  private buildOrderPdf(order: Order, market?: Market): jsPDF {
     const doc = new jsPDF();
 
     // Header
@@ -470,6 +490,6 @@ export class PdfService {
       doc.text(`Erstellt am ${moment().format('DD.MM.YYYY HH:mm')}`, 14, doc.internal.pageSize.height - 10);
     }
 
-    doc.save(`Bestellung_${order.customerName.replace(/\s+/g, '_')}_${moment(order.orderDate).format('YYYYMMDD')}.pdf`);
+    return doc;
   }
 }

@@ -201,7 +201,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
                     this.orderService.updateOrder(updatedOrder);
                 } else {
                     // Create
-                    this.orderService.addOrder(result);
+                    const selectedMarket = this.markets.find(m => m.name === result.market);
+                    this.orderService.addOrder(result, selectedMarket);
                 }
             }
         });
