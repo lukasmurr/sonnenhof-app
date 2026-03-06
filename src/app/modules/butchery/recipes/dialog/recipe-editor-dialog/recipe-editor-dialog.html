@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{ data.recipe ? 'Rezept bearbeiten' : 'Neues Rezept anlegen' }}</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <div class="base-fields">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" placeholder="z. B. Fleischwurst">
+            @if (form.controls.name.touched && form.controls.name.invalid) {
+                <mat-error>Name ist erforderlich</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Beschreibung (optional)</mat-label>
+            <input matInput formControlName="description" placeholder="Kurze Notiz zum Rezept">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Basismenge</mat-label>
+            <input matInput type="number" min="0.001" step="0.001" formControlName="baseAmount" placeholder="1">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Basis-Einheit</mat-label>
+            <input matInput formControlName="baseUnit" placeholder="kg">
+        </mat-form-field>
+    </div>
+
+    <div class="positions-header">
+        <h3>Positionen</h3>
+        <button type="button" mat-stroked-button (click)="addPosition()">
+            <mat-icon>add</mat-icon>
+            Position
+        </button>
+    </div>
+
+    <div class="positions-list" formArrayName="positions">
+        @for (positionControl of positions.controls; track $index; let i = $index) {
+            <div class="position-row" [formGroupName]="i">
+                <mat-form-field appearance="outline">
+                    <mat-label>Zutat</mat-label>
+                    <input matInput formControlName="ingredientName" placeholder="z. B. Schweinefleisch">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Menge</mat-label>
+                    <input matInput type="number" min="0.001" step="0.001" formControlName="quantity" placeholder="0.0">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Einheit</mat-label>
+                    <input matInput formControlName="unit" placeholder="kg">
+                </mat-form-field>
+
+                <button type="button" mat-icon-button color="warn" (click)="removePosition(i)" [disabled]="positions.length <= 1" aria-label="Position entfernen">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">Speichern</button>
+</mat-dialog-actions>

@@ -84,6 +84,12 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/butchery/offers/offers').then(m => m.OffersComponent)
     },
     {
+        path: 'butchery/recipes',
+        canActivate: [permissionGuard],
+        data: { permission: 'recipe.view' },
+        loadComponent: () => import('./modules/butchery/recipes/recipes').then(m => m.RecipesComponent)
+    },
+    {
         path: 'butchery/production',
         canActivate: [permissionGuard],
         data: { permission: 'product.view' },

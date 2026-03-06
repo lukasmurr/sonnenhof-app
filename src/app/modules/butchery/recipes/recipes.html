@@ -1,0 +1,94 @@
+<div class="recipes-container">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()" aria-label="Zurueck zur Metzgerei-Uebersicht">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="headline">Rezept-App</h1>
+        <div class="spacer"></div>
+    </div>
+
+    <div class="recipes-content">
+        <mat-card class="recipe-list-card">
+            <mat-card-header>
+                <mat-card-title>Rezepte</mat-card-title>
+                <mat-card-subtitle>Verwalten und auswaehlen</mat-card-subtitle>
+                <div class="header-actions">
+                    <button mat-raised-button color="primary" (click)="openCreateDialog()" *appHasPermission="'recipe.create'">
+                        <mat-icon>add</mat-icon>
+                        Neues Rezept
+                    </button>
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                @if (recipes().length > 0) {
+                    <div class="desktop-table-view">
+                        <div class="table-scroll-wrapper">
+                            <table mat-table [dataSource]="dataSource" class="full-width-table">
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef>Rezept</th>
+                                    <td mat-cell *matCellDef="let recipe">{{ recipe.name }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="base">
+                                    <th mat-header-cell *matHeaderCellDef>Basismenge</th>
+                                    <td mat-cell *matCellDef="let recipe">{{ recipe.baseAmount }} {{ recipe.baseUnit }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="positions">
+                                    <th mat-header-cell *matHeaderCellDef>Positionen</th>
+                                    <td mat-cell *matCellDef="let recipe">{{ recipe.positions.length }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+                                    <td mat-cell *matCellDef="let recipe">
+                                        <div class="table-actions-row">
+                                            <button mat-icon-button (click)="openCalculatorDialog(recipe)" aria-label="Rezeptrechner oeffnen">
+                                                <mat-icon>calculate</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="openEditDialog(recipe)" aria-label="Rezept bearbeiten" *appHasPermission="'recipe.update'">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="warn" (click)="deleteRecipe(recipe)" aria-label="Rezept loeschen" *appHasPermission="'recipe.delete'">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+
+                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" [pageSize]="10" aria-label="Rezepte pro Seite"></mat-paginator>
+                    </div>
+
+                    <div class="recipe-list mobile-list-view" role="list" aria-label="Rezeptliste mobil">
+                        @for (recipe of recipes(); track recipe._id || recipe.name) {
+                            <article class="recipe-list-item" role="listitem">
+                                <button type="button" class="recipe-select-button" (click)="openCalculatorDialog(recipe)">
+                                    <span class="recipe-title">{{ recipe.name }}</span>
+                                    <span class="recipe-meta">Basis: {{ recipe.baseAmount }} {{ recipe.baseUnit }}</span>
+                                </button>
+                                <div class="recipe-actions">
+                                    <button mat-icon-button (click)="openCalculatorDialog(recipe)" aria-label="Rezeptrechner oeffnen">
+                                        <mat-icon>calculate</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)="openEditDialog(recipe)" aria-label="Rezept bearbeiten" *appHasPermission="'recipe.update'">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="warn" (click)="deleteRecipe(recipe)" aria-label="Rezept loeschen" *appHasPermission="'recipe.delete'">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                } @else {
+                    <div class="empty-state">Noch keine Rezepte vorhanden.</div>
+                }
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

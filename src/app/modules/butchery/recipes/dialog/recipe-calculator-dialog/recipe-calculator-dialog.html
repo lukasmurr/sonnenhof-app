@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Rezeptrechner: {{ data.recipe.name }}</h2>
+
+<mat-dialog-content>
+    <div class="calculation-controls">
+        <mat-form-field appearance="outline" class="target-amount-field">
+            <mat-label>Zielmenge ({{ data.recipe.baseUnit }})</mat-label>
+            <input
+                matInput
+                type="number"
+                min="0.001"
+                step="0.001"
+                [value]="calculationAmount()"
+                (input)="onCalculationAmountInput($any($event.target).value)">
+        </mat-form-field>
+        <div class="factor-text">Faktor: {{ scaleFactor() | number:'1.3-3' }}</div>
+    </div>
+
+    @if (calculatedPositions().length > 0) {
+        <div class="result-table desktop-view" aria-label="Berechnete Zutaten">
+            <div class="result-row result-header">
+                <span>Zutat</span>
+                <span>Menge</span>
+                <span>Einheit</span>
+            </div>
+            @for (position of calculatedPositions(); track position.ingredientName + '_' + $index) {
+                <div class="result-row">
+                    <span>{{ position.ingredientName }}</span>
+                    <span>{{ position.quantity }}</span>
+                    <span>{{ position.unit }}</span>
+                </div>
+            }
+        </div>
+
+        <div class="mobile-results" aria-label="Berechnete Zutaten mobil">
+            @for (position of calculatedPositions(); track position.ingredientName + '_' + $index) {
+                <article class="mobile-result-card">
+                    <h3>{{ position.ingredientName }}</h3>
+                    <p>{{ position.quantity }} {{ position.unit }}</p>
+                </article>
+            }
+        </div>
+    } @else {
+        <div class="empty-state">Bitte eine gueltige Zielmenge groesser als 0 eingeben.</div>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Schliessen</button>
+</mat-dialog-actions>

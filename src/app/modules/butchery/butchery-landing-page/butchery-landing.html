@@ -51,6 +51,16 @@
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>
 
+        <!-- Rezepte Card -->
+        <mat-card class="section-card recipes" (click)="navigateToSection('recipes')" *appHasPermission="'recipe.view'">
+            <div class="card-icon"><mat-icon>menu_book</mat-icon></div>
+            <mat-card-title>Rezepte</mat-card-title>
+            <mat-card-content>
+                Erstellen Sie Rezepte mit Zutatenpositionen und berechnen Sie Produktionsmengen.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
         <!-- Warenbestand Card -->
         <mat-card class="section-card vehicle-stock" (click)="navigateToSection('vehicle-stock')" *appHasPermission="'vehicle-stock.view'">
             <div class="card-icon"><mat-icon>local_shipping</mat-icon></div>

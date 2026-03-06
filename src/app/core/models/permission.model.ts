@@ -11,6 +11,7 @@ export type Permission =
     | 'stall.view' | 'stall.create' | 'stall.update' | 'stall.delete'
     | 'crate.view' | 'crate.create' | 'crate.update' | 'crate.delete'
     | 'offer.view' | 'offer.create' | 'offer.update' | 'offer.delete'
+    | 'recipe.view' | 'recipe.create' | 'recipe.update' | 'recipe.delete'
     | 'vehicle-stock.view' | 'vehicle-stock.create' | 'vehicle-stock.manage'
     | 'purchasing-price.view' | 'purchasing-price.create' | 'purchasing-price.update' | 'purchasing-price.delete';
 
