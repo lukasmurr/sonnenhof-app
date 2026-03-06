@@ -322,6 +322,13 @@
             border-color: rgba(144, 164, 255, 0.35);
         }
 
+        .mobile-item-head {
+            .chip {
+                color: #ffffff;
+                box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+            }
+        }
+
         .meta {
             color: #d0d0d0;
         }

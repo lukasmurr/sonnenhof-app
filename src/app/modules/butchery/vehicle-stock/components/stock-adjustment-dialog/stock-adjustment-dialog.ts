@@ -40,6 +40,12 @@ export interface StockAdjustmentDialogData {
         .mobile-item-card h3 { margin: 0 0 6px; font-size: 0.95rem; }
         .mobile-item-card p { margin: 0 0 2px; font-size: 0.9rem; }
 
+        :host-context(.dark-theme) .mobile-item-card {
+            background: #4a4a4a;
+            border-color: rgba(144, 164, 255, 0.35);
+            color: #eceff1;
+        }
+
         @media (max-width: 768px) {
             .desktop-table-view { display: none; }
             .mobile-list-view { display: block; }
