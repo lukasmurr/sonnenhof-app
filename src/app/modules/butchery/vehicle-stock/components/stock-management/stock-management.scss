@@ -120,6 +120,13 @@
     .stock-card {
         background: #424242;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+        .config-list {
+            .mobile-item-card {
+                background: #4a4a4a;
+                border-color: rgba(144, 164, 255, 0.35);
+            }
+        }
     }
 
     .add-item-section {
@@ -132,12 +139,6 @@
         color: #eceff1;
     }
 
-    .config-list {
-        .mobile-item-card {
-            background: #4a4a4a;
-            border-color: rgba(144, 164, 255, 0.35);
-        }
-    }
 }
 
 @media (max-width: 768px) {

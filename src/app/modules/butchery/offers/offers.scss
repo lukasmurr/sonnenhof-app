@@ -244,6 +244,17 @@
 :host-context(.dark-theme) {
     .offers-container {
         background: #303030;
+
+        .offers-content {
+            .offers-card {
+                .table-container {
+                    .mobile-item-card {
+                        background: #4a4a4a;
+                        border-color: rgba(144, 164, 255, 0.35);
+                    }
+                }
+            }
+        }
     }
 
     .headline {

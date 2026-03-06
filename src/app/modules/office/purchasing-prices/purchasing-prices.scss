@@ -202,6 +202,17 @@
 :host-context(.dark-theme) {
     .purchasing-prices-container {
         background: #303030;
+
+        .purchasing-prices-content {
+            .purchasing-prices-card {
+                .table-container {
+                    .mobile-item-card {
+                        background: #4a4a4a;
+                        border-color: rgba(144, 164, 255, 0.35);
+                    }
+                }
+            }
+        }
     }
 
     .headline {

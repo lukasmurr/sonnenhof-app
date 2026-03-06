@@ -187,6 +187,17 @@
 :host-context(.dark-theme) {
     .orders-container {
         background: #303030;
+
+        .orders-content {
+            .orders-card {
+                .table-container {
+                    .mobile-item-card {
+                        background: #4a4a4a;
+                        border-color: rgba(144, 164, 255, 0.35);
+                    }
+                }
+            }
+        }
     }
 
     .headline {

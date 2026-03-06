@@ -158,6 +158,17 @@
 :host-context(.dark-theme) {
     .settings-wrapper {
         background: #303030;
+
+        .settings-content {
+            .settings-card {
+                .table-container {
+                    .mobile-item-card {
+                        background: #4a4a4a;
+                        border-color: rgba(144, 164, 255, 0.35);
+                    }
+                }
+            }
+        }
     }
 
     .headline {
