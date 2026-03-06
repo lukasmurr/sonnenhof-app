@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Produktionsplan KW {{ data.plan.week }}/{{ data.plan.year }}</h2>
+
+<mat-dialog-content>
+    <div class="summary-row">
+        <span>{{ data.plan.items.length }} Positionen</span>
+        @if (data.plan.notes) {
+            <span class="notes">Notiz: {{ data.plan.notes }}</span>
+        }
+    </div>
+
+    <div class="items-list" role="list" aria-label="Produktionspositionen">
+        @for (item of data.plan.items; track item.productId + '_' + $index) {
+            <article class="item-card" role="listitem">
+                <div class="item-main">
+                    <h3>{{ item.productName }}</h3>
+                    <p>{{ item.targetQuantity }} {{ item.unit }}</p>
+                </div>
+                <div class="item-recipe">
+                    @if (item.recipeId) {
+                        <button type="button" class="recipe-link" (click)="openRecipeForItem(item)">
+                            Rezept: {{ item.recipeName || 'öffnen' }}
+                        </button>
+                    } @else {
+                        <span class="no-recipe">Kein Rezept hinterlegt</span>
+                    }
+                </div>
+            </article>
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="exportPdf()">
+        <mat-icon>picture_as_pdf</mat-icon>
+        PDF exportieren
+    </button>
+    @if (data.canDelete) {
+        <button mat-button color="warn" (click)="closeWith('delete')">
+            <mat-icon>delete</mat-icon>
+            Löschen
+        </button>
+    }
+    @if (data.canEdit) {
+        <button mat-button (click)="closeWith('edit')">
+            <mat-icon>edit</mat-icon>
+            Bearbeiten
+        </button>
+    }
+    <button mat-raised-button color="primary" (click)="closeWith('close')">Schliessen</button>
+</mat-dialog-actions>

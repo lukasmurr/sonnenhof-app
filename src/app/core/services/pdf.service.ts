@@ -7,6 +7,7 @@ import { Order } from '../models/order.model';
 import { Product } from '../models/product.model';
 import { CrateRecord } from '../models/crate.model';
 import { Offer } from '../models/offer.model';
+import { ProductionPlan } from '../models/production-plan.model';
 
 @Injectable({
   providedIn: 'root'
@@ -259,6 +260,50 @@ export class PdfService {
     });
 
     doc.save(`angebotsuebersicht-${year}.pdf`);
+  }
+
+  generateProductionPlanPdf(plan: ProductionPlan) {
+    const doc = new jsPDF();
+    const title = `Produktionsplan KW ${plan.week} / ${plan.year}`;
+
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Erstellt am: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, 30);
+
+    const tableData = plan.items.map((item, index) => [
+      `${index + 1}`,
+      item.productName,
+      `${item.targetQuantity} ${item.unit}`,
+      item.recipeName || '-'
+    ]);
+
+    autoTable(doc, {
+      head: [['Pos.', 'Produkt', 'Sollmenge', 'Rezept']],
+      body: tableData,
+      startY: 36,
+      theme: 'grid',
+      headStyles: { fillColor: [66, 66, 66] },
+      styles: { fontSize: 10, cellPadding: 4 },
+      columnStyles: {
+        0: { cellWidth: 20, halign: 'center' },
+        1: { cellWidth: 70 },
+        2: { cellWidth: 35, halign: 'right' },
+        3: { cellWidth: 'auto' }
+      }
+    });
+
+    if (plan.notes) {
+      const finalY = (doc as any).lastAutoTable?.finalY || 36;
+      doc.setFontSize(11);
+      doc.setTextColor(60);
+      doc.text('Notizen:', 14, finalY + 10);
+      doc.setFontSize(10);
+      doc.text(plan.notes, 14, finalY + 17, { maxWidth: 180 });
+    }
+
+    doc.save(`produktionsplan_kw${plan.week}_${plan.year}.pdf`);
   }
 
   generateProductionReport(orders: Order[], filter: any, products: Product[] = []) {

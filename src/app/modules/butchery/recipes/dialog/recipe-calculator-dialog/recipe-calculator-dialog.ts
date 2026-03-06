@@ -20,8 +20,8 @@ import { Recipe, RecipePosition } from '../../../../../core/models/recipe.model'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecipeCalculatorDialogComponent {
-    readonly data = inject(MAT_DIALOG_DATA) as { recipe: Recipe };
-    readonly calculationAmount = signal<number>(this.data.recipe.baseAmount);
+    readonly data = inject(MAT_DIALOG_DATA) as { recipe: Recipe; initialAmount?: number; title?: string };
+    readonly calculationAmount = signal<number>(this.data.initialAmount ?? this.data.recipe.baseAmount);
 
     readonly scaleFactor = computed(() => {
         const baseAmount = this.data.recipe.baseAmount;

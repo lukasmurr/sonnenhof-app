@@ -9,6 +9,8 @@ export interface Recipe {
     _rev?: string;
     type: 'recipe';
     name: string;
+    productId: string;
+    productName: string;
     description?: string;
     baseAmount: number;
     baseUnit: string;

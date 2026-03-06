@@ -15,6 +15,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'crate.view', 'crate.create', 'crate.update', 'crate.delete',
         'offer.view', 'offer.create', 'offer.update', 'offer.delete',
         'recipe.view', 'recipe.create', 'recipe.update', 'recipe.delete',
+        'production-plan.view', 'production-plan.create', 'production-plan.update', 'production-plan.delete',
         'vehicle-stock.view', 'vehicle-stock.create', 'vehicle-stock.manage',
         'purchasing-price.view', 'purchasing-price.create', 'purchasing-price.update', 'purchasing-price.delete',
     ],
@@ -31,6 +32,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'crate.view', 'crate.create', 'crate.update', 'crate.delete',
         'offer.view', 'offer.create', 'offer.update', 'offer.delete',
         'recipe.view', 'recipe.create', 'recipe.update', 'recipe.delete',
+        'production-plan.view', 'production-plan.create', 'production-plan.update', 'production-plan.delete',
         'vehicle-stock.view', 'vehicle-stock.manage', 'vehicle-stock.create',
         'purchasing-price.view', 'purchasing-price.create', 'purchasing-price.update', 'purchasing-price.delete'
     ],
@@ -50,6 +52,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'crate.view',
         'offer.view',
         'recipe.view', 'recipe.create', 'recipe.update',
+        'production-plan.view', 'production-plan.create', 'production-plan.update',
         'vehicle-stock.view',
     ],
     sales: [
@@ -58,6 +61,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'order.view',
         'vacation.view', 'vacation.create_own', 'vacation.update_own',
         'recipe.view',
+        'production-plan.view',
         'vehicle-stock.view',
     ]
 };

@@ -92,8 +92,8 @@ export const routes: Routes = [
     {
         path: 'butchery/production',
         canActivate: [permissionGuard],
-        data: { permission: 'product.view' },
-        loadComponent: () => import('./modules/landing-page/landing').then(m => m.Landing)
+        data: { permission: 'production-plan.view' },
+        loadComponent: () => import('./modules/butchery/production-plan/production-plan').then(m => m.ProductionPlanComponent)
     },
     {
         path: 'butchery/inventory',

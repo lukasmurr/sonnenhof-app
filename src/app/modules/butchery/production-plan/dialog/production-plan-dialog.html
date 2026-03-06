@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>{{ data.plan ? 'Produktionsplan bearbeiten' : 'Neuen Produktionsplan anlegen' }}</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <div class="header-fields">
+        <mat-form-field appearance="outline">
+            <mat-label>Jahr</mat-label>
+            <input matInput type="number" formControlName="year" min="2020">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Kalenderwoche</mat-label>
+            <input matInput type="number" formControlName="week" min="1" max="53">
+        </mat-form-field>
+    </div>
+
+    <div class="items-header">
+        <h3>Produktionspositionen</h3>
+        <button mat-stroked-button type="button" (click)="addItem()">
+            <mat-icon>add</mat-icon>
+            Position
+        </button>
+    </div>
+
+    <div formArrayName="items" class="items-list">
+        @for (item of items.controls; track item; let i = $index) {
+            <div [formGroupName]="i" class="item-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Produkt</mat-label>
+                    <input type="text" matInput formControlName="product" [matAutocomplete]="productAuto" placeholder="Produkt suchen...">
+                    <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="displayProduct" (optionSelected)="onProductSelectionChange(i, $event.option.value)">
+                        @for (product of filteredProducts$[i] | async; track product._id) {
+                            <mat-option [value]="product">{{ product.name }} ({{ product.puNumber }})</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sollmenge</mat-label>
+                    <input matInput type="number" formControlName="targetQuantity" min="0.001" step="0.001">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Rezept</mat-label>
+                    <mat-select formControlName="recipeId">
+                        <mat-option value="">Kein Rezept</mat-option>
+                        @for (recipe of data.recipes; track recipe._id) {
+                            <mat-option [value]="recipe._id">{{ recipe.name }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-icon-button color="warn" type="button" (click)="removeItem(i)" [disabled]="items.length <= 1" aria-label="Position entfernen">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        }
+    </div>
+
+    <mat-form-field appearance="outline" class="notes-field">
+        <mat-label>Notizen</mat-label>
+        <textarea matInput rows="3" formControlName="notes"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">Speichern</button>
+</mat-dialog-actions>

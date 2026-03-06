@@ -12,6 +12,7 @@ export type Permission =
     | 'crate.view' | 'crate.create' | 'crate.update' | 'crate.delete'
     | 'offer.view' | 'offer.create' | 'offer.update' | 'offer.delete'
     | 'recipe.view' | 'recipe.create' | 'recipe.update' | 'recipe.delete'
+    | 'production-plan.view' | 'production-plan.create' | 'production-plan.update' | 'production-plan.delete'
     | 'vehicle-stock.view' | 'vehicle-stock.create' | 'vehicle-stock.manage'
     | 'purchasing-price.view' | 'purchasing-price.create' | 'purchasing-price.update' | 'purchasing-price.delete';
 

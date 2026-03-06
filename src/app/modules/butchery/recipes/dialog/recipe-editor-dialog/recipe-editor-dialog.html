@@ -11,6 +11,19 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+            <mat-label>Produkt</mat-label>
+            <input type="text" matInput formControlName="product" [matAutocomplete]="productAuto" placeholder="Produkt suchen...">
+            <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="displayProduct">
+                @for (product of filteredProducts$ | async; track product._id) {
+                    <mat-option [value]="product">{{ product.name }} ({{ product.puNumber }})</mat-option>
+                }
+            </mat-autocomplete>
+            @if (form.controls.product.touched && form.controls.product.invalid) {
+                <mat-error>Produkt ist erforderlich</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
             <mat-label>Beschreibung (optional)</mat-label>
             <input matInput formControlName="description" placeholder="Kurze Notiz zum Rezept">
         </mat-form-field>

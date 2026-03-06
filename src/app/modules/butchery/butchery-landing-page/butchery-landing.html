@@ -61,6 +61,16 @@
             <button mat-raised-button class="action-button">Öffnen</button>
         </mat-card>
 
+        <!-- Produktionsplan Card -->
+        <mat-card class="section-card production" (click)="navigateToSection('production')" *appHasPermission="'production-plan.view'">
+            <div class="card-icon"><mat-icon>factory</mat-icon></div>
+            <mat-card-title>Produktionsplan</mat-card-title>
+            <mat-card-content>
+                Planen Sie die Produktion je Kalenderwoche und verknüpfen Sie Produkte mit Rezepten.
+            </mat-card-content>
+            <button mat-raised-button class="action-button">Öffnen</button>
+        </mat-card>
+
         <!-- Warenbestand Card -->
         <mat-card class="section-card vehicle-stock" (click)="navigateToSection('vehicle-stock')" *appHasPermission="'vehicle-stock.view'">
             <div class="card-icon"><mat-icon>local_shipping</mat-icon></div>

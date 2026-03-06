@@ -43,13 +43,13 @@
                                     <th mat-header-cell *matHeaderCellDef>Aktionen</th>
                                     <td mat-cell *matCellDef="let recipe">
                                         <div class="table-actions-row">
-                                            <button mat-icon-button (click)="openCalculatorDialog(recipe)" aria-label="Rezeptrechner oeffnen">
+                                            <button mat-icon-button (click)="openCalculatorDialog(recipe)" aria-label="Rezeptrechner öffnen">
                                                 <mat-icon>calculate</mat-icon>
                                             </button>
                                             <button mat-icon-button (click)="openEditDialog(recipe)" aria-label="Rezept bearbeiten" *appHasPermission="'recipe.update'">
                                                 <mat-icon>edit</mat-icon>
                                             </button>
-                                            <button mat-icon-button color="warn" (click)="deleteRecipe(recipe)" aria-label="Rezept loeschen" *appHasPermission="'recipe.delete'">
+                                            <button mat-icon-button color="warn" (click)="deleteRecipe(recipe)" aria-label="Rezept Löschen" *appHasPermission="'recipe.delete'">
                                                 <mat-icon>delete</mat-icon>
                                             </button>
                                         </div>
@@ -72,13 +72,13 @@
                                     <span class="recipe-meta">Basis: {{ recipe.baseAmount }} {{ recipe.baseUnit }}</span>
                                 </button>
                                 <div class="recipe-actions">
-                                    <button mat-icon-button (click)="openCalculatorDialog(recipe)" aria-label="Rezeptrechner oeffnen">
+                                    <button mat-icon-button (click)="openCalculatorDialog(recipe)" aria-label="Rezeptrechner öffnen">
                                         <mat-icon>calculate</mat-icon>
                                     </button>
                                     <button mat-icon-button (click)="openEditDialog(recipe)" aria-label="Rezept bearbeiten" *appHasPermission="'recipe.update'">
                                         <mat-icon>edit</mat-icon>
                                     </button>
-                                    <button mat-icon-button color="warn" (click)="deleteRecipe(recipe)" aria-label="Rezept loeschen" *appHasPermission="'recipe.delete'">
+                                    <button mat-icon-button color="warn" (click)="deleteRecipe(recipe)" aria-label="Rezept Löschen" *appHasPermission="'recipe.delete'">
                                         <mat-icon>delete</mat-icon>
                                     </button>
                                 </div>

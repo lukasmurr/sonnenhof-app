@@ -7,6 +7,7 @@ export * from './calendar-day.model';
 export * from './vacation-dialog-data.model';
 export * from './stall.model';
 export * from './recipe.model';
+export * from './production-plan.model';
 
 
 

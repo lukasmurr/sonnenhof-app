@@ -77,6 +77,10 @@
         <mat-icon matListItemIcon>menu_book</mat-icon>
         <span matListItemTitle>Rezepte</span>
       </a>
+      <a mat-list-item (click)="navigateAndClose('butchery/production', sidenav)" *appHasPermission="'production-plan.view'">
+        <mat-icon matListItemIcon>factory</mat-icon>
+        <span matListItemTitle>Produktionsplan</span>
+      </a>
       <a mat-list-item (click)="navigateAndClose('butchery/vehicle-stock', sidenav)" *appHasPermission="'vehicle-stock.view'">
         <mat-icon matListItemIcon>local_shipping</mat-icon>
         <span matListItemTitle>Warenbestand</span>

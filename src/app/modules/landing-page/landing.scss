@@ -66,12 +66,22 @@
         width: 120px;
         height: 120px;
         margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             filter: brightness(0) invert(1);
+        }
+
+        mat-icon {
+            font-size: 96px;
+            width: 96px;
+            height: 96px;
+            color: white;
         }
     }
 
