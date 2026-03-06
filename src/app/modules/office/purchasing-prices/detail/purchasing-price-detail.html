@@ -200,9 +200,9 @@
             </div>
 
             <div class="mobile-list-view" aria-label="Preisverlauf als Kartenansicht">
-              @if (dataSource.data.length > 0) {
+              @if (priceEntries().length > 0) {
                 <div class="mobile-cards-grid">
-                  @for (row of dataSource.data; track row._id || $index) {
+                  @for (row of mobilePagedEntries(); track row._id || $index) {
                     <article class="mobile-item-card">
                       <div class="mobile-item-head">
                         <h3>{{ row.date | date:'dd.MM.yyyy' }}</h3>
@@ -223,8 +223,13 @@
               }
             </div>
 
-            <mat-paginator [pageSizeOptions]="[10, 25, 50]"
-            aria-label="Einträge pro Seite"></mat-paginator>
+            <mat-paginator
+              [length]="priceEntries().length"
+              [pageSize]="pageSize()"
+              [pageIndex]="pageIndex()"
+              [pageSizeOptions]="[10, 25, 50]"
+              (page)="onPageChange($event)"
+              aria-label="Einträge pro Seite"></mat-paginator>
           </div>
         </mat-card-content>
       </mat-card>

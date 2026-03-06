@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, signal, computed, inject, effect } from '@angular/core';
+import { Component, OnInit, ViewChild, signal, computed, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -19,7 +19,7 @@ import { PurchaseProduct, PriceEntry, Supplier } from '../../../../core/models/p
 import { PurchasingPriceService } from '../../../../core/services/purchasing-price.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ConfirmationDialogComponent } from '../../../../core/components/confirmation-dialog/confirmation-dialog';
-import { combineLatest, first } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-purchasing-price-detail',
@@ -51,6 +51,14 @@ export class PurchasingPriceDetailComponent implements OnInit {
     product = signal<PurchaseProduct | null>(null);
     supplier = signal<Supplier | null>(null);
     priceEntries = signal<PriceEntry[]>([]);
+    pageSize = signal(10);
+    pageIndex = signal(0);
+
+    mobilePagedEntries = computed(() => {
+        const start = this.pageIndex() * this.pageSize();
+        const end = start + this.pageSize();
+        return this.priceEntries().slice(start, end);
+    });
     
     latestPrice = computed(() => {
         const entries = this.priceEntries();
@@ -150,7 +158,14 @@ export class PurchasingPriceDetailComponent implements OnInit {
             this.dataSource.data = entries;
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+            this.pageIndex.set(0);
+            this.paginator?.firstPage();
         });
+    }
+
+    onPageChange(event: PageEvent): void {
+        this.pageSize.set(event.pageSize);
+        this.pageIndex.set(event.pageIndex);
     }
 
     goBack(): void {

@@ -97,6 +97,10 @@
         <mat-icon matListItemIcon>date_range</mat-icon>
         <span matListItemTitle>Urlaub</span>
       </a>
+      <a mat-list-item (click)="navigateAndClose('office/purchasing-prices', sidenav)" *appHasPermission="'purchasing-price.view'">
+        <mat-icon matListItemIcon>euro</mat-icon>
+        <span matListItemTitle>Einkaufspreise</span>
+      </a>
 
       <mat-divider *appHasPermission="'office.view'"></mat-divider>
 
