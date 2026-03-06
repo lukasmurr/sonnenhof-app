@@ -64,7 +64,7 @@ app.post('/api/mail/order-created', async (req, res) => {
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
-        to: 'lukas.murr@bauernshop.de',
+        to: 'bestellung@bauernshop.de',
         subject: `Neue Bestellung: ${customerName} (${market})`,
         text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
         html: `<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`,
