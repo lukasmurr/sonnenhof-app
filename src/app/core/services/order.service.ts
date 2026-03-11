@@ -51,8 +51,32 @@ export class OrderService {
         }));
     }
 
-    updateOrder(order: Order): Promise<any> {
-        return this.dbService.updateDoc(order);
+    private async sendOrderUpdatedEmail(order: Order, market?: Market): Promise<void> {
+        const apiUrl = `${environment.mailApiBaseUrl}/order-updated`;
+        const pdf = this.pdfService.getOrderPdfBase64(order, market, true);
+
+        await firstValueFrom(this.http.post(apiUrl, {
+            customerName: order.customerName,
+            customerEmail: order.customerEmail,
+            customerPhone: order.customerPhone,
+            market: order.market,
+            orderDate: order.orderDate,
+            items: order.items,
+            pdfFileName: pdf.fileName,
+            pdfBase64: pdf.base64
+        }));
+    }
+
+    updateOrder(order: Order, options?: { sendUpdateEmail?: boolean; market?: Market }): Promise<any> {
+        const sendUpdateEmail = options?.sendUpdateEmail ?? true;
+
+        return this.dbService.updateDoc(order).then(result => {
+            if (sendUpdateEmail && result && result.ok) {
+                this.sendOrderUpdatedEmail(order, options?.market).catch(err => console.error('Failed to send order update email', err));
+            }
+
+            return result;
+        });
     }
 
     deleteOrder(id: string): Promise<any> {

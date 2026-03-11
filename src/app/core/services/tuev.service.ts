@@ -1,19 +1,25 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { TuevAppointment, TuevStatus, Vehicle } from '../models';
 import { NotificationService } from './notification.service';
 import { CouchDbService } from './pouchdb.service';
+import { environment } from '../../../environments/environment';
+
+type TuevReminderType = 'three-months-before' | 'one-month-before' | 'on-expiry' | 'one-month-after';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TuevService implements OnDestroy {
+    private readonly sentTuevReminderStorageKey = 'tuev-reminder-mail-sent';
     private vehicles$ = new BehaviorSubject<Vehicle[]>([]);
     private appointments$ = new BehaviorSubject<TuevAppointment[]>([]);
     private tuevStatuses$ = new BehaviorSubject<TuevStatus[]>([]);
     private notificationIntervalId: any;
 
-    constructor(private couchDbService: CouchDbService, private notificationService: NotificationService) {
+    constructor(private couchDbService: CouchDbService, private notificationService: NotificationService, private http: HttpClient) {
         this.initializeData();
         this.startNotificationCheck();
     }
@@ -58,12 +64,6 @@ export class TuevService implements OnDestroy {
         }, timeUntilNextCheck);
     }
 
-    /**
-     * Prüfe Fahrzeuge und sende Benachrichtigungen basierend auf TÜV-Ablaufdatum
-     * - 1 Monat (30 Tage) vorher
-     * - 1 Woche (7 Tage) vorher
-     * - 1 Tag vorher
-     */
     private checkAndNotifyVehicles(vehicles: Vehicle[]): void {
         vehicles.forEach(vehicle => {
             if (!vehicle.nextTuevDate) {
@@ -71,40 +71,113 @@ export class TuevService implements OnDestroy {
             }
 
             const expiryDate = new Date(vehicle.nextTuevDate);
-            const { days } = this.notificationService.getTimeUntil(expiryDate);
-
-            const vehicleName = `${vehicle.name} (${vehicle.licensePlate})`;
-
-            // 30 Tage vorher
-            if (days === 30) {
-                this.notificationService.sendNotification({
-                    title: '📅 TÜV läuft in einem Monat ab',
-                    body: `${vehicleName} - TÜV läuft in 30 Tagen ab.`,
-                    tag: `tuev-30d-${vehicle._id}`,
+            const todayKey = this.toDateKey(new Date());
+            const reminderSchedule: Array<{ type: TuevReminderType; dateKey: string; title: string; body: string; priority: 'normal' | 'high' }> = [
+                {
+                    type: 'three-months-before',
+                    dateKey: this.toDateKey(this.addMonths(expiryDate, -3)),
+                    title: '📅 TÜV läuft in 3 Monaten ab',
+                    body: `${vehicle.name} (${vehicle.licensePlate}) - TÜV läuft in 3 Monaten ab.`,
                     priority: 'normal'
-                });
-            }
-
-            // 7 Tage vorher
-            if (days === 7) {
-                this.notificationService.sendNotification({
-                    title: '⚠️ TÜV läuft in einer Woche ab',
-                    body: `${vehicleName} - TÜV läuft in 7 Tagen ab.`,
-                    tag: `tuev-7d-${vehicle._id}`,
+                },
+                {
+                    type: 'one-month-before',
+                    dateKey: this.toDateKey(this.addMonths(expiryDate, -1)),
+                    title: '⚠️ TÜV läuft in 1 Monat ab',
+                    body: `${vehicle.name} (${vehicle.licensePlate}) - TÜV läuft in 1 Monat ab.`,
                     priority: 'high'
-                });
-            }
-
-            // 1 Tag vorher
-            if (days === 1) {
-                this.notificationService.sendNotification({
-                    title: '🚨 TÜV läuft morgen ab',
-                    body: `${vehicleName} - TÜV läuft morgen ab!`,
-                    tag: `tuev-1d-${vehicle._id}`,
+                },
+                {
+                    type: 'on-expiry',
+                    dateKey: this.toDateKey(expiryDate),
+                    title: '🚨 TÜV läuft heute ab',
+                    body: `${vehicle.name} (${vehicle.licensePlate}) - TÜV läuft heute ab!`,
                     priority: 'high'
+                },
+                {
+                    type: 'one-month-after',
+                    dateKey: this.toDateKey(this.addMonths(expiryDate, 1)),
+                    title: '❗ TÜV seit 1 Monat abgelaufen',
+                    body: `${vehicle.name} (${vehicle.licensePlate}) - TÜV ist seit 1 Monat abgelaufen.`,
+                    priority: 'high'
+                }
+            ];
+
+            reminderSchedule.forEach(reminder => {
+                if (todayKey !== reminder.dateKey) {
+                    return;
+                }
+
+                this.notificationService.sendNotification({
+                    title: reminder.title,
+                    body: reminder.body,
+                    tag: `tuev-${reminder.type}-${vehicle._id}`,
+                    priority: reminder.priority
                 });
-            }
+
+                if (this.hasReminderBeenSent(vehicle._id, reminder.type, todayKey)) {
+                    return;
+                }
+
+                this.sendTuevReminderEmail(vehicle, expiryDate, reminder.type)
+                    .then(() => this.markReminderAsSent(vehicle._id, reminder.type, todayKey))
+                    .catch(error => console.error('Failed to send tuev reminder email', error));
+            });
         });
+    }
+
+    private async sendTuevReminderEmail(vehicle: Vehicle, expiryDate: Date, reminderType: TuevReminderType): Promise<void> {
+        const apiUrl = `${environment.mailApiBaseUrl}/tuev-reminder`;
+
+        await firstValueFrom(this.http.post(apiUrl, {
+            vehicleName: vehicle.name,
+            licensePlate: vehicle.licensePlate,
+            nextTuevDate: expiryDate,
+            reminderType
+        }));
+    }
+
+    private hasReminderBeenSent(vehicleId: string | undefined, reminderType: TuevReminderType, dateKey: string): boolean {
+        if (!vehicleId) {
+            return false;
+        }
+
+        const sentReminders = this.getSentReminders();
+        const key = `${vehicleId}|${reminderType}|${dateKey}`;
+        return sentReminders[key] === '1';
+    }
+
+    private markReminderAsSent(vehicleId: string | undefined, reminderType: TuevReminderType, dateKey: string): void {
+        if (!vehicleId) {
+            return;
+        }
+
+        const sentReminders = this.getSentReminders();
+        const key = `${vehicleId}|${reminderType}|${dateKey}`;
+        sentReminders[key] = '1';
+        localStorage.setItem(this.sentTuevReminderStorageKey, JSON.stringify(sentReminders));
+    }
+
+    private getSentReminders(): Record<string, string> {
+        try {
+            const raw = localStorage.getItem(this.sentTuevReminderStorageKey);
+            return raw ? JSON.parse(raw) : {};
+        } catch {
+            return {};
+        }
+    }
+
+    private toDateKey(date: Date): string {
+        const year = date.getFullYear();
+        const month = `${date.getMonth() + 1}`.padStart(2, '0');
+        const day = `${date.getDate()}`.padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    private addMonths(baseDate: Date, months: number): Date {
+        const result = new Date(baseDate);
+        result.setMonth(result.getMonth() + months);
+        return result;
     }
 
     // ===== Vehicle Management =====

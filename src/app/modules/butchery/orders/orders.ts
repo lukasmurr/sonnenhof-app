@@ -125,7 +125,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
             if (ordersToArchive.length > 0) {
                 ordersToArchive.forEach(order => {
                     const updatedOrder = { ...order, isArchived: true };
-                    this.orderService.updateOrder(updatedOrder);
+                    this.orderService.updateOrder(updatedOrder, { sendUpdateEmail: false });
                 });
             }
             

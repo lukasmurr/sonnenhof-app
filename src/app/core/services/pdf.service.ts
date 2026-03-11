@@ -445,32 +445,39 @@ export class PdfService {
     doc.save(`Bestellbericht_Suche_${moment().format('YYYYMMDD_HHmmss')}.pdf`);
   }
 
-  generateOrderPdf(order: Order, market?: Market) {
-    const doc = this.buildOrderPdf(order, market);
-    doc.save(this.getOrderPdfFileName(order));
+  generateOrderPdf(order: Order, market?: Market, isUpdate: boolean = false) {
+    const doc = this.buildOrderPdf(order, market, isUpdate);
+    doc.save(this.getOrderPdfFileName(order, isUpdate));
   }
 
-  getOrderPdfBase64(order: Order, market?: Market): { fileName: string; base64: string } {
-    const doc = this.buildOrderPdf(order, market);
+  getOrderPdfBase64(order: Order, market?: Market, isUpdate: boolean = false): { fileName: string; base64: string } {
+    const doc = this.buildOrderPdf(order, market, isUpdate);
     const dataUri = doc.output('datauristring');
     const base64 = dataUri.split(',')[1] || '';
 
     return {
-      fileName: this.getOrderPdfFileName(order),
+      fileName: this.getOrderPdfFileName(order, isUpdate),
       base64
     };
   }
 
-  private getOrderPdfFileName(order: Order): string {
-    return `Bestellung_${order.customerName.replace(/\s+/g, '_')}_${moment(order.orderDate).format('YYYYMMDD')}.pdf`;
+  private getOrderPdfFileName(order: Order, isUpdate: boolean = false): string {
+    const prefix = isUpdate ? 'Bestellung_Update' : 'Bestellung';
+    return `${prefix}_${order.customerName.replace(/\s+/g, '_')}_${moment(order.orderDate).format('YYYYMMDD')}.pdf`;
   }
 
-  private buildOrderPdf(order: Order, market?: Market): jsPDF {
+  private buildOrderPdf(order: Order, market?: Market, isUpdate: boolean = false): jsPDF {
     const doc = new jsPDF();
 
     // Header
     doc.setFontSize(20);
-    doc.text('Bestellübersicht', 14, 22);
+    doc.text(isUpdate ? 'Bestellübersicht (Update)' : 'Bestellübersicht', 14, 22);
+
+    if (isUpdate) {
+      doc.setFontSize(11);
+      doc.setTextColor(180, 30, 30);
+      doc.text('Hinweis: Diese Bestellung wurde aktualisiert.', 14, 29);
+    }
 
     doc.setFontSize(12);
     doc.setTextColor(0);
