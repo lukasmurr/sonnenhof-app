@@ -57,9 +57,8 @@ app.post('/api/mail/order-created', async (req, res) => {
         customerPhone,
         market,
         orderDate,
-        items,
-        pdfFileName,
-        pdfBase64
+        orderNumber,
+        items
     } = req.body;
 
     if (!customerName || !market || !orderDate || !Array.isArray(items) || items.length === 0) {
@@ -79,14 +78,8 @@ app.post('/api/mail/order-created', async (req, res) => {
         to: orderNotificationRecipients,
         subject: `Neue Bestellung: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
-        text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
-        html: `<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`,
-        attachments: pdfBase64 ? [{
-            filename: pdfFileName || 'Bestellung.pdf',
-            content: pdfBase64,
-            encoding: 'base64',
-            contentType: 'application/pdf'
-        }] : []
+        text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
+        html: `<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`
     };
 
     try {
@@ -105,9 +98,8 @@ app.post('/api/mail/order-updated', async (req, res) => {
         customerPhone,
         market,
         orderDate,
-        items,
-        pdfFileName,
-        pdfBase64
+        orderNumber,
+        items
     } = req.body;
 
     if (!customerName || !market || !orderDate || !Array.isArray(items) || items.length === 0) {
@@ -127,14 +119,8 @@ app.post('/api/mail/order-updated', async (req, res) => {
         to: orderNotificationRecipients,
         subject: `Bestellung aktualisiert: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
-        text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
-        html: `<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`,
-        attachments: pdfBase64 ? [{
-            filename: pdfFileName || 'Bestellung_Update.pdf',
-            content: pdfBase64,
-            encoding: 'base64',
-            contentType: 'application/pdf'
-        }] : []
+        text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
+        html: `<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`
     };
 
     try {

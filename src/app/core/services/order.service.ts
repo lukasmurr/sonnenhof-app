@@ -5,7 +5,6 @@ import { firstValueFrom } from 'rxjs';
 import { Market } from '../models/market.model';
 import { Order } from '../models/order.model';
 import { CouchDbService } from './pouchdb.service';
-import { PdfService } from './pdf.service';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -14,7 +13,7 @@ import { environment } from '../../../environments/environment';
 export class OrderService {
     private readonly TYPE = 'order';
 
-    constructor(private dbService: CouchDbService, private http: HttpClient, private pdfService: PdfService) { }
+    constructor(private dbService: CouchDbService, private http: HttpClient) { }
 
     getOrders(): Observable<Order[]> {
         return this.dbService.watchDocs(this.TYPE) as Observable<Order[]>;
@@ -37,7 +36,6 @@ export class OrderService {
 
     private async sendOrderCreatedEmail(order: Order, market?: Market): Promise<void> {
         const apiUrl = `${environment.mailApiBaseUrl}/order-created`;
-        const pdf = this.pdfService.getOrderPdfBase64(order, market);
 
         await firstValueFrom(this.http.post(apiUrl, {
             customerName: order.customerName,
@@ -45,15 +43,13 @@ export class OrderService {
             customerPhone: order.customerPhone,
             market: order.market,
             orderDate: order.orderDate,
-            items: order.items,
-            pdfFileName: pdf.fileName,
-            pdfBase64: pdf.base64
+            orderNumber: order.orderNumber,
+            items: order.items
         }));
     }
 
     private async sendOrderUpdatedEmail(order: Order, market?: Market): Promise<void> {
         const apiUrl = `${environment.mailApiBaseUrl}/order-updated`;
-        const pdf = this.pdfService.getOrderPdfBase64(order, market, true);
 
         await firstValueFrom(this.http.post(apiUrl, {
             customerName: order.customerName,
@@ -61,9 +57,8 @@ export class OrderService {
             customerPhone: order.customerPhone,
             market: order.market,
             orderDate: order.orderDate,
-            items: order.items,
-            pdfFileName: pdf.fileName,
-            pdfBase64: pdf.base64
+            orderNumber: order.orderNumber,
+            items: order.items
         }));
     }
 
