@@ -21,8 +21,7 @@ const buildSystemMailHeaders = () => ({
 });
 
 const orderNotificationRecipients = [
-    'direktverkauf@bauernshop.de',
-    'lukas.murr@bauernshop.de'
+    'direktverkauf@bauernshop.de'
 ];
 
 app.post('/api/mail/account-created', async (req, res) => {
