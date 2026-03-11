@@ -183,11 +183,13 @@ export class PurchasingPriceDetailComponent implements OnInit {
             };
             
             this.purchasingPriceService.addPriceEntry(entry).then(() => {
-                this.priceForm.patchValue({
-                    price: '',
-                    quantity: '',
+                this.priceForm.reset({
+                    price: null,
+                    quantity: null,
                     date: new Date()
                 });
+                this.priceForm.markAsPristine();
+                this.priceForm.markAsUntouched();
             });
         }
     }
