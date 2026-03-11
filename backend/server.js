@@ -14,6 +14,12 @@ const transporter = nodemailer.createTransport({
     tls: { rejectUnauthorized: false }
 });
 
+const buildSystemMailHeaders = () => ({
+    'Auto-Submitted': 'auto-generated',
+    'X-Auto-Response-Suppress': 'All',
+    Precedence: 'bulk'
+});
+
 app.post('/api/mail/account-created', async (req, res) => {
     const { email, password, name } = req.body;
 
@@ -25,6 +31,7 @@ app.post('/api/mail/account-created', async (req, res) => {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
         to: email,
         subject: 'Ihr Account wurde erstellt',
+        headers: buildSystemMailHeaders(),
         text: `Hallo ${name || 'User'},\n\nDein Account für die Sonnenhof App wurde erstellt.\n\nDein initiales Passwort lautet: ${password}\n\nBitte ändere dieses Passwort nach dem ersten Login.\n\nViele Grüße,\nDein Sonnenhof Team`,
         html: `<p>Hallo ${name || 'User'},</p><p>Dein Account für die Sonnenhof App wurde erstellt.</p><p>Dein initiales Passwort lautet: <strong>${password}</strong></p><p>Bitte ändere dieses Passwort nach dem ersten Login.</p><p>Viele Grüße,<br>Dein Sonnenhof Team</p>`
     };
@@ -66,6 +73,7 @@ app.post('/api/mail/order-created', async (req, res) => {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
         to: 'direktverkauf@bauernshop.de',
         subject: `Neue Bestellung: ${customerName} (${market})`,
+        headers: buildSystemMailHeaders(),
         text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
         html: `<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`,
         attachments: pdfBase64 ? [{
@@ -113,6 +121,7 @@ app.post('/api/mail/order-updated', async (req, res) => {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
         to: 'direktverkauf@bauernshop.de',
         subject: `Bestellung aktualisiert: ${customerName} (${market})`,
+        headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
         html: `<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`,
         attachments: pdfBase64 ? [{
@@ -156,7 +165,7 @@ app.post('/api/mail/tuev-reminder', async (req, res) => {
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
-        to: 'direktverkauf@bauernshop.de',
+        to: 'ulrich.murr@bauernshop.de',
         subject: `TÜV Erinnerung (${reminderTypeText}): ${vehicleName} (${licensePlate})`,
         text: `TÜV-Erinnerung\n\nFahrzeug: ${vehicleName}\nKennzeichen: ${licensePlate}\nTÜV-Ablaufdatum: ${formattedDate}\nErinnerung: ${reminderTypeText}`,
         html: `<p><strong>TÜV-Erinnerung</strong></p><p><strong>Fahrzeug:</strong> ${vehicleName}<br><strong>Kennzeichen:</strong> ${licensePlate}<br><strong>TÜV-Ablaufdatum:</strong> ${formattedDate}<br><strong>Erinnerung:</strong> ${reminderTypeText}</p>`
