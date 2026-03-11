@@ -20,6 +20,11 @@ const buildSystemMailHeaders = () => ({
     Precedence: 'bulk'
 });
 
+const orderNotificationRecipients = [
+    'direktverkauf@bauernshop.de',
+    'lukas.murr@bauernshop.de'
+];
+
 app.post('/api/mail/account-created', async (req, res) => {
     const { email, password, name } = req.body;
 
@@ -71,7 +76,7 @@ app.post('/api/mail/order-created', async (req, res) => {
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
-        to: 'direktverkauf@bauernshop.de',
+        to: orderNotificationRecipients,
         subject: `Neue Bestellung: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
@@ -119,7 +124,7 @@ app.post('/api/mail/order-updated', async (req, res) => {
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
-        to: 'direktverkauf@bauernshop.de',
+        to: orderNotificationRecipients,
         subject: `Bestellung aktualisiert: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\n\nPositionen:\n${itemsText}`,
