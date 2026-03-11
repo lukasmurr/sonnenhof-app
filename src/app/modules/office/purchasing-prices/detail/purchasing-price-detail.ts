@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, signal, computed, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -109,6 +109,7 @@ export class PurchasingPriceDetailComponent implements OnInit {
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
+    @ViewChild(FormGroupDirective) formGroupDirective?: FormGroupDirective;
 
     private purchasingPriceService = inject(PurchasingPriceService);
     private dialog = inject(MatDialog);
@@ -183,13 +184,14 @@ export class PurchasingPriceDetailComponent implements OnInit {
             };
             
             this.purchasingPriceService.addPriceEntry(entry).then(() => {
-                this.priceForm.reset({
+                const resetValue = {
                     price: null,
                     quantity: null,
                     date: new Date()
-                });
-                this.priceForm.markAsPristine();
-                this.priceForm.markAsUntouched();
+                };
+
+                this.formGroupDirective?.resetForm(resetValue);
+                this.priceForm.reset(resetValue);
             });
         }
     }
