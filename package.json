@@ -52,7 +52,7 @@
     "@angular/compiler-cli": "^21.2.2",
     "@types/jasmine": "~6.0.0",
     "@types/node": "^25.3.5",
-    "baseline-browser-mapping": "^2.9.12",
+    "baseline-browser-mapping": "^2.10.0",
     "jasmine-core": "~6.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
