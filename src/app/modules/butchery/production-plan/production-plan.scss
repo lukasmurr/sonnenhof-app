@@ -38,26 +38,47 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 
             mat-card-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
                 margin-bottom: 24px;
+            }
 
-                .header-actions {
-                    margin-left: auto;
+            .week-navigation {
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+                gap: 12px;
+                padding: 8px 0 4px;
+
+                .week-navigation-center {
+                    min-width: 0;
+                }
+
+                .active-week-title {
+                    text-align: center;
+                    font-size: 1.05rem;
+                    font-weight: 600;
+                    color: #2a2f57;
+                    margin-bottom: 8px;
+                }
+
+                .week-jump-controls {
                     display: flex;
-                    align-items: center;
                     gap: 8px;
+                    justify-content: center;
+                    flex-wrap: wrap;
                 }
 
                 .year-select {
-                    width: 100px;
+                    width: 110px;
+                }
+
+                .week-select {
+                    min-width: 240px;
                 }
             }
 
             .calendar-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: repeat(5, minmax(180px, 1fr));
                 gap: 16px;
                 padding: 16px 0;
 
@@ -66,14 +87,41 @@
                     height: 100%;
                     display: flex;
                     flex-direction: column;
+                    border: 1px solid rgba(63, 81, 181, 0.12);
+
+                    mat-card-content {
+                        flex: 1;
+                        display: flex;
+                    }
+
+                    .plan-card-body {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+
+                    .status-badge {
+                        align-self: flex-start;
+                        border-radius: 999px;
+                        background: rgba(76, 175, 80, 0.2);
+                        color: #2e7d32;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 4px 10px;
+                    }
+
+                    .plan-metric {
+                        margin: 0;
+                        color: #2f3548;
+                        font-size: 0.9rem;
+                    }
 
                     &.empty {
-                        background: #fff;
-                        border: 1px dashed #ccc;
+                        background: #f6f7fa;
+                        border: 1px dashed rgba(68, 76, 115, 0.4);
 
                         mat-card-content {
-                            flex: 1;
-                            display: flex;
                             align-items: center;
                             justify-content: center;
                         }
@@ -81,110 +129,37 @@
                 }
             }
 
-            .plan-detail-link {
-                display: block;
-                width: 100%;
-                text-align: center;
-                border: 0;
-                background: transparent;
-                color: #2a2f57;
-                padding: 10px;
-                cursor: pointer;
-                border-radius: 6px;
-                font-weight: 500;
-
-                &:hover:not(:disabled),
-                &:focus-visible:not(:disabled) {
-                    background: rgba(63, 81, 181, 0.1);
-                    outline: none;
-                }
-            }
-
             .empty-state {
                 text-align: center;
                 width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+
+                .empty-label {
+                    margin: 0;
+                    color: #5d647d;
+                    font-size: 0.9rem;
+                }
             }
 
-            .table-container {
-                padding-top: 16px;
+            .mobile-empty-state {
+                margin: 8px 0;
+                padding: 16px;
+                text-align: center;
+                border: 1px dashed rgba(0, 0, 0, 0.2);
+                border-radius: 12px;
+                color: #666;
+            }
 
-                .mobile-list-view {
-                    display: none;
-                }
+        }
+    }
 
-                .mobile-cards-grid {
-                    display: grid;
-                    gap: 12px;
-                    margin-bottom: 8px;
-                }
-
-                .mobile-item-card {
-                    border: 1px solid rgba(63, 81, 181, 0.15);
-                    border-radius: 12px;
-                    padding: 12px;
-                    background: #fafbff;
-                }
-
-                .mobile-item-head {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    gap: 8px;
-                    margin-bottom: 8px;
-
-                    h3 {
-                        margin: 0;
-                        font-size: 1rem;
-                    }
-
-                    .chip {
-                        border-radius: 999px;
-                        background: rgba(63, 81, 181, 0.12);
-                        color: #303f9f;
-                        font-size: 0.75rem;
-                        font-weight: 600;
-                        padding: 4px 10px;
-                    }
-                }
-
-                .mobile-products-list {
-                    margin: 8px 0;
-                }
-
-                .mobile-item-actions {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                    margin-top: 8px;
-                }
-
-                .mobile-empty-state {
-                    margin-bottom: 8px;
-                    padding: 16px;
-                    text-align: center;
-                    border: 1px dashed rgba(0, 0, 0, 0.2);
-                    border-radius: 12px;
-                    color: #666;
-                }
-
-                .full-width-table {
-                    width: 100%;
-
-                    .mat-column-week {
-                        width: 90px;
-                    }
-
-                    .mat-column-actions {
-                        width: 1%;
-                        white-space: nowrap;
-                    }
-                }
-
-                .actions-row {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 4px;
-                }
+    @media (max-width: 1024px) {
+        .production-plan-content .plan-card {
+            .calendar-grid {
+                grid-template-columns: repeat(2, minmax(180px, 1fr));
             }
         }
     }
@@ -198,26 +173,33 @@
 
         .production-plan-content .plan-card {
             mat-card-header {
-                align-items: flex-start;
+                margin-bottom: 16px;
+            }
 
-                .header-actions {
-                    margin-left: 0;
+            .week-navigation {
+                grid-template-columns: auto 1fr auto;
+                gap: 6px;
+
+                .active-week-title {
+                    font-size: 0.95rem;
+                    margin-bottom: 6px;
+                }
+
+                .week-jump-controls {
+                    flex-direction: column;
+                }
+
+                .year-select,
+                .week-select {
                     width: 100%;
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 8px;
+                    min-width: 0;
                 }
             }
 
-            .table-container {
-                .desktop-table-view {
-                    display: none;
-                }
-
-                .mobile-list-view {
-                    display: block;
-                }
+            .calendar-grid {
+                grid-template-columns: 1fr;
             }
+
         }
     }
 }
@@ -234,32 +216,35 @@
             background: #424242;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
+            .week-navigation .active-week-title {
+                color: #eceff1;
+            }
+
             .calendar-grid .week-card {
                 background: #505050;
+
+                .plan-metric {
+                    color: #e6e8f3;
+                }
+
+                .status-badge {
+                    background: rgba(129, 199, 132, 0.2);
+                    color: #c8e6c9;
+                }
             }
 
-            .mobile-item-card {
-                background: #4a4a4a;
-                border-color: rgba(144, 164, 255, 0.35);
+            .calendar-grid .week-card.empty {
+                background: #424b56;
+                border-color: rgba(196, 207, 255, 0.45);
             }
 
-            .mobile-item-head .chip {
-                background: rgba(144, 164, 255, 0.2);
-                color: #d7deff;
+            .empty-state .empty-label {
+                color: #d1d7ee;
             }
 
             .mobile-empty-state {
                 border-color: rgba(255, 255, 255, 0.25);
                 color: #d4d4d4;
-            }
-
-            .plan-detail-link {
-                color: #d8defa;
-
-                &:hover:not(:disabled),
-                &:focus-visible:not(:disabled) {
-                    background: rgba(144, 164, 255, 0.2);
-                }
             }
         }
     }

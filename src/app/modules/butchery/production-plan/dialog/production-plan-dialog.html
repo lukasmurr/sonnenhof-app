@@ -3,13 +3,12 @@
 <mat-dialog-content [formGroup]="form">
     <div class="header-fields">
         <mat-form-field appearance="outline">
-            <mat-label>Jahr</mat-label>
-            <input matInput type="number" formControlName="year" min="2020">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Kalenderwoche</mat-label>
-            <input matInput type="number" formControlName="week" min="1" max="53">
+            <mat-label>Produktionstag</mat-label>
+            <input matInput type="date" formControlName="date">
+            <mat-hint>Nur Montag bis Freitag</mat-hint>
+            @if (form.controls.date.hasError('weekday') && form.controls.date.touched) {
+                <mat-error>Bitte einen Wochentag von Montag bis Freitag auswaehlen.</mat-error>
+            }
         </mat-form-field>
     </div>
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -20,8 +20,7 @@ type PlanItemFormGroup = FormGroup<{
 }>;
 
 type PlanFormGroup = FormGroup<{
-    year: FormControl<number | null>;
-    week: FormControl<number | null>;
+    date: FormControl<string>;
     notes: FormControl<string>;
     items: FormArray<PlanItemFormGroup>;
 }>;
@@ -52,10 +51,18 @@ export class ProductionPlanDialogComponent {
         recipes: Recipe[];
     };
     readonly filteredProducts$: Array<Observable<Product[]>> = [];
+    private readonly weekdayValidator: ValidatorFn = (control: AbstractControl<string>): ValidationErrors | null => {
+        const value = control.value;
+        if (!value) {
+            return null;
+        }
+
+        const weekDay = new Date(`${value}T00:00:00`).getDay();
+        return weekDay >= 1 && weekDay <= 5 ? null : { weekday: true };
+    };
 
     readonly form: PlanFormGroup = this.fb.group({
-        year: this.fb.control<number | null>(this.data.plan?.year ?? new Date().getFullYear(), [Validators.required]),
-        week: this.fb.control<number | null>(this.data.plan?.week ?? this.getWeekNumber(new Date()), [Validators.required, Validators.min(1), Validators.max(53)]),
+        date: this.fb.nonNullable.control(this.getInitialDate(), [Validators.required, this.weekdayValidator]),
         notes: this.fb.nonNullable.control(this.data.plan?.notes ?? ''),
         items: this.fb.array<PlanItemFormGroup>([])
     });
@@ -141,8 +148,7 @@ export class ProductionPlanDialogComponent {
         }
 
         this.dialogRef.close({
-            year: formValue.year ?? new Date().getFullYear(),
-            week: formValue.week ?? 1,
+            date: formValue.date,
             notes: formValue.notes.trim() || undefined,
             items
         } as Omit<ProductionPlan, '_id' | '_rev' | 'type' | 'createdAt' | 'updatedAt'>);
@@ -208,10 +214,37 @@ export class ProductionPlanDialogComponent {
         return recipe?._id ?? null;
     }
 
-    private getWeekNumber(date: Date): number {
-        const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+    private getInitialDate(): string {
+        if (this.data.plan?.date) {
+            return this.data.plan.date;
+        }
+
+        if (this.data.plan?.year && this.data.plan?.week) {
+            return this.getDateFromYearWeek(this.data.plan.year, this.data.plan.week);
+        }
+
+        return this.getNextBusinessDay(new Date()).toISOString().slice(0, 10);
+    }
+
+    private getDateFromYearWeek(year: number, week: number): string {
+        const jan4 = new Date(Date.UTC(year, 0, 4));
+        const jan4Day = jan4.getUTCDay() || 7;
+        const firstMonday = new Date(jan4);
+        firstMonday.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
+
+        const mondayOfWeek = new Date(firstMonday);
+        mondayOfWeek.setUTCDate(firstMonday.getUTCDate() + ((week - 1) * 7));
+
+        return mondayOfWeek.toISOString().slice(0, 10);
+    }
+
+    private getNextBusinessDay(date: Date): Date {
+        const candidate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+        while (candidate.getUTCDay() === 0 || candidate.getUTCDay() === 6) {
+            candidate.setUTCDate(candidate.getUTCDate() + 1);
+        }
+
+        return candidate;
     }
 }

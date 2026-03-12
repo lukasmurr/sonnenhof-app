@@ -31,6 +31,23 @@ export class ProductionPlanDetailDialogComponent {
         canDelete: boolean;
     };
 
+    getPlanTitle(): string {
+        if (this.data.plan.date) {
+            return `Produktionsplan ${new Intl.DateTimeFormat('de-DE', {
+                weekday: 'long',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }).format(new Date(`${this.data.plan.date}T00:00:00`))}`;
+        }
+
+        if (this.data.plan.week && this.data.plan.year) {
+            return `Produktionsplan KW ${this.data.plan.week}/${this.data.plan.year}`;
+        }
+
+        return 'Produktionsplan';
+    }
+
     openRecipeForItem(item: ProductionPlanItem): void {
         if (!item.recipeId) {
             return;

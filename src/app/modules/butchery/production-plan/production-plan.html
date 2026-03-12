@@ -11,107 +11,81 @@
         <mat-card class="plan-card">
             <mat-card-header>
                 <mat-card-title>Produktionsplaene</mat-card-title>
-                <mat-card-subtitle>Wochenweise Planung der Produktion</mat-card-subtitle>
-                <div class="header-actions">
-                    <mat-form-field appearance="outline" class="year-select" subscriptSizing="dynamic">
-                        <mat-label>Jahr</mat-label>
-                        <mat-select [value]="selectedYear()" (valueChange)="selectedYear.set($event); onYearChange()">
-                            @for (year of availableYears; track year) {
-                                <mat-option [value]="year">{{ year }}</mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
-                    <button mat-raised-button color="primary" (click)="openPlanDialog()" *appHasPermission="'production-plan.create'">
-                        <mat-icon>add</mat-icon>
-                        Neuer Plan
-                    </button>
-                </div>
+                <mat-card-subtitle>Wochenfokus mit schneller Navigation (Mo-Fr)</mat-card-subtitle>
             </mat-card-header>
 
             <mat-card-content>
-                <mat-tab-group>
-                    <mat-tab label="Kalenderansicht">
-                        <div class="calendar-grid">
-                            @for (weekItem of calendarWeeks; track trackByWeek($index, weekItem)) {
-                                <mat-card class="week-card" [class.empty]="!weekItem.plan">
-                                    <mat-card-header>
-                                        <mat-card-title>KW {{ weekItem.week }}</mat-card-title>
-                                    </mat-card-header>
+                <div class="week-navigation" aria-label="Wochennavigation">
+                    <button mat-icon-button type="button" (click)="goToPreviousWeek()" [disabled]="!canGoToPreviousWeek()" aria-label="Vorherige Woche">
+                        <mat-icon>chevron_left</mat-icon>
+                    </button>
 
-                                    <mat-card-content>
-                                        @if (weekItem.plan) {
-                                            <button class="plan-detail-link" type="button" (click)="openPlanDetails(weekItem.plan)">
-                                                {{ weekItem.plan.items.length }} Positionen anzeigen
+                    <div class="week-navigation-center">
+                        <div class="active-week-title">{{ getActiveWeekTitle() }}</div>
+                        <div class="week-jump-controls">
+                            <mat-form-field appearance="outline" class="year-select" subscriptSizing="dynamic">
+                                <mat-label>Jahr</mat-label>
+                                <mat-select [value]="selectedYear()" (valueChange)="selectedYear.set($event); onYearChange()">
+                                    @for (year of availableYears; track year) {
+                                        <mat-option [value]="year">{{ year }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="week-select" subscriptSizing="dynamic">
+                                <mat-label>Kalenderwoche</mat-label>
+                                <mat-select [value]="activeWeekKey()" (valueChange)="jumpToWeek($event)">
+                                    @for (weekGroup of weekGroups; track trackByWeekGroup($index, weekGroup)) {
+                                        <mat-option [value]="getWeekKey(weekGroup)">
+                                            KW {{ weekGroup.week }} ({{ weekGroup.rangeShortLabel }})
+                                        </mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <button mat-icon-button type="button" (click)="goToNextWeek()" [disabled]="!canGoToNextWeek()" aria-label="Naechste Woche">
+                        <mat-icon>chevron_right</mat-icon>
+                    </button>
+                </div>
+
+                @if (activeWeekGroup(); as activeWeek) {
+                    <div class="calendar-grid single-week-grid">
+                        @for (dayItem of activeWeek.days; track trackByBusinessDay($index, dayItem)) {
+                            <mat-card class="week-card" [class.empty]="!dayItem.plan">
+                                <mat-card-header>
+                                    <mat-card-title>{{ dayItem.label }}</mat-card-title>
+                                </mat-card-header>
+
+                                <mat-card-content>
+                                    @if (dayItem.plan) {
+                                        <div class="plan-card-body">
+                                            <span class="status-badge">Geplant</span>
+                                            <p class="plan-metric">{{ dayItem.plan.items.length }} Positionen</p>
+                                            <p class="plan-metric">Gesamtmenge: {{ formatTotalTargetQuantity(dayItem.plan) }}</p>
+                                            <p class="plan-metric">Top-Produkt: {{ getPrimaryProductName(dayItem.plan) }}</p>
+                                            <button mat-flat-button color="primary" type="button" (click)="openPlanDetails(dayItem.plan)">
+                                                <mat-icon>launch</mat-icon>
+                                                Details
                                             </button>
-                                        } @else {
-                                            <div class="empty-state">
-                                                <button mat-button color="primary" (click)="createNewPlan(weekItem.week)" *appHasPermission="'production-plan.create'">
-                                                    <mat-icon>add</mat-icon>
-                                                    Plan erstellen
-                                                </button>
-                                            </div>
-                                        }
-                                    </mat-card-content>
-                                </mat-card>
-                            }
-                        </div>
-                    </mat-tab>
-
-                    <mat-tab label="Tabellenansicht">
-                        <div class="table-container">
-                            <table mat-table [dataSource]="dataSource" class="full-width-table desktop-table-view">
-                                <ng-container matColumnDef="week">
-                                    <th mat-header-cell *matHeaderCellDef>KW</th>
-                                    <td mat-cell *matCellDef="let row">{{ row.week }}</td>
-                                </ng-container>
-
-                                <ng-container matColumnDef="summary">
-                                    <th mat-header-cell *matHeaderCellDef>Zusammenfassung</th>
-                                    <td mat-cell *matCellDef="let row">{{ row.items.length }} Positionen</td>
-                                </ng-container>
-
-                                <ng-container matColumnDef="details">
-                                    <th mat-header-cell *matHeaderCellDef>Details</th>
-                                    <td mat-cell *matCellDef="let row">
-                                        <button mat-stroked-button (click)="openPlanDetails(row)">
-                                            <mat-icon>visibility</mat-icon>
-                                            Öffnen
-                                        </button>
-                                    </td>
-                                </ng-container>
-
-                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                            </table>
-
-                            <div class="mobile-list-view" aria-label="Produktionsplaene als Kartenansicht">
-                                @if (dataSource.data.length > 0) {
-                                    <div class="mobile-cards-grid">
-                                        @for (row of dataSource.data; track trackByPlan($index, row)) {
-                                            <article class="mobile-item-card">
-                                                <div class="mobile-item-head">
-                                                    <h3>KW {{ row.week }}</h3>
-                                                    <span class="chip">{{ row.year }}</span>
-                                                </div>
-                                                <div class="mobile-products-list">{{ row.items.length }} Positionen</div>
-                                                <div class="mobile-item-actions">
-                                                    <button mat-stroked-button (click)="openPlanDetails(row)">
-                                                        <mat-icon>visibility</mat-icon>
-                                                        Details
-                                                    </button>
-                                                </div>
-                                            </article>
-                                        }
-                                    </div>
-                                } @else {
-                                    <div class="mobile-empty-state">Keine Produktionsplaene vorhanden</div>
-                                }
-                            </div>
-
-                            <mat-paginator [pageSizeOptions]="[10, 25, 50]" [pageSize]="10" aria-label="Produktionsplaene pro Seite"></mat-paginator>
-                        </div>
-                    </mat-tab>
-                </mat-tab-group>
+                                        </div>
+                                    } @else {
+                                        <div class="empty-state">
+                                            <p class="empty-label">Kein Plan vorhanden</p>
+                                            <button mat-flat-button color="primary" (click)="createNewPlan(dayItem.date)" *appHasPermission="'production-plan.create'">
+                                                <mat-icon>add</mat-icon>
+                                                Plan erstellen
+                                            </button>
+                                        </div>
+                                    }
+                                </mat-card-content>
+                            </mat-card>
+                        }
+                    </div>
+                } @else {
+                    <div class="mobile-empty-state">Keine Kalenderwochen fuer das gewaehlte Jahr verfuegbar</div>
+                }
             </mat-card-content>
         </mat-card>
     </div>

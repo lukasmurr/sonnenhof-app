@@ -11,8 +11,9 @@ export interface ProductionPlan {
     _id?: string;
     _rev?: string;
     type: 'production-plan';
-    year: number;
-    week: number;
+    date?: string;
+    year?: number;
+    week?: number;
     items: ProductionPlanItem[];
     notes?: string;
     createdAt?: string;

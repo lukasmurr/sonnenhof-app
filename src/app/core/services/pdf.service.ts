@@ -264,7 +264,7 @@ export class PdfService {
 
   generateProductionPlanPdf(plan: ProductionPlan) {
     const doc = new jsPDF();
-    const title = `Produktionsplan KW ${plan.week} / ${plan.year}`;
+    const title = this.getProductionPlanTitle(plan);
 
     doc.setFontSize(18);
     doc.text(title, 14, 22);
@@ -303,7 +303,7 @@ export class PdfService {
       doc.text(plan.notes, 14, finalY + 17, { maxWidth: 180 });
     }
 
-    doc.save(`produktionsplan_kw${plan.week}_${plan.year}.pdf`);
+    doc.save(this.getProductionPlanFileName(plan));
   }
 
   generateProductionReport(orders: Order[], filter: any, products: Product[] = []) {
@@ -390,6 +390,30 @@ export class PdfService {
   private getPuNumber(productName: string, products: Product[]): string {
     const product = products.find(p => p.name === productName);
     return product ? product.puNumber : '';
+  }
+
+  private getProductionPlanTitle(plan: ProductionPlan): string {
+    if (plan.date) {
+      return `Produktionsplan ${moment(plan.date).format('DD.MM.YYYY')}`;
+    }
+
+    if (plan.week && plan.year) {
+      return `Produktionsplan KW ${plan.week} / ${plan.year}`;
+    }
+
+    return 'Produktionsplan';
+  }
+
+  private getProductionPlanFileName(plan: ProductionPlan): string {
+    if (plan.date) {
+      return `produktionsplan_${moment(plan.date).format('YYYY-MM-DD')}.pdf`;
+    }
+
+    if (plan.week && plan.year) {
+      return `produktionsplan_kw${plan.week}_${plan.year}.pdf`;
+    }
+
+    return `produktionsplan_${moment().format('YYYY-MM-DD')}.pdf`;
   }
 
 

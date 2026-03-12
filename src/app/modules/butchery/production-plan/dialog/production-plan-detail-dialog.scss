@@ -2,7 +2,15 @@ mat-dialog-content {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    min-width: 320px;
+    width: min(100%, 920px);
+    min-width: 0;
+    max-height: min(74vh, 760px);
+    overflow: auto;
+    padding-right: 4px;
+}
+
+mat-dialog-actions {
+    padding-top: 8px;
 }
 
 .summary-row {
@@ -56,11 +64,20 @@ mat-dialog-content {
     text-decoration: underline;
 }
 
+.item-recipe {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .no-recipe {
     color: #888;
 }
 
 @media (max-width: 720px) {
+    mat-dialog-content {
+        width: 100%;
+    }
+
     .summary-row {
         flex-direction: column;
         align-items: flex-start;
@@ -69,6 +86,21 @@ mat-dialog-content {
     .item-card {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .item-main,
+    .item-recipe {
+        width: 100%;
+    }
+
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
     }
 }
 
