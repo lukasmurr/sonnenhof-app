@@ -2,10 +2,9 @@
 'Neue Bestellung') }}</h2>
 <mat-dialog-content>
   @if (form.get('status')?.value === 'prepared' && !data.isReorder) {
-    <div
-      style="margin-bottom: 16px; padding: 12px; background-color: #e8f5e9; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
-      <span style="color: #2e7d32; font-weight: 500;">
-        <mat-icon style="vertical-align: bottom; margin-right: 8px;">check_circle</mat-icon>
+    <div class="status-banner">
+      <span class="status-text">
+        <mat-icon class="status-icon">check_circle</mat-icon>
         Status: Hergerichtet (Nr. {{ form.get('orderNumber')?.value }})
       </span>
       <button mat-button color="warn" (click)="resetStatus()">
@@ -29,7 +28,7 @@
     </mat-form-field>
 
     <div class="form-row">
-      <mat-form-field appearance="outline" style="flex: 1;">
+      <mat-form-field appearance="outline" class="row-field">
         <mat-label>E-Mail</mat-label>
         <input matInput formControlName="customerEmail" placeholder="max@beispiel.de">
         @if (form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)) {
@@ -40,7 +39,7 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="flex: 1;">
+      <mat-form-field appearance="outline" class="row-field">
         <mat-label>Telefon</mat-label>
         <input matInput formControlName="customerPhone" placeholder="0123 456789">
         @if (form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)) {
@@ -52,14 +51,13 @@
       </mat-form-field>
     </div>
     @if (form.hasError('atLeastOneContact') && (form.get('customerEmail')?.touched || form.get('customerPhone')?.touched)) {
-      <div
-        style="color: #f44336; font-size: 12px; margin-top: -10px; margin-bottom: 10px;">
+      <div class="contact-error">
         Bitte geben Sie entweder eine E-Mail-Adresse oder eine Telefonnummer an.
       </div>
     }
 
     <div class="form-row">
-      <mat-form-field appearance="outline" style="flex: 1;">
+      <mat-form-field appearance="outline" class="row-field">
         <mat-label>Markt</mat-label>
         <mat-select formControlName="market">
           @for (market of markets; track market) {
@@ -75,7 +73,7 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="flex: 1;">
+      <mat-form-field appearance="outline" class="row-field">
         <mat-label>Bestelldatum</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="orderDate">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -104,14 +102,13 @@
           <div class="item-col-product">
             <app-product-select formControlName="product" [products]="products"></app-product-select>
             @if (item.get('product')?.hasError('required') && item.get('product')?.touched) {
-              <div
-                style="color: #f44336; font-size: 12px; padding-left: 16px; margin-top: -4px;">
+              <div class="inline-error">
                 Erforderlich
               </div>
             }
           </div>
           <div class="item-col-quantity">
-            <mat-form-field appearance="outline" style="width: 100%;" subscriptSizing="dynamic">
+            <mat-form-field appearance="outline" class="full-width-field" subscriptSizing="dynamic">
               <mat-label>{{ getUnit(i) }}</mat-label>
               <input matInput type="number" formControlName="quantity" placeholder="0">
               @if (item.get('quantity')?.hasError('required')) {
@@ -122,7 +119,7 @@
             </mat-form-field>
           </div>
           <div class="item-col-notes">
-            <mat-form-field appearance="outline" style="width: 100%;" subscriptSizing="dynamic">
+            <mat-form-field appearance="outline" class="full-width-field" subscriptSizing="dynamic">
               <mat-label>Bemerkung</mat-label>
               <input matInput formControlName="notes" placeholder="Bemerkung">
             </mat-form-field>

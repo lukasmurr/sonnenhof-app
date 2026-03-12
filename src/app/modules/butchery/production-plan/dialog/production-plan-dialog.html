@@ -49,7 +49,7 @@
                     </mat-select>
                 </mat-form-field>
 
-                <button mat-icon-button color="warn" type="button" (click)="removeItem(i)" [disabled]="items.length <= 1" aria-label="Position entfernen">
+                <button mat-icon-button color="warn" type="button" class="item-remove-button" (click)="removeItem(i)" [disabled]="items.length <= 1" aria-label="Position entfernen">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

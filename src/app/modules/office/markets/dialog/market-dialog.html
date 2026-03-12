@@ -37,8 +37,8 @@
       }
     </mat-form-field>
 
-    <div style="display: flex; gap: 1rem;">
-      <mat-form-field appearance="outline" style="flex: 1;">
+    <div class="time-row">
+      <mat-form-field appearance="outline" class="time-field">
         <mat-label>Startzeit</mat-label>
         <input matInput type="time" formControlName="startTime">
         @if (form.get('startTime')?.hasError('required')) {
@@ -48,7 +48,7 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="flex: 1;">
+      <mat-form-field appearance="outline" class="time-field">
         <mat-label>Endzeit</mat-label>
         <input matInput type="time" formControlName="endTime">
         @if (form.get('endTime')?.hasError('required')) {

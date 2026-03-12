@@ -101,7 +101,9 @@ export class PurchasingPricesComponent implements OnInit {
         }
 
         const dialogRef = this.dialog.open(PurchaseProductDialogComponent, {
-            width: '500px',
+            width: 'min(560px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: { product }
         });
 

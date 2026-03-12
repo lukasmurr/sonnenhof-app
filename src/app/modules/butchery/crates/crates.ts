@@ -84,7 +84,9 @@ export class CratesComponent implements OnInit, AfterViewInit {
 
     openCrateDialog(record?: CrateRecord) {
         const dialogRef = this.dialog.open(CrateDialogComponent, {
-            width: '400px',
+            width: 'min(480px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: { 
                 record,
                 mode: record ? 'edit' : 'create'
@@ -123,7 +125,9 @@ export class CratesComponent implements OnInit, AfterViewInit {
 
     openTransactionDialog(record: CrateRecord, type: 'borrow' | 'return') {
         const dialogRef = this.dialog.open(CrateDialogComponent, {
-            width: '400px',
+            width: 'min(480px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: { 
                 record,
                 mode: 'transaction',

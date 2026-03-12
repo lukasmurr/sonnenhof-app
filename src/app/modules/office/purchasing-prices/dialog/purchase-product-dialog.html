@@ -41,7 +41,7 @@
     @if (showNewSupplierForm()) {
       <div class="new-supplier-form">
         <h4>Neuer Lieferant</h4>
-        <form [formGroup]="newSupplierForm">
+        <div [formGroup]="newSupplierForm" class="new-supplier-fields">
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name" placeholder="Lieferant Name">
@@ -58,7 +58,7 @@
             <mat-icon>save</mat-icon>
             Lieferant speichern
           </button>
-        </form>
+        </div>
       </div>
     }
 

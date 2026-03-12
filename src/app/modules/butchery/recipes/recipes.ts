@@ -73,7 +73,9 @@ export class RecipesComponent implements OnInit {
 
     openCreateDialog(): void {
         const dialogRef = this.dialog.open(RecipeEditorDialogComponent, {
-            width: '900px',
+            width: 'min(900px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: {
                 products: this.products()
             }
@@ -90,7 +92,9 @@ export class RecipesComponent implements OnInit {
 
     openEditDialog(recipe: Recipe): void {
         const dialogRef = this.dialog.open(RecipeEditorDialogComponent, {
-            width: '900px',
+            width: 'min(900px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: {
                 recipe,
                 products: this.products()

@@ -173,6 +173,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         const dialogRef = this.dialog.open(OrderDialogComponent, {
             width: '95%',
             maxWidth: '800px',
+            maxHeight: '92vh',
             data: { order, isReorder }
         });
 

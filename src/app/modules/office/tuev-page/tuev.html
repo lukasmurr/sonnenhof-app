@@ -99,9 +99,15 @@
               <div class="mobile-cards-grid">
                 @for (vehicle of vehicles; track vehicle._id || $index) {
                   <article class="mobile-item-card">
+                    <div class="mobile-item-image">
+                      <app-vehicle-image [vehicle]="vehicle"></app-vehicle-image>
+                    </div>
                     <div class="mobile-item-head">
                       <h3>{{ vehicle.licensePlate }}</h3>
-                      <span class="chip">{{ vehicle.nextTuevDate | date:'MM.yyyy' }}</span>
+                      <span class="chip" [class.expired]="isExpired(vehicle.nextTuevDate)"
+                        [class.soon-expired]="isSoonExpired(vehicle.nextTuevDate)">
+                        {{ vehicle.nextTuevDate | date:'MM.yyyy' }}
+                      </span>
                     </div>
                     <p class="meta">{{ vehicle.name }} | {{ getVehicleTypeLabel(vehicle.vehicleType) }}</p>
                     <div class="mobile-status">

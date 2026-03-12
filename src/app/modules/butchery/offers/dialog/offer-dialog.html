@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ data.offer ? 'Angebot bearbeiten' : 'Neues Angebot planen' }}</h2>
 <mat-dialog-content [formGroup]="form">
-    <div class="row">
+    <div class="row header-row">
         <mat-form-field appearance="outline">
             <mat-label>Jahr</mat-label>
             <input matInput type="number" formControlName="year">
@@ -22,7 +22,7 @@
                         </button>
                     }
                 </div>
-                <div class="row">
+                <div class="row item-row-fields">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Produkt suchen</mat-label>
                         <input type="text" matInput formControlName="productName" [matAutocomplete]="auto">

@@ -117,7 +117,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         }
 
         const dialogRef = this.dialog.open(ProductDialogComponent, {
-            width: '400px',
+            width: 'min(480px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: { product }
         });
 

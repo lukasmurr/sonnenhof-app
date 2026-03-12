@@ -3,6 +3,10 @@ mat-dialog-content {
     flex-direction: column;
     gap: 12px;
     padding-top: 8px;
+    width: min(100%, 900px);
+    max-height: min(74vh, 780px);
+    overflow: auto;
+    padding-right: 4px;
 }
 
 .base-fields {
@@ -43,12 +47,43 @@ mat-dialog-actions {
 }
 
 @media (max-width: 800px) {
+    mat-dialog-content {
+        width: 100%;
+    }
+
     .base-fields {
         grid-template-columns: 1fr;
     }
 
+    .positions-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
+    }
+
     .position-row {
         grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .position-remove-button {
+        justify-self: end;
+        margin-top: -2px;
+        margin-bottom: 4px;
+    }
+
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
     }
 }
 

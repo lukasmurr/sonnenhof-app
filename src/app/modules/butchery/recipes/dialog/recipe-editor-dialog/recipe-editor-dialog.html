@@ -65,7 +65,7 @@
                     <input matInput formControlName="unit" placeholder="kg">
                 </mat-form-field>
 
-                <button type="button" mat-icon-button color="warn" (click)="removePosition(i)" [disabled]="positions.length <= 1" aria-label="Position entfernen">
+                <button type="button" mat-icon-button color="warn" class="position-remove-button" (click)="removePosition(i)" [disabled]="positions.length <= 1" aria-label="Position entfernen">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

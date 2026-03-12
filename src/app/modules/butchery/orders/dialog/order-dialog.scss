@@ -2,15 +2,74 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: min(100%, 920px);
 }
 
 mat-form-field {
     width: 100%;
 }
 
+mat-dialog-content {
+    max-height: min(74vh, 760px);
+    overflow: auto;
+    padding-right: 4px;
+}
+
+mat-dialog-actions {
+    padding-top: 8px;
+}
+
+.status-banner {
+    margin-bottom: 16px;
+    padding: 12px;
+    background-color: #e8f5e9;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.status-text {
+    color: #2e7d32;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.status-icon {
+    margin-right: 8px;
+}
+
+.contact-error,
+.inline-error {
+    color: #f44336;
+    font-size: 12px;
+}
+
+.contact-error {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.inline-error {
+    padding-left: 16px;
+    margin-top: -4px;
+}
+
 .form-row {
     display: flex;
     gap: 1rem;
+}
+
+.row-field,
+.full-width-field {
+    width: 100%;
+}
+
+.row-field {
+    flex: 1;
 }
 
 .item-row {
@@ -57,16 +116,48 @@ mat-form-field {
     justify-content: space-between;
     align-items: center;
     margin-top: 1rem;
+    gap: 8px;
 }
 
 :host-context(.dark-theme) .item-row {
     background: #424242;
 }
 
+:host-context(.dark-theme) .status-banner {
+    background-color: rgba(102, 187, 106, 0.15);
+}
+
+:host-context(.dark-theme) .status-text {
+    color: #a5d6a7;
+}
+
 @media (max-width: 800px) {
+    .order-form {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .status-banner {
+        flex-direction: column;
+        align-items: flex-start;
+
+        button {
+            width: 100%;
+        }
+    }
+
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+
+        button {
+            width: 100%;
+        }
     }
 
     .item-row {
@@ -92,5 +183,15 @@ mat-form-field {
         height: auto;
         margin-top: 0;
         align-self: center;
+    }
+
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
     }
 }

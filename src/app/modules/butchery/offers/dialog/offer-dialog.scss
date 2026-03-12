@@ -7,6 +7,17 @@
     }
 }
 
+mat-dialog-content {
+    width: min(100%, 760px);
+    max-height: min(74vh, 760px);
+    overflow: auto;
+    padding-right: 4px;
+}
+
+mat-dialog-actions {
+    padding-top: 8px;
+}
+
 .full-width {
     width: 100%;
 }
@@ -61,5 +72,47 @@ h3 {
     margin-bottom: 16px;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width: 760px) {
+    mat-dialog-content {
+        width: 100%;
+    }
+
+    .header-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .item-row-fields {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .product-header {
+        margin-top: 12px;
+
+        h3 {
+            font-size: 1rem;
+        }
+    }
+
+    .add-button-container {
+        justify-content: stretch;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
+    }
 }
 

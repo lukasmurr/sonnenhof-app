@@ -110,7 +110,9 @@ export class ProductionPlanComponent implements OnInit {
 
     openPlanDialog(plan?: ProductionPlan): void {
         const dialogRef = this.dialog.open(ProductionPlanDialogComponent, {
-            width: '980px',
+            width: 'min(980px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: {
                 plan,
                 products: this.products(),

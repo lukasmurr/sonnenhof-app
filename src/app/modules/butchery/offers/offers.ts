@@ -117,7 +117,9 @@ export class OffersComponent implements OnInit, AfterViewInit {
 
     openOfferDialog(offer?: Offer) {
         const dialogRef = this.dialog.open(OfferDialogComponent, {
-            width: '600px',
+            width: 'min(760px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: { 
                 offer,
                 allOffers: this.offers()

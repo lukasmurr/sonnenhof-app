@@ -254,6 +254,9 @@ export class VacationPlanningComponent implements OnInit {
 
     openVacationDialog(vacation?: Vacation, preselectedDate?: Date) {
         const dialogRef = this.dialog.open(VacationDialogComponent, {
+            width: 'min(560px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: {
                 vacation,
                 preselectedDate,

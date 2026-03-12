@@ -76,7 +76,9 @@ export class MarketsComponent implements OnInit, AfterViewInit {
         }
 
         const dialogRef = this.dialog.open(MarketDialogComponent, {
-            width: '500px',
+            width: 'min(520px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh',
             data: { market }
         });
 

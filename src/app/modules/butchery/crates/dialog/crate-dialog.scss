@@ -2,9 +2,46 @@
     width: 100%;
     margin-bottom: 8px;
 }
+
+mat-dialog-content {
+    width: min(100%, 480px);
+    max-height: min(72vh, 640px);
+    overflow: auto;
+    padding-right: 4px;
+}
+
+mat-dialog-actions {
+    padding-top: 8px;
+}
+
+mat-dialog-content p {
+    margin: 0 0 10px;
+    overflow-wrap: anywhere;
+}
+
 .action-radio-group {
     display: flex;
     flex-direction: column;
     margin: 16px 0;
     gap: 8px;
+}
+
+@media (max-width: 640px) {
+    mat-dialog-content {
+        width: 100%;
+    }
+
+    .full-width {
+        margin-bottom: 6px;
+    }
+
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
+    }
 }

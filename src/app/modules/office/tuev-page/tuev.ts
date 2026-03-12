@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -83,9 +83,7 @@ export class Tuev implements OnInit {
     }
 
     openAddVehicleDialog() {
-        const dialogRef = this.dialog.open(VehicleDialog, {
-            data: {}
-        });
+        const dialogRef = this.dialog.open(VehicleDialog, this.getVehicleDialogConfig());
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
@@ -98,9 +96,7 @@ export class Tuev implements OnInit {
     }
 
     openEditVehicleDialog(vehicle: Vehicle) {
-        const dialogRef = this.dialog.open(VehicleDialog, {
-            data: { vehicle }
-        });
+        const dialogRef = this.dialog.open(VehicleDialog, this.getVehicleDialogConfig(vehicle));
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
@@ -144,17 +140,26 @@ export class Tuev implements OnInit {
         });
     }
 
-    isExpired(date: Date): boolean {
+    isExpired(date?: Date): boolean {
         if (!date) return false;
         return new Date(date) < new Date();
     }
 
-    isSoonExpired(date: Date): boolean {
+    isSoonExpired(date?: Date): boolean {
         if (!date) return false;
         const now = new Date();
         const expiry = new Date(date);
         const diffTime = expiry.getTime() - now.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         return diffDays > 0 && diffDays <= 30;
+    }
+
+    private getVehicleDialogConfig(vehicle?: Vehicle): MatDialogConfig<{ vehicle?: Vehicle }> {
+        return {
+            data: vehicle ? { vehicle } : {},
+            width: 'min(560px, 95vw)',
+            maxWidth: '95vw',
+            maxHeight: '92vh'
+        };
     }
 }
