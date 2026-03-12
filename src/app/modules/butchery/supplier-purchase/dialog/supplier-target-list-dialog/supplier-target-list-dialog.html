@@ -3,6 +3,14 @@
 <mat-dialog-content [formGroup]="form">
     <p class="hint">Fügen Sie manuell Produkte hinzu und hinterlegen Sie je Position die Sollmenge.</p>
 
+    <mat-form-field appearance="outline">
+        <mat-label>Name der Sollliste</mat-label>
+        <input matInput formControlName="listName" placeholder="z. B. Wocheneinkauf KW 12">
+        @if (form.controls.listName.touched && form.controls.listName.invalid) {
+            <mat-error>Name der Sollliste ist erforderlich</mat-error>
+        }
+    </mat-form-field>
+
     <div class="top-actions">
         <button mat-stroked-button type="button" (click)="addItem()">
             <mat-icon>add</mat-icon>

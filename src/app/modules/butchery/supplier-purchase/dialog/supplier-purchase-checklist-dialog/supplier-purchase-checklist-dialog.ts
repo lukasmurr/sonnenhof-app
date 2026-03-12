@@ -103,6 +103,7 @@ export class SupplierPurchaseChecklistDialogComponent {
                 phone: this.data.supplier.phone,
                 email: this.data.supplier.email
             },
+            this.data.list.listName,
             items
         );
         this.dialogRef.close();

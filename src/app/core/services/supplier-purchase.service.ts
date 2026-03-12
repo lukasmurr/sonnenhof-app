@@ -76,6 +76,7 @@ export class SupplierPurchaseService {
     async saveList(
         supplierId: string,
         supplierName: string,
+        listName: string,
         items: SupplierPurchaseListItem[],
         listId?: string
     ): Promise<void> {
@@ -84,6 +85,7 @@ export class SupplierPurchaseService {
             await this.dbService.updateDoc({
                 ...existing,
                 supplierName,
+                listName,
                 items
             });
             return;
@@ -94,6 +96,7 @@ export class SupplierPurchaseService {
             type: this.LIST_TYPE,
             supplierId,
             supplierName,
+            listName,
             items
         };
         await this.dbService.addDoc(list);

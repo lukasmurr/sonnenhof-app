@@ -23,6 +23,7 @@ export interface SupplierPurchaseList {
     type: 'supplier-purchase-list';
     supplierId: string;
     supplierName: string;
+    listName?: string;
     items: SupplierPurchaseListItem[];
     createdAt?: string;
     updatedAt?: string;

@@ -418,10 +418,14 @@ export class PdfService {
 
   generateSupplierPurchaseListPdf(
     supplier: { name: string; phone?: string; email?: string },
+    listName: string | undefined,
     items: Array<{ productName: string; quantity: number; unit: string; note?: string; completed?: boolean }>
   ) {
     const doc = new jsPDF();
-    const title = `Lieferantenliste - ${supplier.name}`;
+    const normalizedListName = listName?.trim();
+    const title = normalizedListName
+      ? `Lieferantenliste - ${supplier.name} - ${normalizedListName}`
+      : `Lieferantenliste - ${supplier.name}`;
 
     doc.setFontSize(18);
     doc.text(title, 14, 22);
@@ -435,6 +439,10 @@ export class PdfService {
     }
     if (supplier.email) {
       doc.text(`E-Mail: ${supplier.email}`, 14, currentY);
+      currentY += 6;
+    }
+    if (normalizedListName) {
+      doc.text(`Sollliste: ${normalizedListName}`, 14, currentY);
       currentY += 6;
     }
 
@@ -465,7 +473,8 @@ export class PdfService {
       }
     });
 
-    doc.save(`lieferantenliste_${supplier.name.replace(/\s+/g, '_')}_${moment().format('YYYY-MM-DD')}.pdf`);
+    const listNamePart = normalizedListName ? `_${normalizedListName.replace(/\s+/g, '_')}` : '';
+    doc.save(`lieferantenliste_${supplier.name.replace(/\s+/g, '_')}${listNamePart}_${moment().format('YYYY-MM-DD')}.pdf`);
   }
 
 

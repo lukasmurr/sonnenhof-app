@@ -182,6 +182,7 @@ export class SupplierPurchaseComponent implements OnInit {
             await this.supplierPurchaseService.saveList(
                 supplier._id,
                 supplier.name,
+                result.listName,
                 result.items,
                 existingList?._id
             );
@@ -240,6 +241,11 @@ export class SupplierPurchaseComponent implements OnInit {
     }
 
     listDisplayName(index: number, list: SupplierPurchaseList): string {
+        const explicitName = list.listName?.trim();
+        if (explicitName) {
+            return explicitName;
+        }
+
         const timestamp = list.updatedAt ?? list.createdAt;
         if (!timestamp) {
             return `Sollliste ${index + 1}`;

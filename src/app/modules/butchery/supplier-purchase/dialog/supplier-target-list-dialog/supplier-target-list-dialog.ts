@@ -40,6 +40,7 @@ export class SupplierTargetListDialogComponent {
     };
 
     readonly form = this.fb.group({
+        listName: this.fb.nonNullable.control(this.data.existingList?.listName ?? '', [Validators.required]),
         items: this.fb.array<ListItemFormGroup>([])
     });
 
@@ -91,7 +92,10 @@ export class SupplierTargetListDialogComponent {
             }))
             .filter(item => item.targetQuantity > 0 || !!item.note);
 
-        this.dialogRef.close({ items });
+        this.dialogRef.close({
+            listName: this.form.controls.listName.value.trim(),
+            items
+        });
     }
 
     private createItemGroup(item?: SupplierPurchaseListItem): ListItemFormGroup {
