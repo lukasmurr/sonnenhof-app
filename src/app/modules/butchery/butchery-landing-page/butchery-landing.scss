@@ -46,6 +46,18 @@
     max-width: 1200px;
 }
 
+.module-section {
+    max-width: 1200px;
+    margin: 0 auto 36px;
+
+    .section-title {
+        margin: 0 0 16px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2a2f57;
+    }
+}
+
 .section-card {
     border-radius: 16px !important;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
@@ -129,6 +141,10 @@
 
     .section-description {
         color: #b0bec5;
+    }
+
+    .module-section .section-title {
+        color: #eceff1;
     }
 
     .section-card {

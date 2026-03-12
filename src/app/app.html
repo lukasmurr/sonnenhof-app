@@ -56,11 +56,8 @@
 <mat-sidenav-container class="app-sidenav-container" [hasBackdrop]="true">
   <mat-sidenav #sidenav mode="over" class="app-sidenav">
     <mat-nav-list>
-      <div mat-subheader *appHasPermission="'butchery.view'">Metzgerei</div>
-      <a mat-list-item (click)="navigateAndClose('butchery/products', sidenav)" *appHasPermission="'product.view'">
-        <mat-icon matListItemIcon>inventory_2</mat-icon>
-        <span matListItemTitle>Produkte</span>
-      </a>
+      <div mat-subheader *appHasPermission="'butchery.view'"><b>Metzgerei</b></div>
+      <div mat-subheader *appHasPermission="'butchery.view'">Verkauf</div>
       <a mat-list-item (click)="navigateAndClose('butchery/orders', sidenav)" *appHasPermission="'order.view'">
         <mat-icon matListItemIcon>shopping_cart</mat-icon>
         <span matListItemTitle>Bestellungen</span>
@@ -73,6 +70,16 @@
         <mat-icon matListItemIcon>local_offer</mat-icon>
         <span matListItemTitle>Angebote</span>
       </a>
+      <a mat-list-item (click)="navigateAndClose('butchery/vehicle-stock', sidenav)" *appHasPermission="'vehicle-stock.view'">
+        <mat-icon matListItemIcon>local_shipping</mat-icon>
+        <span matListItemTitle>Warenbestand</span>
+      </a>
+
+      <div mat-subheader *appHasPermission="'butchery.view'">Production</div>
+      <a mat-list-item (click)="navigateAndClose('butchery/products', sidenav)" *appHasPermission="'product.view'">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Produkte</span>
+      </a>
       <a mat-list-item (click)="navigateAndClose('butchery/recipes', sidenav)" *appHasPermission="'recipe.view'">
         <mat-icon matListItemIcon>menu_book</mat-icon>
         <span matListItemTitle>Rezepte</span>
@@ -81,14 +88,14 @@
         <mat-icon matListItemIcon>factory</mat-icon>
         <span matListItemTitle>Produktionsplan</span>
       </a>
-      <a mat-list-item (click)="navigateAndClose('butchery/vehicle-stock', sidenav)" *appHasPermission="'vehicle-stock.view'">
-        <mat-icon matListItemIcon>local_shipping</mat-icon>
-        <span matListItemTitle>Warenbestand</span>
+      <a mat-list-item (click)="navigateAndClose('butchery/supplier-purchase', sidenav)" *appHasPermission="'supplier-purchase.view'">
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <span matListItemTitle>Lieferanteneinkauf</span>
       </a>
 
       <mat-divider *appHasPermission="'butchery.view'"></mat-divider>
 
-      <div mat-subheader *appHasPermission="'office.view'">Büro</div>
+      <div mat-subheader *appHasPermission="'office.view'"><b>Büro</b></div>
       <a mat-list-item (click)="navigateAndClose('office/tuev', sidenav)" *appHasPermission="'tuev.view'">
         <mat-icon matListItemIcon>fact_check</mat-icon>
         <span matListItemTitle>TÜV</span>
@@ -112,7 +119,7 @@
 
       <mat-divider *appHasPermission="'office.view'"></mat-divider>
 
-      <div mat-subheader *appHasPermission="'farming.view'">Landwirtschaft</div>
+      <div mat-subheader *appHasPermission="'farming.view'"><b>Landwirtschaft</b></div>
       <a mat-list-item (click)="navigateAndClose('farming/stall', sidenav)" *appHasPermission="'stall.view'">
         <mat-icon matListItemIcon>house</mat-icon>
         <span matListItemTitle>Stall</span>

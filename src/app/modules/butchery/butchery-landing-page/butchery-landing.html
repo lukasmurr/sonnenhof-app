@@ -9,76 +9,94 @@
 
     <p class="section-description">Verwalten Sie Ihre Metzgerei-Prozesse und Bestände</p>
 
-    <div class="card-grid">
-        <!-- Produkte Card -->
-        <mat-card class="section-card products" (click)="navigateToSection('products')"
-            *appHasPermission="'product.view'">
-            <div class="card-icon"><mat-icon>inventory_2</mat-icon></div>
-            <mat-card-title>Produkte</mat-card-title>
-            <mat-card-content>
-                Verwalten Sie Ihre Produkte, Einheiten und Preise.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
+    <section class="module-section">
+        <h2 class="section-title">Verkauf</h2>
+        <div class="card-grid">
+            <!-- Bestellungen Card -->
+            <mat-card class="section-card orders" (click)="navigateToSection('orders')" *appHasPermission="'order.view'">
+                <div class="card-icon"><mat-icon>shopping_cart</mat-icon></div>
+                <mat-card-title>Bestellungen</mat-card-title>
+                <mat-card-content>
+                    Übersicht aller Bestellungen und Kundenanfragen.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
 
-        <!-- Bestellungen Card -->
-        <mat-card class="section-card orders" (click)="navigateToSection('orders')" *appHasPermission="'order.view'">
-            <div class="card-icon"><mat-icon>shopping_cart</mat-icon></div>
-            <mat-card-title>Bestellungen</mat-card-title>
-            <mat-card-content>
-                Übersicht aller Bestellungen und Kundenanfragen.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
+            <!-- Angebote Card -->
+            <mat-card class="section-card offers" (click)="navigateToSection('offers')" *appHasPermission="'offer.view'">
+                <div class="card-icon"><mat-icon>local_offer</mat-icon></div>
+                <mat-card-title>Angebote</mat-card-title>
+                <mat-card-content>
+                    Planen Sie Wochenangebote und Aktionen.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
 
-        <!-- Kisten Card -->
-        <mat-card class="section-card crates" (click)="navigateToSection('crates')" *appHasPermission="'crate.view'">
-            <div class="card-icon"><mat-icon>inbox</mat-icon></div>
-            <mat-card-title>Kisten</mat-card-title>
-            <mat-card-content>
-                Verwalten Sie ausgeliehene rote Kisten.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
+            <!-- Kisten Card -->
+            <mat-card class="section-card crates" (click)="navigateToSection('crates')" *appHasPermission="'crate.view'">
+                <div class="card-icon"><mat-icon>inbox</mat-icon></div>
+                <mat-card-title>Kisten</mat-card-title>
+                <mat-card-content>
+                    Verwalten Sie ausgeliehene rote Kisten.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
 
-        <!-- Angebote Card -->
-        <mat-card class="section-card offers" (click)="navigateToSection('offers')" *appHasPermission="'offer.view'">
-            <div class="card-icon"><mat-icon>local_offer</mat-icon></div>
-            <mat-card-title>Angebote</mat-card-title>
-            <mat-card-content>
-                Planen Sie Wochenangebote und Aktionen.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
+            <!-- Warenbestand Card -->
+            <mat-card class="section-card vehicle-stock" (click)="navigateToSection('vehicle-stock')" *appHasPermission="'vehicle-stock.view'">
+                <div class="card-icon"><mat-icon>local_shipping</mat-icon></div>
+                <mat-card-title>Warenbestand</mat-card-title>
+                <mat-card-content>
+                    Erfassen und verwalten Sie den Warenbestand der Verkaufsautos.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
+        </div>
+    </section>
 
-        <!-- Rezepte Card -->
-        <mat-card class="section-card recipes" (click)="navigateToSection('recipes')" *appHasPermission="'recipe.view'">
-            <div class="card-icon"><mat-icon>menu_book</mat-icon></div>
-            <mat-card-title>Rezepte</mat-card-title>
-            <mat-card-content>
-                Erstellen Sie Rezepte mit Zutatenpositionen und berechnen Sie Produktionsmengen.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
+    <section class="module-section">
+        <h2 class="section-title">Produktion</h2>
+        <div class="card-grid">
+            <!-- Produkte Card -->
+            <mat-card class="section-card products" (click)="navigateToSection('products')"
+                *appHasPermission="'product.view'">
+                <div class="card-icon"><mat-icon>inventory_2</mat-icon></div>
+                <mat-card-title>Produkte</mat-card-title>
+                <mat-card-content>
+                    Verwalten Sie Ihre Produkte, Einheiten und Preise.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
 
-        <!-- Produktionsplan Card -->
-        <mat-card class="section-card production" (click)="navigateToSection('production')" *appHasPermission="'production-plan.view'">
-            <div class="card-icon"><mat-icon>factory</mat-icon></div>
-            <mat-card-title>Produktionsplan</mat-card-title>
-            <mat-card-content>
-                Planen Sie die Produktion je Werktag (Mo-Fr) und verknüpfen Sie Produkte mit Rezepten.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
+            <!-- Rezepte Card -->
+            <mat-card class="section-card recipes" (click)="navigateToSection('recipes')" *appHasPermission="'recipe.view'">
+                <div class="card-icon"><mat-icon>menu_book</mat-icon></div>
+                <mat-card-title>Rezepte</mat-card-title>
+                <mat-card-content>
+                    Erstellen Sie Rezepte mit Zutatenpositionen und berechnen Sie Produktionsmengen.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
 
-        <!-- Warenbestand Card -->
-        <mat-card class="section-card vehicle-stock" (click)="navigateToSection('vehicle-stock')" *appHasPermission="'vehicle-stock.view'">
-            <div class="card-icon"><mat-icon>local_shipping</mat-icon></div>
-            <mat-card-title>Warenbestand</mat-card-title>
-            <mat-card-content>
-                Erfassen und verwalten Sie den Warenbestand der Verkaufsautos.
-            </mat-card-content>
-            <button mat-raised-button class="action-button">Öffnen</button>
-        </mat-card>
-    </div>
+            <!-- Produktionsplan Card -->
+            <mat-card class="section-card production" (click)="navigateToSection('production')" *appHasPermission="'production-plan.view'">
+                <div class="card-icon"><mat-icon>factory</mat-icon></div>
+                <mat-card-title>Produktionsplan</mat-card-title>
+                <mat-card-content>
+                    Planen Sie die Produktion je Werktag (Mo-Fr) und verknüpfen Sie Produkte mit Rezepten.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
+
+            <!-- Lieferanteneinkauf Card -->
+            <mat-card class="section-card supplier-purchase" (click)="navigateToSection('supplier-purchase')" *appHasPermission="'supplier-purchase.view'">
+                <div class="card-icon"><mat-icon>receipt_long</mat-icon></div>
+                <mat-card-title>Lieferanteneinkauf</mat-card-title>
+                <mat-card-content>
+                    Erstellen Sie Solllisten je Lieferant, arbeiten Sie diese gefuehrt ab und exportieren Sie die Bestellliste als PDF.
+                </mat-card-content>
+                <button mat-raised-button class="action-button">Öffnen</button>
+            </mat-card>
+        </div>
+    </section>
 </div>

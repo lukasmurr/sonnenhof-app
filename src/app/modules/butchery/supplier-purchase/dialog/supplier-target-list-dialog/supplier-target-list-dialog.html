@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Sollliste bearbeiten - {{ data.supplier.name }}</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <p class="hint">Fügen Sie manuell Produkte hinzu und hinterlegen Sie je Position die Sollmenge.</p>
+
+    <div class="top-actions">
+        <button mat-stroked-button type="button" (click)="addItem()">
+            <mat-icon>add</mat-icon>
+            Position hinzufügen
+        </button>
+    </div>
+
+    <div formArrayName="items" class="items-list">
+        @for (item of items.controls; track $index; let i = $index) {
+            <div [formGroupName]="i" class="item-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Produkt</mat-label>
+                    <input matInput formControlName="productName" placeholder="z. B. Schweinebauch">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sollmenge</mat-label>
+                    <input matInput type="number" min="0" step="0.01" formControlName="targetQuantity">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Einheit</mat-label>
+                    <mat-select formControlName="unit">
+                        @for (unit of units; track unit) {
+                            <mat-option [value]="unit">{{ unit }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="note-field">
+                    <mat-label>Notiz</mat-label>
+                    <input matInput formControlName="note" placeholder="Optional">
+                </mat-form-field>
+
+                <button mat-icon-button color="warn" type="button" class="remove-button" (click)="removeItem(i)"
+                    [disabled]="items.length <= 1" aria-label="Position entfernen">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+</mat-dialog-actions>

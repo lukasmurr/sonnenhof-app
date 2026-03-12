@@ -1,0 +1,221 @@
+.supplier-purchase-container {
+    min-height: 100%;
+    padding: 24px;
+    background: #f5f5f5;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .spacer {
+            width: 40px;
+        }
+
+        .headline {
+            flex: 1;
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #3f51b5;
+            margin: 0;
+        }
+    }
+
+    .section-description {
+        max-width: 1200px;
+        margin: 0 auto 24px;
+        text-align: center;
+        color: #5d647d;
+    }
+
+    .page-actions {
+        max-width: 1200px;
+        margin: 0 auto 16px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .supplier-groups {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .supplier-group-card {
+        border-radius: 14px;
+        border: 1px solid rgba(63, 81, 181, 0.14);
+        padding: 8px;
+
+        .supplier-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 8px 0;
+
+            h2 {
+                margin: 0;
+                font-size: 1.2rem;
+                font-weight: 600;
+            }
+        }
+
+        .list-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+            padding: 8px;
+        }
+
+        .list-card {
+            border: 1px solid rgba(63, 81, 181, 0.14);
+            border-radius: 12px;
+
+            mat-card-content {
+                p {
+                    margin: 0;
+                    color: #5d647d;
+                }
+            }
+
+            mat-card-actions {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                padding: 0 16px 16px;
+            }
+        }
+
+        .empty-list-actions {
+            padding: 8px 16px 16px;
+        }
+
+        .no-list-hint {
+            margin: 0;
+            padding: 8px 16px 16px;
+            color: #5d647d;
+        }
+
+        .status {
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+        }
+
+        .status-ready {
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
+        }
+
+        .status-empty {
+            background: rgba(158, 158, 158, 0.16);
+            color: #424242;
+        }
+
+        > mat-card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 0 16px 16px;
+        }
+    }
+
+    .empty-state {
+        max-width: 1200px;
+        margin: 0 auto;
+        border: 1px dashed rgba(0, 0, 0, 0.25);
+        border-radius: 12px;
+        padding: 18px;
+        text-align: center;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        padding: 16px;
+
+        .header .headline {
+            font-size: 1.7rem;
+        }
+
+        .supplier-group-card {
+            .list-card mat-card-actions,
+            > mat-card-actions {
+                flex-direction: column;
+
+                button {
+                    width: 100%;
+                }
+            }
+
+            .empty-list-actions button {
+                width: 100%;
+            }
+        }
+
+        .supplier-group-card .supplier-group-header h2 {
+            font-size: 1.05rem;
+        }
+
+        .supplier-group-card .list-card-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .page-actions button {
+            width: 100%;
+        }
+    }
+}
+
+:host-context(.dark-theme) {
+    .supplier-purchase-container {
+        background: #303030;
+
+        .header .headline {
+            color: #eceff1;
+        }
+
+        .section-description {
+            color: #d1d7ee;
+        }
+
+        .supplier-group-card {
+            background: #424242;
+            border-color: rgba(144, 164, 255, 0.35);
+
+            .list-card {
+                background: #3a3a3a;
+                border-color: rgba(144, 164, 255, 0.35);
+
+                mat-card-content p {
+                    color: #d1d7ee;
+                }
+            }
+
+            .no-list-hint {
+                color: #d1d7ee;
+            }
+
+            .status-empty {
+                background: rgba(255, 255, 255, 0.14);
+                color: #e0e0e0;
+            }
+
+            .status-ready {
+                background: rgba(129, 199, 132, 0.2);
+                color: #c8e6c9;
+            }
+        }
+
+        .empty-state {
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #d4d4d4;
+        }
+    }
+}

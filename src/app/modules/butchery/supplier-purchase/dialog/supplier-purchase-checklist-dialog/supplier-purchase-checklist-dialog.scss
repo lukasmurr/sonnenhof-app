@@ -1,0 +1,89 @@
+mat-dialog-content {
+    width: min(100%, 860px);
+    max-height: min(74vh, 760px);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.progress-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.guided-card {
+    border: 1px solid rgba(63, 81, 181, 0.16);
+    border-radius: 12px;
+    padding: 14px;
+    background: #fafbff;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    h3 {
+        margin: 0;
+    }
+
+    p {
+        margin: 0 0 4px;
+        color: #666;
+    }
+}
+
+.auto-done-hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #5f6368;
+}
+
+.guided-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+mat-dialog-actions {
+    padding-top: 8px;
+}
+
+@media (max-width: 760px) {
+    .progress-row {
+        flex-direction: column;
+    }
+
+    .guided-actions {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+:host-context(.dark-theme) {
+    .guided-card {
+        background: #4a4a4a;
+        border-color: rgba(144, 164, 255, 0.35);
+
+        p {
+            color: #d0d0d0;
+        }
+    }
+
+    .auto-done-hint {
+        color: #c3c7d1;
+    }
+}

@@ -62,7 +62,7 @@ export class PdfService {
         if (isFirst) {
           row.push({ content: moment(order.orderDate).format('DD.MM.YYYY'), rowSpan: rowSpan, styles: { valign: 'middle' } });
           row.push({ content: order.orderNumber || '', rowSpan: rowSpan, styles: { valign: 'middle' } });
-          
+
           let customerInfo = order.customerName;
           if (order.customerPhone) {
             customerInfo += `\n${order.customerPhone}`;
@@ -162,7 +162,7 @@ export class PdfService {
 
     doc.setFontSize(18);
     doc.text(title, 14, 22);
-    
+
     doc.setFontSize(12);
     doc.text(`Aktueller Bestand: ${crate.count} Kisten`, 14, 32);
     doc.text(`Stand: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, 39);
@@ -416,6 +416,58 @@ export class PdfService {
     return `produktionsplan_${moment().format('YYYY-MM-DD')}.pdf`;
   }
 
+  generateSupplierPurchaseListPdf(
+    supplier: { name: string; phone?: string; email?: string },
+    items: Array<{ productName: string; quantity: number; unit: string; note?: string; completed?: boolean }>
+  ) {
+    const doc = new jsPDF();
+    const title = `Lieferantenliste - ${supplier.name}`;
+
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+
+    let currentY = 30;
+    if (supplier.phone) {
+      doc.text(`Telefon: ${supplier.phone}`, 14, currentY);
+      currentY += 6;
+    }
+    if (supplier.email) {
+      doc.text(`E-Mail: ${supplier.email}`, 14, currentY);
+      currentY += 6;
+    }
+
+    doc.text(`Erstellt am: ${moment().format('DD.MM.YYYY HH:mm')}`, 14, currentY);
+    currentY += 6;
+
+    const tableData = items
+      .filter(item => item.quantity > 0)
+      .map((item, index) => [
+        `${index + 1}`,
+        item.productName,
+        `${item.quantity}`,
+        item.unit,
+        item.note || '-'
+      ]);
+
+    autoTable(doc, {
+      head: [['Pos.', 'Produkt', 'Menge', 'Einheit', 'Notiz']],
+      body: tableData,
+      startY: currentY + 2,
+      theme: 'grid',
+      headStyles: { fillColor: [66, 66, 66] },
+      styles: { fontSize: 10, cellPadding: 4 },
+      columnStyles: {
+        0: { cellWidth: 20, halign: 'center' },
+        2: { cellWidth: 24, halign: 'right' },
+        3: { cellWidth: 24 }
+      }
+    });
+
+    doc.save(`lieferantenliste_${supplier.name.replace(/\s+/g, '_')}_${moment().format('YYYY-MM-DD')}.pdf`);
+  }
+
 
   generateFilteredOrdersReport(orders: Order[], filterValue: string = '') {
     const doc = new jsPDF();
@@ -434,15 +486,15 @@ export class PdfService {
     const searchStr = filterValue.toLowerCase();
 
     orders.forEach(order => {
-      const orderMatches = 
+      const orderMatches =
         (order.customerName && order.customerName.toLowerCase().includes(searchStr)) ||
         (order.market && order.market.toLowerCase().includes(searchStr)) ||
         (order.orderNumber && order.orderNumber.toLowerCase().includes(searchStr));
 
       order.items.forEach(item => {
-        const itemMatches = 
-            (item.productName && item.productName.toLowerCase().includes(searchStr)) ||
-            (item.notes && item.notes.toLowerCase().includes(searchStr));
+        const itemMatches =
+          (item.productName && item.productName.toLowerCase().includes(searchStr)) ||
+          (item.notes && item.notes.toLowerCase().includes(searchStr));
 
         if (orderMatches || itemMatches) {
           tableData.push([

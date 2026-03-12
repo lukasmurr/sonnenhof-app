@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Lieferantenname">
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+            <mat-error>Name ist erforderlich</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Telefon</mat-label>
+        <input matInput formControlName="phone" placeholder="Optional">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>E-Mail</mat-label>
+        <input matInput formControlName="email" placeholder="Optional">
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+            <mat-error>Ungültige E-Mail Adresse</mat-error>
+        }
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+</mat-dialog-actions>

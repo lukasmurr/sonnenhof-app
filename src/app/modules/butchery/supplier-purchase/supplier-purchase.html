@@ -1,0 +1,111 @@
+<div class="supplier-purchase-container">
+    <div class="header">
+        <button mat-icon-button (click)="goBack()" aria-label="Zurück zur Metzgerei">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="headline">Lieferanteneinkauf</h1>
+        <div class="spacer"></div>
+    </div>
+
+    @if (canCreateSupplier()) {
+        <div class="page-actions">
+            <button mat-raised-button color="primary" type="button" (click)="openCreateSupplierDialog()">
+                <mat-icon>person_add</mat-icon>
+                Lieferant anlegen
+            </button>
+        </div>
+    }
+
+    @if (supplierSummaries().length > 0) {
+        <div class="supplier-groups">
+            @for (summary of supplierSummaries(); track trackBySupplier($index, summary)) {
+                <mat-card class="supplier-group-card">
+                    <div class="supplier-group-header">
+                        <h2>{{ summary.supplier.name }}</h2>
+
+                        @if (canUpdateSuppliers() || canDeleteSuppliers()) {
+                            <button mat-icon-button [matMenuTriggerFor]="supplierSettingsMenu" aria-label="Lieferant Einstellungen">
+                                <mat-icon>settings</mat-icon>
+                            </button>
+
+                            <mat-menu #supplierSettingsMenu="matMenu">
+                                @if (canUpdateSuppliers()) {
+                                    <button mat-menu-item type="button" (click)="openEditSupplierDialog(summary)">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Lieferant bearbeiten</span>
+                                    </button>
+                                }
+                                @if (canDeleteSuppliers()) {
+                                    <button mat-menu-item type="button" (click)="openDeleteSupplierDialog(summary)">
+                                        <mat-icon>person_remove</mat-icon>
+                                        <span>Lieferant löschen</span>
+                                    </button>
+                                }
+                            </mat-menu>
+                        }
+                    </div>
+
+                    @if (summary.lists.length > 0) {
+                        <div class="list-card-grid">
+                            @for (list of summary.lists; track trackByList($index, list)) {
+                                <mat-card class="list-card">
+                                    <mat-card-header>
+                                        <mat-card-title>{{ listDisplayName($index, list) }}</mat-card-title>
+                                    </mat-card-header>
+
+                                    <mat-card-content>
+                                        <p>{{ list.items.length }} Positionen</p>
+                                    </mat-card-content>
+
+                                    <mat-card-actions>
+                                        @if (canMaintainLists()) {
+                                            <button mat-stroked-button type="button" (click)="openTargetListDialog(summary.supplier, list)">
+                                                <mat-icon>edit_note</mat-icon>
+                                                Sollliste bearbeiten
+                                            </button>
+                                        }
+                                        @if (canDeleteLists()) {
+                                            <button mat-stroked-button color="warn" type="button" (click)="openDeleteListDialog(summary.supplier, list)">
+                                                <mat-icon>delete</mat-icon>
+                                                Sollliste löschen
+                                            </button>
+                                        }
+                                        @if (canProcessLists()) {
+                                            <button mat-raised-button color="primary" type="button" (click)="openChecklistDialog(summary.supplier, list)"
+                                                [disabled]="list.items.length === 0">
+                                                <mat-icon>checklist</mat-icon>
+                                                Liste abarbeiten
+                                            </button>
+                                        }
+                                    </mat-card-actions>
+                                </mat-card>
+                            }
+                        </div>
+                    } @else {
+                        @if (canMaintainLists()) {
+                            <div class="empty-list-actions">
+                                <button mat-stroked-button color="primary" type="button" (click)="openCreateListDialog(summary)">
+                                    <mat-icon>add</mat-icon>
+                                    + Sollliste erstellen
+                                </button>
+                            </div>
+                        } @else {
+                            <p class="no-list-hint">Noch keine Sollliste vorhanden.</p>
+                        }
+                    }
+
+                    @if (summary.lists.length > 0 && canMaintainLists()) {
+                        <mat-card-actions>
+                            <button mat-stroked-button color="primary" type="button" (click)="openCreateListDialog(summary)">
+                                <mat-icon>add</mat-icon>
+                                Weitere Sollliste erstellen
+                            </button>
+                        </mat-card-actions>
+                    }
+                </mat-card>
+            }
+        </div>
+    } @else {
+        <div class="empty-state">Noch keine Lieferanten vorhanden. Legen Sie zuerst einen Lieferanten an.</div>
+    }
+ </div>

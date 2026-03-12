@@ -1,0 +1,24 @@
+mat-dialog-content {
+    width: min(100%, 520px);
+    max-height: min(72vh, 640px);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+@media (max-width: 640px) {
+    mat-dialog-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        button {
+            width: 100%;
+        }
+    }
+}
