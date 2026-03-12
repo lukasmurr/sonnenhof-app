@@ -44,7 +44,7 @@ export class SupplierTargetListDialogComponent {
         items: this.fb.array<ListItemFormGroup>([])
     });
 
-    readonly units: Array<'kg' | 'Stück' | 'Liter' | 'Packung'> = ['kg', 'Stück', 'Liter', 'Packung'];
+    readonly units: Array<'kg' | 'Stück' | 'Liter' | 'Packung' | 'Gebinde'> = ['kg', 'Stück', 'Liter', 'Packung', 'Gebinde'];
 
     constructor() {
         const existingItems = this.data.existingList?.items ?? [];
