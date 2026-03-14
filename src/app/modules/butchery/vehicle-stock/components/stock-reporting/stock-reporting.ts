@@ -59,6 +59,7 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
     markets = signal<Market[]>([]);
     products = signal<Product[]>([]);
     offers = signal<Offer[]>([]);
+    currentItemIndex = signal(0);
 
     private _autoSkipTried = false;
 
@@ -144,10 +145,46 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
                 unit: [item.unit]
             }));
         });
+
+        this.currentItemIndex.set(0);
     }
 
-    async submit() {
-        if (this.firstFormGroup.invalid || this.stockFormArray.invalid) return;
+    currentStockControl() {
+        const index = this.currentItemIndex();
+        return this.stockFormArray.at(index) ?? null;
+    }
+
+    goBackFromItemStep() {
+        const current = this.currentItemIndex();
+        if (current > 0) {
+            this.currentItemIndex.set(current - 1);
+            return;
+        }
+
+        this.stepper?.previous();
+    }
+
+    goForwardFromItemStep() {
+        const current = this.currentItemIndex();
+        if (current < this.stockFormArray.length - 1) {
+            this.currentItemIndex.set(current + 1);
+            return;
+        }
+
+        this.stepper?.next();
+    }
+
+    async submitAndReset() {
+        const didSubmit = await this.submit();
+        if (!didSubmit) return;
+
+        this.stepper?.reset();
+        this.stockFormArray.clear();
+        this.currentItemIndex.set(0);
+    }
+
+    async submit(): Promise<boolean> {
+        if (this.firstFormGroup.invalid || this.stockFormArray.invalid) return false;
 
         const marketId = this.firstFormGroup.get('market')?.value;
         const date = this.firstFormGroup.get('date')?.value;
@@ -175,9 +212,11 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
                 await this._stockService.addStock(stock);
             }
             this._snackBar.open('Bestand erfolgreich gespeichert', 'OK', { duration: 3000 });
+            return true;
         } catch (e) {
             console.error(e);
             this._snackBar.open('Fehler beim Speichern', 'OK', { duration: 3000 });
+            return false;
         }
     }
 }

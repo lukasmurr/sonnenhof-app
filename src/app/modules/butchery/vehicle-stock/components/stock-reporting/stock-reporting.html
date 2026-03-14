@@ -34,22 +34,32 @@
 
         <mat-step>
             <ng-template matStepLabel>Bestand erfassen</ng-template>
-            <div class="stock-list">
-                @for (control of stockFormArray.controls; track $index) {
-                <div [formGroup]="control" class="stock-item">
-                    <span class="item-name">{{control.get('name')?.value}}</span>
-                    <mat-form-field appearance="outline" class="qty-input">
-                        <mat-label>Menge</mat-label>
-                        <input matInput type="number" formControlName="quantity" min="0">
-                        <span matSuffix>{{control.get('unit')?.value}}</span>
-                    </mat-form-field>
-                </div>
-                }
+            @if (stockFormArray.length > 0 && currentStockControl(); as control) {
+            <div class="item-progress">
+                Produkt {{ currentItemIndex() + 1 }} von {{ stockFormArray.length }}
             </div>
-            <div>
+
+            <div [formGroup]="control" class="stock-item-card">
+                <h3 class="item-name">{{control.get('name')?.value}}</h3>
+                <mat-form-field appearance="outline" class="qty-input">
+                    <mat-label>Menge</mat-label>
+                    <input matInput type="number" formControlName="quantity" min="0" inputmode="decimal">
+                    <span matSuffix>{{control.get('unit')?.value}}</span>
+                </mat-form-field>
+            </div>
+
+            <div class="step-actions">
+                <button mat-button (click)="goBackFromItemStep()">Zurück</button>
+                <button mat-raised-button color="primary" (click)="goForwardFromItemStep()">
+                    {{ currentItemIndex() < stockFormArray.length - 1 ? 'Weiter' : 'Zur Zusammenfassung' }}
+                </button>
+            </div>
+            } @else {
+            <p class="empty-state">Keine Produkte für diesen Markt konfiguriert.</p>
+            <div class="step-actions">
                 <button mat-button matStepperPrevious>Zurück</button>
-                <button mat-raised-button color="primary" matStepperNext>Weiter</button>
             </div>
+            }
         </mat-step>
 
         <mat-step>
@@ -65,9 +75,9 @@
                 }
                 }
             </mat-list>
-            <div>
+            <div class="step-actions">
                 <button mat-button matStepperPrevious>Zurück</button>
-                <button mat-raised-button color="primary" (click)="submit(); stepper.reset()">Speichern</button>
+                <button mat-raised-button color="primary" (click)="submitAndReset()">Speichern</button>
             </div>
         </mat-step>
     </mat-stepper>

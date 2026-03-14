@@ -13,33 +13,42 @@
     margin-top: 24px;
 }
 
-.stock-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 24px;
-    margin-bottom: 24px;
-    max-height: 60vh;
-    overflow-y: auto;
+.item-progress {
+    margin-top: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #455a64;
 }
 
-.stock-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 8px;
+.stock-item-card {
+    margin-bottom: 20px;
+    padding: 18px;
     background: #f9f9f9;
-    border-radius: 8px;
+    border-radius: 12px;
+    border: 1px solid #eceff1;
+    max-width: 520px;
 
     .item-name {
-        flex: 1;
+        margin: 0 0 14px 0;
         font-weight: 500;
     }
 
     .qty-input {
-        width: 120px;
-        margin-bottom: -1.25em;
+        width: 100%;
+        max-width: 220px;
     }
+}
+
+.step-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.empty-state {
+    margin-top: 20px;
+    margin-bottom: 16px;
 }
 
 :host-context(.dark-theme) {
@@ -48,8 +57,38 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .stock-item {
+    .item-progress {
+        color: #cfd8dc;
+    }
+
+    .stock-item-card {
         background: #505050;
+        border-color: #616161;
         color: #eceff1;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-card {
+        padding: 16px;
+    }
+
+    .form-column {
+        max-width: 100%;
+    }
+
+    .stock-item-card {
+        padding: 14px;
+        max-width: 100%;
+
+        .qty-input {
+            max-width: 100%;
+        }
+    }
+
+    .step-actions {
+        button {
+            flex: 1 1 100%;
+        }
     }
 }
