@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,8 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../../../core/services/auth.service';
 import { Market } from '../../../../../core/models/market.model';
 import { Offer } from '../../../../../core/models/offer.model';
 import { Product } from '../../../../../core/models/product.model';
@@ -44,17 +45,22 @@ import { VehicleStockService } from '../../../../../core/services/vehicle-stock.
     templateUrl: './stock-reporting.html',
     styleUrls: ['./stock-reporting.scss']
 })
-export class StockReportingComponent implements OnInit {
+export class StockReportingComponent implements OnInit, AfterViewInit {
+    @ViewChild('stepper') private stepper?: MatStepper;
+
     private _formBuilder = inject(FormBuilder);
     private _marketService = inject(MarketService);
     private _stockService = inject(VehicleStockService);
     private _productService = inject(ProductService);
     private _offerService = inject(OfferService);
+    private _authService = inject(AuthService);
     private _snackBar = inject(MatSnackBar);
 
     markets = signal<Market[]>([]);
     products = signal<Product[]>([]);
     offers = signal<Offer[]>([]);
+
+    private _autoSkipTried = false;
 
     firstFormGroup = this._formBuilder.group({
         market: ['', Validators.required],
@@ -64,9 +70,43 @@ export class StockReportingComponent implements OnInit {
     stockFormArray = this._formBuilder.array<FormGroup>([]);
 
     ngOnInit() {
-        this._marketService.getMarkets().subscribe(m => this.markets.set(m));
+        this._marketService.getMarkets().subscribe(m => {
+            this.markets.set(m);
+            this.tryAutoSkipFirstStep(m);
+        });
+
         this._productService.getProducts().subscribe(p => this.products.set(p));
         this._offerService.getOffers().subscribe(o => this.offers.set(o));
+    }
+
+    ngAfterViewInit() {
+        // In case markets are already loaded before the stepper is ready
+        this.tryAutoSkipFirstStep(this.markets());
+    }
+
+    private tryAutoSkipFirstStep(markets: Market[]) {
+        if (this._autoSkipTried || !markets?.length) return;
+
+        const email = this._authService.getCurrentUser();
+        if (!email) return;
+
+        const match = email.match(/^auto(\d+)@/i);
+        if (!match) return;
+
+        const car = match[1];
+        const market = markets.find(m => m.car === car) ?? markets[0];
+        if (!market?._id) return;
+
+        this.firstFormGroup.patchValue({ market: market._id });
+
+        // Auto-advance the stepper once the first step is valid.
+        // We use a microtask to avoid ExpressionChanged errors.
+        Promise.resolve().then(async () => {
+            await this.onStep1Next();
+            this.stepper?.next();
+        });
+
+        this._autoSkipTried = true;
     }
 
     async onStep1Next() {
