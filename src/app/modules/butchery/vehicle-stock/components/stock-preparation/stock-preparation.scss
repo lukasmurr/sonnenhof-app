@@ -9,6 +9,7 @@
     display: flex;
     gap: 16px;
     margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
 .header {
@@ -20,6 +21,12 @@
     .spacer {
         flex: 1;
     }
+}
+
+.today-hint {
+    margin: 0;
+    font-weight: 500;
+    color: #455a64;
 }
 
 .full-width-table {
@@ -67,6 +74,10 @@
         background: #424242;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
+        .today-hint {
+            color: #cfd8dc;
+        }
+
         .mobile-item-card {
             background: #4a4a4a;
             border-color: rgba(144, 164, 255, 0.35);
@@ -88,6 +99,17 @@ mat-expansion-panel {
 }
 
 @media (max-width: 768px) {
+    .nav-actions {
+        button {
+            flex: 1 1 100%;
+        }
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
     .desktop-table-view {
         display: none;
     }

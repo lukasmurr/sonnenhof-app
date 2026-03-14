@@ -11,6 +11,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -18,8 +19,9 @@ import { VehicleStock } from '../../../../../core/models/vehicle-stock.model';
 import { MarketService } from '../../../../../core/services/market.service';
 import { PdfService } from '../../../../../core/services/pdf.service';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
-import { StockAdjustmentDialogComponent } from '../stock-adjustment-dialog/stock-adjustment-dialog';
+import { StockAdjustmentDialogComponent, StockAdjustmentDialogResult } from '../stock-adjustment-dialog/stock-adjustment-dialog';
 import { HasPermissionDirective } from "src/app/core/directives/has-permission.directive";
+import { ConfirmationDialogComponent } from '../../../../../core/components/confirmation-dialog/confirmation-dialog';
 
 interface MarketPrepGroup {
     marketId: string;
@@ -42,6 +44,7 @@ interface MarketPrepGroup {
     MatButtonModule,
     MatTableModule,
     MatIconModule,
+    MatSelectModule,
     MatCardModule,
     MatCheckboxModule,
     MatExpansionModule,
@@ -58,6 +61,9 @@ export class StockPreparationComponent implements OnInit {
 
     selectedDate = signal<Date>(new Date());
     showAllPositions = signal<boolean>(false);
+    isArchiveView = signal<boolean>(false);
+    selectedYear = signal<number>(new Date().getFullYear());
+    availableYears = signal<number[]>([]);
 
     private marketGroups = signal<MarketPrepGroup[]>([]);
 
@@ -72,26 +78,76 @@ export class StockPreparationComponent implements OnInit {
     displayedColumns: string[] = ['name', 'totalTarget', 'totalPrep'];
 
     ngOnInit() {
-        // Default to today (Report Date)
+        // Default view always shows only today's reports.
         this.selectedDate.set(new Date());
         this.loadPrepList();
     }
 
-    onDateChange(date: Date) {
+    onDateChange(date: Date | null) {
+        if (!this.isArchiveView() || !date) return;
         this.selectedDate.set(date);
         this.loadPrepList();
     }
 
+    onArchiveToggle() {
+        this.isArchiveView.update(v => !v);
+        if (!this.isArchiveView()) {
+            this.selectedDate.set(new Date());
+        }
+        this.loadPrepList();
+    }
+
+    onArchiveYearChange(year: number) {
+        this.selectedYear.set(year);
+        this.loadPrepList();
+    }
+
+    private toLocalIsoDate(date: Date): string {
+        return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+    }
+
     async loadPrepList() {
-        const date = this.selectedDate();
-        const dateStr = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+        const todayStr = this.toLocalIsoDate(new Date());
+        let dateStr = this.toLocalIsoDate(this.selectedDate());
+        const archiveView = this.isArchiveView();
 
         const [allStocks, allMarkets] = await Promise.all([
             firstValueFrom(this._stockService.getStocks()),
             firstValueFrom(this._marketService.getMarkets())
         ]);
 
-        const stocks = allStocks.filter(s => s.date === dateStr);
+        const archivedStocks = allStocks.filter(s => s.date < todayStr);
+        const years = Array.from(new Set(archivedStocks.map(s => Number(s.date.slice(0, 4))))).sort((a, b) => b - a);
+        this.availableYears.set(years);
+
+        if (archiveView) {
+            if (!years.includes(this.selectedYear())) {
+                this.selectedYear.set(years[0] ?? new Date().getFullYear());
+            }
+
+            const yearPrefix = `${this.selectedYear()}-`;
+            const datesInYear = Array.from(new Set(
+                archivedStocks
+                    .filter(s => s.date.startsWith(yearPrefix))
+                    .map(s => s.date)
+            )).sort((a, b) => b.localeCompare(a));
+
+            if (datesInYear.length > 0 && !datesInYear.includes(dateStr)) {
+                dateStr = datesInYear[0];
+                this.selectedDate.set(new Date(`${dateStr}T00:00:00`));
+            }
+        } else {
+            dateStr = todayStr;
+            this.selectedDate.set(new Date());
+        }
+
+        const stocks = allStocks.filter(s => {
+            if (archiveView) {
+                return s.date === dateStr && s.date < todayStr;
+            }
+
+            return s.date === todayStr;
+        });
 
         // Group stocks by marketId
         const stocksByMarket = new Map<string, typeof stocks>();
@@ -168,13 +224,29 @@ export class StockPreparationComponent implements OnInit {
             data: { stock: JSON.parse(JSON.stringify(group.stock)), calculatedPreps } // Pass copy to avoid direct mutation
         });
 
-        dialogRef.afterClosed().subscribe(async (result) => {
-            if (result && group.stock) {
-                // result is the updated items array
-                group.stock.items = result;
+        dialogRef.afterClosed().subscribe(async (result?: StockAdjustmentDialogResult) => {
+            if (!result || !group.stock) return;
+
+            if (result.action === 'save') {
+                group.stock.items = result.items;
                 await this._stockService.updateStock(group.stock);
-                this.loadPrepList(); // Reload to refresh the view
+                this.loadPrepList();
+                return;
             }
+
+            const confirmRef = this._dialog.open(ConfirmationDialogComponent, {
+                data: {
+                    title: 'Bericht löschen',
+                    message: `Möchten Sie den Bericht für "${group.marketName}" am ${group.stock.date} wirklich löschen?`
+                }
+            });
+
+            confirmRef.afterClosed().subscribe(async confirmed => {
+                if (!confirmed || !group.stock?._id) return;
+
+                await this._stockService.deleteStock(group.stock._id);
+                this.loadPrepList();
+            });
         });
     }
 }

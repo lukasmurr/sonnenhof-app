@@ -2,16 +2,33 @@
     <div class="nav-actions">
         <button mat-raised-button color="primary" routerLink="report" *appHasPermission="'vehicle-stock.create'">Neue Meldung</button>
         <button mat-stroked-button routerLink="management" *appHasPermission="'vehicle-stock.manage'">Sollmenge verwalten</button>
+        <button mat-stroked-button (click)="onArchiveToggle()">
+            <mat-icon>{{ isArchiveView() ? 'arrow_back' : 'archive' }}</mat-icon>
+            {{ isArchiveView() ? 'Zurück' : 'Archiv' }}
+        </button>
     </div>
 
     <div class="header">
-        <mat-form-field appearance="outline">
-            <mat-label>Datum (Meldung)</mat-label>
-            <input matInput [matDatepicker]="picker" [ngModel]="selectedDate()"
-                (dateChange)="onDateChange($event.value)">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+        @if (isArchiveView()) {
+            <mat-form-field appearance="outline">
+                <mat-label>Jahr</mat-label>
+                <mat-select [ngModel]="selectedYear()" (ngModelChange)="onArchiveYearChange($event)">
+                    @for (year of availableYears(); track year) {
+                        <mat-option [value]="year">{{year}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Datum (Meldung)</mat-label>
+                <input matInput [matDatepicker]="picker" [ngModel]="selectedDate()"
+                    (dateChange)="onDateChange($event.value)">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        } @else {
+            <p class="today-hint">Es werden nur Berichte von heute angezeigt.</p>
+        }
 
         <mat-checkbox [ngModel]="showAllPositions()" (ngModelChange)="showAllPositions.set($event)">
             Zeige alle Positionen
@@ -19,7 +36,7 @@
     </div>
 
     <div class="prep-content">
-        <h2>Herzurichtende Mengen nach Markt</h2>
+        <h2>{{ isArchiveView() ? 'Archiv: Herzurichtende Mengen nach Markt' : 'Herzurichtende Mengen nach Markt (Heute)' }}</h2>
 
         <mat-accordion>
             @for (group of filteredMarketGroups(); track group.marketId) {

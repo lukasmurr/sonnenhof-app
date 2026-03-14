@@ -13,6 +13,10 @@ export interface StockAdjustmentDialogData {
     calculatedPreps: Map<string, number>; // itemId -> calculated prep
 }
 
+export type StockAdjustmentDialogResult =
+    | { action: 'save'; items: VehicleStock['items'] }
+    | { action: 'delete' };
+
 @Component({
     selector: 'app-stock-adjustment-dialog',
     standalone: true,
@@ -54,7 +58,7 @@ export interface StockAdjustmentDialogData {
     `]
 })
 export class StockAdjustmentDialogComponent {
-    readonly dialogRef = inject(MatDialogRef<StockAdjustmentDialogComponent>);
+    readonly dialogRef = inject(MatDialogRef<StockAdjustmentDialogComponent, StockAdjustmentDialogResult>);
     readonly data = inject<StockAdjustmentDialogData>(MAT_DIALOG_DATA);
 
     displayedColumns: string[] = ['name', 'target', 'reported', 'calculated', 'adjusted'];
@@ -74,7 +78,11 @@ export class StockAdjustmentDialogComponent {
             };
         });
 
-        this.dialogRef.close(updatedItems);
+        this.dialogRef.close({ action: 'save', items: updatedItems });
+    }
+
+    deleteReport() {
+        this.dialogRef.close({ action: 'delete' });
     }
 
     cancel() {

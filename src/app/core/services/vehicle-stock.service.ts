@@ -38,6 +38,10 @@ export class VehicleStockService {
         return this.dbService.updateDoc(stock);
     }
 
+    deleteStock(id: string): Promise<any> {
+        return this.dbService.deleteDoc(id);
+    }
+
     async saveConfig(config: VehicleStockConfig): Promise<any> {
         if (config._id) {
             return this.dbService.updateDoc(config);
