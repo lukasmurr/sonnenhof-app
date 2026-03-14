@@ -31,6 +31,7 @@
       <mat-select formControlName="unit">
         <mat-option value="Stück">Stück</mat-option>
         <mat-option value="Kg">Kg</mat-option>
+        <mat-option value="Paar">Paar</mat-option>
       </mat-select>
       @if (form.get('unit')?.hasError('required')) {
         <mat-error>
