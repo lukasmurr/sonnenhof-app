@@ -20,19 +20,18 @@
         <div class="add-item-section">
             <h3>Neues Produkt hinzufügen</h3>
             <div class="add-form-row">
-                <mat-form-field appearance="outline" class="product-select" subscriptSizing="dynamic">
-                    <mat-label>Produkt</mat-label>
-                    <mat-select [ngModel]="selectedProductToAdd()" (ngModelChange)="selectedProductToAdd.set($event)">
-                        @for (p of products(); track p._id) {
-                        <mat-option [value]="p._id">{{p.name}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+                <div class="product-select">
+                    <app-product-select [products]="products()" [ngModel]="selectedProductToAdd()"
+                        (ngModelChange)="selectedProductToAdd.set($event)"></app-product-select>
+                </div>
 
                 <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
                     <mat-label>Einheit</mat-label>
-                    <input matInput [ngModel]="newTargetUnit()" (ngModelChange)="newTargetUnit.set($event)"
-                        placeholder="z.B. kg">
+                    <mat-select [ngModel]="newTargetUnit()" (ngModelChange)="newTargetUnit.set($event)">
+                        @for (unit of availableUnits; track unit) {
+                            <mat-option [value]="unit">{{unit}}</mat-option>
+                        }
+                    </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
@@ -42,7 +41,7 @@
                 </mat-form-field>
 
                 <button mat-mini-fab color="primary" (click)="addConfigItem()"
-                    [disabled]="!selectedProductToAdd() || newTargetQuantity() <= 0">
+                    [disabled]="!selectedProductToAdd() || !newTargetUnit() || newTargetQuantity() <= 0">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
@@ -60,7 +59,11 @@
                     <th mat-header-cell *matHeaderCellDef> Einheit </th>
                     <td mat-cell *matCellDef="let item">
                         <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
-                            <input matInput [(ngModel)]="item.unit">
+                            <mat-select [(ngModel)]="item.unit">
+                                @for (unit of availableUnits; track unit) {
+                                    <mat-option [value]="unit">{{unit}}</mat-option>
+                                }
+                            </mat-select>
                         </mat-form-field>
                     </td>
                 </ng-container>
@@ -76,7 +79,15 @@
 
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef> </th>
-                    <td mat-cell *matCellDef="let item">
+                    <td mat-cell *matCellDef="let item; let i = index">
+                        <button mat-icon-button (click)="moveConfigItemUp(i)" [disabled]="i === 0"
+                            aria-label="Produkt nach oben verschieben">
+                            <mat-icon>arrow_upward</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="moveConfigItemDown(i)" [disabled]="i === configItems().length - 1"
+                            aria-label="Produkt nach unten verschieben">
+                            <mat-icon>arrow_downward</mat-icon>
+                        </button>
                         <button mat-icon-button color="warn" (click)="removeConfigItem(item.id)">
                             <mat-icon>delete</mat-icon>
                         </button>
@@ -90,7 +101,7 @@
             <div class="mobile-list-view" aria-label="Konfigurierte Produkte als Kartenansicht">
                 @if (configItems().length > 0) {
                     <div class="mobile-cards-grid">
-                        @for (item of configItems(); track item.id || $index) {
+                        @for (item of configItems(); track item.id || $index; let i = $index) {
                             <article class="mobile-item-card">
                                 <div class="mobile-item-head">
                                     <h3>{{ item.name }}</h3>
@@ -98,7 +109,11 @@
                                 <div class="mobile-item-fields">
                                     <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
                                         <mat-label>Einheit</mat-label>
-                                        <input matInput [(ngModel)]="item.unit">
+                                        <mat-select [(ngModel)]="item.unit">
+                                            @for (unit of availableUnits; track unit) {
+                                                <mat-option [value]="unit">{{unit}}</mat-option>
+                                            }
+                                        </mat-select>
                                     </mat-form-field>
                                     <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
                                         <mat-label>Soll</mat-label>
@@ -106,6 +121,14 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="mobile-item-actions">
+                                    <button mat-stroked-button (click)="moveConfigItemUp(i)" [disabled]="i === 0">
+                                        <mat-icon>arrow_upward</mat-icon>
+                                        Nach oben
+                                    </button>
+                                    <button mat-stroked-button (click)="moveConfigItemDown(i)" [disabled]="i === configItems().length - 1">
+                                        <mat-icon>arrow_downward</mat-icon>
+                                        Nach unten
+                                    </button>
                                     <button mat-stroked-button color="warn" (click)="removeConfigItem(item.id)">
                                         <mat-icon>delete</mat-icon>
                                         Entfernen

@@ -18,6 +18,7 @@ import { MarketService } from '../../../../../core/services/market.service';
 import { OfferService } from '../../../../../core/services/offer.service';
 import { ProductService } from '../../../../../core/services/product.service';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
+import { ProductSelectComponent } from '../../../orders/dialog/product-select/product-select';
 
 @Component({
     selector: 'app-stock-management',
@@ -34,7 +35,8 @@ import { VehicleStockService } from '../../../../../core/services/vehicle-stock.
         MatIconModule,
         MatSnackBarModule,
         MatCardModule,
-        MatTableModule
+        MatTableModule,
+        ProductSelectComponent
     ],
     templateUrl: './stock-management.html',
     styleUrls: ['./stock-management.scss']
@@ -57,9 +59,10 @@ export class StockManagementComponent implements OnInit {
     configItems = signal<any[]>([]); // { id, name, type, target, unit }
 
     // Add Item State
-    selectedProductToAdd = signal<string | null>(null);
+    selectedProductToAdd = signal<Product | null>(null);
     newTargetQuantity = signal<number>(0);
     newTargetUnit = signal<string>('');
+    availableUnits = ['Stück', 'Stange', 'Paar'];
 
     ngOnInit() {
         this._marketService.getMarkets().subscribe(m => this.markets.set(m));
@@ -87,18 +90,15 @@ export class StockManagementComponent implements OnInit {
     }
 
     addConfigItem() {
-        const productId = this.selectedProductToAdd();
+        const product = this.selectedProductToAdd();
         const target = this.newTargetQuantity();
         const unit = this.newTargetUnit();
 
-        if (!productId || target <= 0) return;
-
-        const product = this.products().find(p => p._id === productId);
-        if (!product) return;
+        if (!product || !product._id || target <= 0 || !unit) return;
 
         // Check if already exists
         const currentItems = this.configItems();
-        if (currentItems.find(i => i.id === productId)) {
+        if (currentItems.find(i => i.id === product._id)) {
             this._snackBar.open('Produkt bereits in der Liste', 'OK', { duration: 3000 });
             return;
         }
@@ -121,6 +121,22 @@ export class StockManagementComponent implements OnInit {
 
     removeConfigItem(itemId: string) {
         this.configItems.set(this.configItems().filter(i => i.id !== itemId));
+    }
+
+    moveConfigItemUp(index: number) {
+        if (index <= 0) return;
+
+        const items = [...this.configItems()];
+        [items[index - 1], items[index]] = [items[index], items[index - 1]];
+        this.configItems.set(items);
+    }
+
+    moveConfigItemDown(index: number) {
+        const items = [...this.configItems()];
+        if (index < 0 || index >= items.length - 1) return;
+
+        [items[index], items[index + 1]] = [items[index + 1], items[index]];
+        this.configItems.set(items);
     }
 
     async saveConfig() {
