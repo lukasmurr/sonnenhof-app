@@ -79,3 +79,26 @@ router-outlet + * {
 .mat-mdc-dialog-content {
   padding-top: 10px !important;
 }
+
+.vehicle-stock-dialog {
+  .mat-mdc-dialog-surface {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .mat-mdc-dialog-content {
+    max-height: calc(94vh - 130px);
+  }
+}
+
+.vehicle-stock-dialog-mobile {
+  .mat-mdc-dialog-surface {
+    border-radius: 0;
+    width: 100vw;
+    height: 100dvh;
+  }
+
+  .mat-mdc-dialog-content {
+    max-height: calc(100dvh - 124px);
+  }
+}

@@ -11,29 +11,32 @@
         }
         <h2 style="margin: 0;">Neue Meldung erfassen</h2>
     </div>
-    <mat-stepper [linear]="true" #stepper>
+    <mat-stepper [linear]="true" #stepper (selectionChange)="onStepperSelectionChange($event)">
         <mat-step [stepControl]="firstFormGroup">
-            <form [formGroup]="firstFormGroup">
+            <form [formGroup]="firstFormGroup" (ngSubmit)="continueFromStep1()">
                 <ng-template matStepLabel>Markt & Datum</ng-template>
-                <div class="form-column">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Markt</mat-label>
-                        <mat-select formControlName="market">
-                            @for (m of markets(); track m._id) {
-                            <mat-option [value]="m._id">{{m.name}}</mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
+                <div class="stock-item-card">
+                    <h3 class="item-name">Markt und Datum</h3>
+                    <div class="form-column form-column-in-card">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Markt</mat-label>
+                            <mat-select formControlName="market">
+                                @for (m of markets(); track m._id) {
+                                <mat-option [value]="m._id">{{m.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Datum</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="date">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Datum</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="date">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
                 </div>
-                <div>
-                    <button mat-button matStepperNext (click)="onStep1Next()">Weiter</button>
+                <div class="step-actions">
+                    <button mat-raised-button color="primary" type="submit" class="continue-btn">Weiter</button>
                 </div>
             </form>
         </mat-step>
@@ -49,14 +52,15 @@
                 <h3 class="item-name">{{control.get('name')?.value}}</h3>
                 <mat-form-field appearance="outline" class="qty-input">
                     <mat-label>Menge</mat-label>
-                    <input matInput type="number" formControlName="quantity" min="0" inputmode="decimal">
+                    <input #quantityInput matInput type="number" formControlName="quantity" min="0" inputmode="decimal"
+                        (keydown.enter)="onQuantityEnter($event)">
                     <span matSuffix>{{control.get('unit')?.value}}</span>
                 </mat-form-field>
             </div>
 
             <div class="step-actions">
                 <button mat-button (click)="goBackFromItemStep()">Zurück</button>
-                <button mat-raised-button color="primary" (click)="goForwardFromItemStep()">
+                <button mat-raised-button color="primary" class="continue-btn" (click)="goForwardFromItemStep()">
                     {{ currentItemIndex() < stockFormArray.length - 1 ? 'Weiter' : 'Zur Zusammenfassung' }}
                 </button>
             </div>

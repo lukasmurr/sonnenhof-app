@@ -13,6 +13,11 @@
     margin-top: 24px;
 }
 
+.form-column-in-card {
+    max-width: 100%;
+    margin-top: 0;
+}
+
 .item-progress {
     margin-top: 20px;
     margin-bottom: 12px;
@@ -26,17 +31,44 @@
     background: #f9f9f9;
     border-radius: 12px;
     border: 1px solid #eceff1;
-    max-width: 520px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
 
     .item-name {
         margin: 0 0 14px 0;
         font-weight: 500;
+        text-align: center;
     }
 
     .qty-input {
+        display: block;
         width: 100%;
-        max-width: 220px;
+        max-width: 360px;
+        margin: 0 auto;
+
+        .mat-mdc-input-element {
+            font-size: 1.35rem;
+            line-height: 1.35;
+            text-align: center;
+        }
+
+        .mat-mdc-form-field-infix {
+            min-height: 56px;
+        }
     }
+}
+
+.continue-btn {
+    min-height: 46px;
+    min-width: 160px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding-inline: 20px;
+}
+
+.step-actions .continue-btn {
+    margin-left: auto;
 }
 
 .step-actions {
@@ -90,5 +122,10 @@
         button {
             flex: 1 1 100%;
         }
+    }
+
+    .continue-btn {
+        min-height: 52px;
+        font-size: 1.05rem;
     }
 }

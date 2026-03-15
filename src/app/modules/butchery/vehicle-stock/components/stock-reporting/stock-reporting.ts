@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { Market } from '../../../../../core/models/market.model';
@@ -48,6 +49,7 @@ import { VehicleStockService } from '../../../../../core/services/vehicle-stock.
 })
 export class StockReportingComponent implements OnInit, AfterViewInit {
     @ViewChild('stepper') private stepper?: MatStepper;
+    @ViewChild('quantityInput') private quantityInput?: ElementRef<HTMLInputElement>;
 
     private _formBuilder = inject(FormBuilder);
     private _marketService = inject(MarketService);
@@ -66,6 +68,16 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
     currentItemIndex = signal(0);
 
     private _autoSkipTried = false;
+
+    private focusCurrentQuantityField() {
+        setTimeout(() => {
+            const input = this.quantityInput?.nativeElement;
+            if (!input) return;
+
+            input.focus();
+            input.select();
+        });
+    }
 
     firstFormGroup = this._formBuilder.group({
         market: ['', Validators.required],
@@ -107,8 +119,7 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
         // Auto-advance the stepper once the first step is valid.
         // We use a microtask to avoid ExpressionChanged errors.
         Promise.resolve().then(async () => {
-            await this.onStep1Next();
-            this.stepper?.next();
+            await this.continueFromStep1();
         });
 
         this._autoSkipTried = true;
@@ -153,6 +164,23 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
         this.currentItemIndex.set(0);
     }
 
+    async continueFromStep1() {
+        if (this.firstFormGroup.invalid) {
+            this.firstFormGroup.markAllAsTouched();
+            return;
+        }
+
+        await this.onStep1Next();
+        this.stepper?.next();
+        this.focusCurrentQuantityField();
+    }
+
+    onStepperSelectionChange(event: StepperSelectionEvent) {
+        if (event.selectedIndex === 1) {
+            this.focusCurrentQuantityField();
+        }
+    }
+
     currentStockControl() {
         const index = this.currentItemIndex();
         return this.stockFormArray.at(index) ?? null;
@@ -162,6 +190,7 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
         const current = this.currentItemIndex();
         if (current > 0) {
             this.currentItemIndex.set(current - 1);
+            this.focusCurrentQuantityField();
             return;
         }
 
@@ -172,6 +201,7 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
         const current = this.currentItemIndex();
         if (current < this.stockFormArray.length - 1) {
             this.currentItemIndex.set(current + 1);
+            this.focusCurrentQuantityField();
             return;
         }
 
@@ -194,6 +224,11 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
 
     closeDialog() {
         this._dialogRef?.close(false);
+    }
+
+    onQuantityEnter(event: Event) {
+        event.preventDefault();
+        this.goForwardFromItemStep();
     }
 
     async submit(): Promise<boolean> {

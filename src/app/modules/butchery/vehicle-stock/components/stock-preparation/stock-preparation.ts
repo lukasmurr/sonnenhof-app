@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -79,13 +79,36 @@ export class StockPreparationComponent implements OnInit {
 
     displayedColumns: string[] = ['name', 'totalTarget', 'totalPrep'];
 
+    private getDialogConfig(desktopWidth: string): MatDialogConfig {
+        const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+
+        if (isMobile) {
+            return {
+                width: '100vw',
+                maxWidth: '100vw',
+                height: '100dvh',
+                maxHeight: '100dvh',
+                panelClass: ['vehicle-stock-dialog', 'vehicle-stock-dialog-mobile'],
+                disableClose: true,
+                autoFocus: false,
+                restoreFocus: false
+            };
+        }
+
+        return {
+            width: desktopWidth,
+            maxWidth: '98vw',
+            height: '94vh',
+            maxHeight: '94vh',
+            panelClass: ['vehicle-stock-dialog'],
+            disableClose: true,
+            autoFocus: false,
+            restoreFocus: false
+        };
+    }
+
     openReportingDialog() {
-        const dialogRef = this._dialog.open(StockReportingComponent, {
-            width: '960px',
-            maxWidth: '95vw',
-            maxHeight: '90vh',
-            autoFocus: false
-        });
+        const dialogRef = this._dialog.open(StockReportingComponent, this.getDialogConfig('1200px'));
 
         dialogRef.afterClosed().subscribe((wasSaved?: boolean) => {
             if (wasSaved) {
@@ -95,12 +118,7 @@ export class StockPreparationComponent implements OnInit {
     }
 
     openManagementDialog() {
-        this._dialog.open(StockManagementComponent, {
-            width: '960px',
-            maxWidth: '95vw',
-            maxHeight: '90vh',
-            autoFocus: false
-        });
+        this._dialog.open(StockManagementComponent, this.getDialogConfig('1100px'));
     }
 
     ngOnInit() {
@@ -247,6 +265,7 @@ export class StockPreparationComponent implements OnInit {
 
         const dialogRef = this._dialog.open(StockAdjustmentDialogComponent, {
             width: '900px',
+            disableClose: true,
             data: { stock: JSON.parse(JSON.stringify(group.stock)), calculatedPreps } // Pass copy to avoid direct mutation
         });
 
