@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { VehicleStock, VehicleStockConfig } from '../models/vehicle-stock.model';
+import { VehicleStock, VehicleStockConfig, VehicleStockPrintOrderConfig } from '../models/vehicle-stock.model';
 import { CouchDbService } from './pouchdb.service';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { CouchDbService } from './pouchdb.service';
 export class VehicleStockService {
     private readonly STOCK_TYPE = 'vehicle-stock';
     private readonly CONFIG_TYPE = 'vehicle-stock-config';
+    private readonly PRINT_ORDER_CONFIG_TYPE = 'vehicle-stock-print-order-config';
 
     constructor(private dbService: CouchDbService) { }
 
@@ -48,5 +49,25 @@ export class VehicleStockService {
         } else {
             return this.dbService.addDoc({ ...config, type: this.CONFIG_TYPE });
         }
+    }
+
+    async getGlobalPrintOrderConfig(): Promise<VehicleStockPrintOrderConfig | undefined> {
+        const configs = await this.dbService.getAllDocs(this.PRINT_ORDER_CONFIG_TYPE) as VehicleStockPrintOrderConfig[];
+        return configs[0];
+    }
+
+    async saveGlobalPrintOrder(orderItemIds: string[]): Promise<any> {
+        const existing = await this.getGlobalPrintOrderConfig();
+        const config: VehicleStockPrintOrderConfig = {
+            ...existing,
+            type: this.PRINT_ORDER_CONFIG_TYPE,
+            orderItemIds
+        };
+
+        if (config._id) {
+            return this.dbService.updateDoc(config);
+        }
+
+        return this.dbService.addDoc(config);
     }
 }

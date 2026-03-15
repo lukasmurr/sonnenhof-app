@@ -2,6 +2,7 @@
     <div class="nav-actions">
         <button mat-raised-button color="primary" (click)="openReportingDialog()" *appHasPermission="'vehicle-stock.create'">Neue Meldung</button>
         <button mat-stroked-button (click)="openManagementDialog()" *appHasPermission="'vehicle-stock.manage'">Sollmenge verwalten</button>
+        <button mat-stroked-button (click)="openPrintOrderDialog()" *appHasPermission="'vehicle-stock.manage'">Lagerreihenfolge</button>
         <button mat-stroked-button (click)="onArchiveToggle()">
             <mat-icon>{{ isArchiveView() ? 'arrow_back' : 'archive' }}</mat-icon>
             {{ isArchiveView() ? 'Zurück' : 'Archiv' }}
@@ -46,10 +47,6 @@
 
                 <div class="panel-actions">
                     <button mat-stroked-button (click)="adjustReport(group); $event.stopPropagation()">Anpassen</button>
-                    <button mat-stroked-button *appHasPermission="'vehicle-stock.manage'"
-                        (click)="openPrintOrderDialog(group); $event.stopPropagation()">
-                        Lagerreihenfolge
-                    </button>
                     <button mat-raised-button color="primary" (click)="generatePdf(group); $event.stopPropagation()">
                         <mat-icon>picture_as_pdf</mat-icon>
                         PDF Export

@@ -5,12 +5,9 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { VehicleStockConfig } from '../../../../../core/models/vehicle-stock.model';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
 
 export interface StockPrintOrderDialogData {
-    marketId: string;
-    marketName: string;
     items: { itemId: string; name: string; unit: string }[];
     printOrderIds?: string[];
 }
@@ -74,16 +71,7 @@ export class StockPrintOrderDialogComponent {
 
     async save() {
         try {
-            const existing = await this._stockService.getConfigByMarket(this.data.marketId);
-            const config: VehicleStockConfig = {
-                ...existing,
-                type: 'vehicle-stock-config',
-                marketId: this.data.marketId,
-                targets: existing?.targets ?? [],
-                preparationPrintOrder: this.items().map(item => item.itemId)
-            };
-
-            await this._stockService.saveConfig(config);
+            await this._stockService.saveGlobalPrintOrder(this.items().map(item => item.itemId));
             this._snackBar.open('Lagerreihenfolge gespeichert', 'OK', { duration: 2500 });
             this.dialogRef.close({ saved: true });
         } catch (error) {

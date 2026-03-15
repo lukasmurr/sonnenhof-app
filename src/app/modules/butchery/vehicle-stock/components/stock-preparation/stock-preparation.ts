@@ -30,7 +30,6 @@ interface MarketPrepGroup {
     marketId: string;
     marketName: string;
     stock?: VehicleStock;
-    printOrderIds: string[];
     items: { name: string, totalTarget: number, totalPrep: number, unit: string, itemId: string }[];
 }
 
@@ -69,6 +68,7 @@ export class StockPreparationComponent implements OnInit {
     availableYears = signal<number[]>([]);
 
     private marketGroups = signal<MarketPrepGroup[]>([]);
+    private globalPrintOrderIds = signal<string[]>([]);
     private _autoReportingDialogOpened = false;
 
     filteredMarketGroups = computed(() => this.marketGroups());
@@ -117,14 +117,21 @@ export class StockPreparationComponent implements OnInit {
         this._dialog.open(StockManagementComponent, this.getDialogConfig('1100px'));
     }
 
-    openPrintOrderDialog(group: MarketPrepGroup) {
+    openPrintOrderDialog() {
+        const uniqueItems = new Map<string, { itemId: string; name: string; unit: string }>();
+        for (const group of this.marketGroups()) {
+            for (const item of group.items) {
+                if (!uniqueItems.has(item.itemId)) {
+                    uniqueItems.set(item.itemId, { itemId: item.itemId, name: item.name, unit: item.unit });
+                }
+            }
+        }
+
         const dialogRef = this._dialog.open(StockPrintOrderDialogComponent, {
             ...this.getDialogConfig('860px'),
             data: {
-                marketId: group.marketId,
-                marketName: group.marketName,
-                printOrderIds: group.printOrderIds,
-                items: group.items.map(item => ({ itemId: item.itemId, name: item.name, unit: item.unit }))
+                printOrderIds: this.globalPrintOrderIds(),
+                items: Array.from(uniqueItems.values()).sort((a, b) => a.name.localeCompare(b.name))
             }
         });
 
@@ -205,6 +212,10 @@ export class StockPreparationComponent implements OnInit {
             firstValueFrom(this._marketService.getMarkets())
         ]);
 
+        const globalPrintOrderConfig = await this._stockService.getGlobalPrintOrderConfig();
+        const printOrderIds = globalPrintOrderConfig?.orderItemIds ?? [];
+        this.globalPrintOrderIds.set(printOrderIds);
+
         const archivedStocks = allStocks.filter(s => s.date < todayStr);
         const years = Array.from(new Set(archivedStocks.map(s => Number(s.date.slice(0, 4))))).sort((a, b) => b - a);
         this.availableYears.set(years);
@@ -252,7 +263,6 @@ export class StockPreparationComponent implements OnInit {
             const market = allMarkets.find(m => m._id === marketId);
             const marketName = market ? market.name : 'Unbekannter Markt';
             const config = await this._stockService.getConfigByMarket(marketId);
-            const printOrderIds = config?.preparationPrintOrder ?? [];
 
             const itemMap = new Map<string, { name: string, totalTarget: number, totalPrep: number, unit: string, itemId: string }>();
 
@@ -279,7 +289,6 @@ export class StockPreparationComponent implements OnInit {
                 marketId,
                 marketName,
                 stock: marketStocks[0],
-                printOrderIds,
                 items: sortedItems
             });
         }
@@ -290,7 +299,7 @@ export class StockPreparationComponent implements OnInit {
     }
 
     generatePdf(group: MarketPrepGroup) {
-        const sortedForPdf = this.sortItemsByPrintOrder(group.items, group.printOrderIds);
+        const sortedForPdf = this.sortItemsByPrintOrder(group.items, this.globalPrintOrderIds());
         this._pdfService.generateStockPreparationReport(sortedForPdf, this.selectedDate(), group.marketName);
     }
 

@@ -35,5 +35,11 @@ export interface VehicleStockConfig {
     type: 'vehicle-stock-config';
     marketId: string;
     targets: StockTarget[];
-    preparationPrintOrder?: string[]; // Ordered list of item IDs for PDF print sequence
+}
+
+export interface VehicleStockPrintOrderConfig {
+    _id?: string;
+    _rev?: string;
+    type: 'vehicle-stock-print-order-config';
+    orderItemIds: string[];
 }

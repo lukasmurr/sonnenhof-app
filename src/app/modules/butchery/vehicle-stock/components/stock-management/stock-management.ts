@@ -62,7 +62,6 @@ export class StockManagementComponent implements OnInit {
     selectedConfigMarketId = signal<string | null>(null);
     selectedCopySourceMarketId = signal<string | null>(null);
     configItems = signal<any[]>([]); // { id, name, type, target, unit }
-    copiedPrintOrderIds = signal<string[] | null>(null);
 
     availableCopySourceMarkets = computed(() => {
         const targetId = this.selectedConfigMarketId();
@@ -85,7 +84,6 @@ export class StockManagementComponent implements OnInit {
     async onConfigMarketChange(marketId: string) {
         this.selectedConfigMarketId.set(marketId);
         this.selectedCopySourceMarketId.set(null);
-        this.copiedPrintOrderIds.set(null);
         const config = await this._stockService.getConfigByMarket(marketId);
 
         const items: any[] = [];
@@ -122,7 +120,6 @@ export class StockManagementComponent implements OnInit {
         }));
 
         this.configItems.set(copiedItems);
-        this.copiedPrintOrderIds.set(sourceConfig.preparationPrintOrder ?? null);
 
         this._snackBar.open('Sollliste kopiert. Bitte speichern, um zu übernehmen.', 'OK', { duration: 3500 });
     }
@@ -200,16 +197,11 @@ export class StockManagementComponent implements OnInit {
             }));
 
         const existing = await this._stockService.getConfigByMarket(marketId);
-        const targetIds = new Set(targets.map(t => t.itemId));
-        const copiedPrintOrder = this.copiedPrintOrderIds()?.filter(id => targetIds.has(id));
-        const existingPrintOrder = existing?.preparationPrintOrder?.filter(id => targetIds.has(id));
-
         const config: VehicleStockConfig = {
             ...existing,
             type: 'vehicle-stock-config',
             marketId,
-            targets,
-            preparationPrintOrder: copiedPrintOrder ?? existingPrintOrder
+            targets
         };
 
         try {
