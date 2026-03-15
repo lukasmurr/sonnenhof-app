@@ -7,6 +7,9 @@
 
 .tab-content {
     padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .add-item-section {
@@ -67,6 +70,9 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 24px;
+    max-height: min(52vh, 560px);
+    overflow-y: auto;
+    padding-right: 4px;
 
     .mobile-list-view {
         display: none;
@@ -170,6 +176,10 @@
 }
 
 @media (max-width: 768px) {
+    .config-list {
+        max-height: min(48vh, 440px);
+    }
+
     .copy-config-row {
         mat-form-field,
         button {
