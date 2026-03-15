@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -47,6 +48,9 @@ export class StockManagementComponent implements OnInit {
     private _productService = inject(ProductService);
     private _offerService = inject(OfferService);
     private _snackBar = inject(MatSnackBar);
+    private _dialogRef = inject(MatDialogRef<StockManagementComponent, boolean>, { optional: true });
+
+    readonly isDialog = !!this._dialogRef;
 
     markets = signal<Market[]>([]);
     products = signal<Product[]>([]);
@@ -139,9 +143,9 @@ export class StockManagementComponent implements OnInit {
         this.configItems.set(items);
     }
 
-    async saveConfig() {
+    async saveConfig(): Promise<boolean> {
         const marketId = this.selectedConfigMarketId();
-        if (!marketId) return;
+        if (!marketId) return false;
 
         const targets: StockTarget[] = this.configItems()
             .map(i => ({
@@ -162,8 +166,21 @@ export class StockManagementComponent implements OnInit {
         try {
             await this._stockService.saveConfig(config);
             this._snackBar.open('Konfiguration gespeichert', 'OK', { duration: 3000 });
+            return true;
         } catch (e) {
             this._snackBar.open('Fehler beim Speichern', 'OK', { duration: 3000 });
+            return false;
         }
+    }
+
+    async saveAndClose() {
+        const didSave = await this.saveConfig();
+        if (didSave) {
+            this._dialogRef?.close(true);
+        }
+    }
+
+    closeDialog() {
+        this._dialogRef?.close(false);
     }
 }

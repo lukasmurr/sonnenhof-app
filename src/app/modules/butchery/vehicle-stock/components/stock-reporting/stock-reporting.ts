@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { RouterModule } from '@angular/router';
@@ -55,6 +56,9 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
     private _offerService = inject(OfferService);
     private _authService = inject(AuthService);
     private _snackBar = inject(MatSnackBar);
+    private _dialogRef = inject(MatDialogRef<StockReportingComponent, boolean>, { optional: true });
+
+    readonly isDialog = !!this._dialogRef;
 
     markets = signal<Market[]>([]);
     products = signal<Product[]>([]);
@@ -178,9 +182,18 @@ export class StockReportingComponent implements OnInit, AfterViewInit {
         const didSubmit = await this.submit();
         if (!didSubmit) return;
 
+        if (this.isDialog) {
+            this._dialogRef?.close(true);
+            return;
+        }
+
         this.stepper?.reset();
         this.stockFormArray.clear();
         this.currentItemIndex.set(0);
+    }
+
+    closeDialog() {
+        this._dialogRef?.close(false);
     }
 
     async submit(): Promise<boolean> {

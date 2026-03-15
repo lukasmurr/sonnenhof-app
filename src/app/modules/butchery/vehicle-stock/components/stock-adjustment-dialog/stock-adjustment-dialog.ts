@@ -30,32 +30,7 @@ export type StockAdjustmentDialogResult =
         MatTableModule
     ],
     templateUrl: './stock-adjustment-dialog.html',
-    styles: [`
-        .full-width-table { width: 100%; }
-        .small-input { width: 80px; }
-        .mobile-list-view { display: none; }
-        .mobile-cards-grid { display: grid; gap: 10px; }
-        .mobile-item-card {
-            border: 1px solid rgba(63, 81, 181, 0.15);
-            border-radius: 12px;
-            padding: 10px 12px;
-            background: #fafbff;
-        }
-        .mobile-item-card h3 { margin: 0 0 6px; font-size: 0.95rem; }
-        .mobile-item-card p { margin: 0 0 2px; font-size: 0.9rem; }
-
-        :host-context(.dark-theme) .mobile-list-view .mobile-item-card {
-            background: #4a4a4a;
-            border-color: rgba(144, 164, 255, 0.35);
-            color: #eceff1;
-        }
-
-        @media (max-width: 768px) {
-            .desktop-table-view { display: none; }
-            .mobile-list-view { display: block; }
-            .small-input { width: 100%; }
-        }
-    `]
+    styleUrl: './stock-adjustment-dialog.scss'
 })
 export class StockAdjustmentDialogComponent {
     readonly dialogRef = inject(MatDialogRef<StockAdjustmentDialogComponent, StockAdjustmentDialogResult>);

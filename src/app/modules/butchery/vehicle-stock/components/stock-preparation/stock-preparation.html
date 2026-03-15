@@ -1,7 +1,7 @@
 <mat-card class="stock-card">
     <div class="nav-actions">
-        <button mat-raised-button color="primary" routerLink="report" *appHasPermission="'vehicle-stock.create'">Neue Meldung</button>
-        <button mat-stroked-button routerLink="management" *appHasPermission="'vehicle-stock.manage'">Sollmenge verwalten</button>
+        <button mat-raised-button color="primary" (click)="openReportingDialog()" *appHasPermission="'vehicle-stock.create'">Neue Meldung</button>
+        <button mat-stroked-button (click)="openManagementDialog()" *appHasPermission="'vehicle-stock.manage'">Sollmenge verwalten</button>
         <button mat-stroked-button (click)="onArchiveToggle()">
             <mat-icon>{{ isArchiveView() ? 'arrow_back' : 'archive' }}</mat-icon>
             {{ isArchiveView() ? 'Zurück' : 'Archiv' }}

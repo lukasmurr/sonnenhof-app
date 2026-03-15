@@ -22,6 +22,8 @@ import { VehicleStockService } from '../../../../../core/services/vehicle-stock.
 import { StockAdjustmentDialogComponent, StockAdjustmentDialogResult } from '../stock-adjustment-dialog/stock-adjustment-dialog';
 import { HasPermissionDirective } from "src/app/core/directives/has-permission.directive";
 import { ConfirmationDialogComponent } from '../../../../../core/components/confirmation-dialog/confirmation-dialog';
+import { StockReportingComponent } from '../stock-reporting/stock-reporting';
+import { StockManagementComponent } from '../stock-management/stock-management';
 
 interface MarketPrepGroup {
     marketId: string;
@@ -76,6 +78,30 @@ export class StockPreparationComponent implements OnInit {
     });
 
     displayedColumns: string[] = ['name', 'totalTarget', 'totalPrep'];
+
+    openReportingDialog() {
+        const dialogRef = this._dialog.open(StockReportingComponent, {
+            width: '960px',
+            maxWidth: '95vw',
+            maxHeight: '90vh',
+            autoFocus: false
+        });
+
+        dialogRef.afterClosed().subscribe((wasSaved?: boolean) => {
+            if (wasSaved) {
+                this.loadPrepList();
+            }
+        });
+    }
+
+    openManagementDialog() {
+        this._dialog.open(StockManagementComponent, {
+            width: '960px',
+            maxWidth: '95vw',
+            maxHeight: '90vh',
+            autoFocus: false
+        });
+    }
 
     ngOnInit() {
         // Default view always shows only today's reports.

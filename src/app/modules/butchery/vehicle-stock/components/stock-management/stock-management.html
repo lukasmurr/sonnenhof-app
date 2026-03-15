@@ -1,8 +1,14 @@
 <mat-card class="stock-card">
     <div class="header-actions" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+        @if (isDialog) {
+        <button mat-icon-button (click)="closeDialog()" aria-label="Dialog schließen">
+            <mat-icon>close</mat-icon>
+        </button>
+        } @else {
         <button mat-icon-button routerLink="..">
             <mat-icon>arrow_back</mat-icon>
         </button>
+        }
         <h2 style="margin: 0;">Sollbestände verwalten</h2>
     </div>
     <div class="tab-content">
@@ -145,8 +151,13 @@
             }
         </div>
         <div class="actions">
+            @if (isDialog) {
+            <button mat-raised-button color="primary" (click)="saveAndClose()"
+                [disabled]="configItems().length === 0">Speichern</button>
+            } @else {
             <button mat-raised-button color="primary" (click)="saveConfig()"
                 [disabled]="configItems().length === 0">Speichern</button>
+            }
         </div>
         }
     </div>
