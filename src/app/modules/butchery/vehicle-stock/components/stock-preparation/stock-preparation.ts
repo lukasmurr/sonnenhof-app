@@ -3,7 +3,6 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -48,7 +47,6 @@ interface MarketPrepGroup {
     MatIconModule,
     MatSelectModule,
     MatCardModule,
-    MatCheckboxModule,
     MatExpansionModule,
     HasPermissionDirective
 ],
@@ -62,20 +60,13 @@ export class StockPreparationComponent implements OnInit {
     private _dialog = inject(MatDialog);
 
     selectedDate = signal<Date>(new Date());
-    showAllPositions = signal<boolean>(false);
     isArchiveView = signal<boolean>(false);
     selectedYear = signal<number>(new Date().getFullYear());
     availableYears = signal<number[]>([]);
 
     private marketGroups = signal<MarketPrepGroup[]>([]);
 
-    filteredMarketGroups = computed(() => {
-        const showAll = this.showAllPositions();
-        return this.marketGroups().map(group => ({
-            ...group,
-            items: group.items.filter(item => showAll || item.totalPrep > 0)
-        })).filter(group => group.items.length > 0);
-    });
+    filteredMarketGroups = computed(() => this.marketGroups());
 
     displayedColumns: string[] = ['name', 'totalTarget', 'totalPrep'];
 
@@ -243,11 +234,7 @@ export class StockPreparationComponent implements OnInit {
     }
 
     generatePdf(group: MarketPrepGroup) {
-        // Filter items based on current view settings (showAllPositions)
-        const showAll = this.showAllPositions();
-        const itemsToPrint = group.items.filter(item => showAll || item.totalPrep > 0);
-
-        this._pdfService.generateStockPreparationReport(itemsToPrint, this.selectedDate(), group.marketName);
+        this._pdfService.generateStockPreparationReport(group.items, this.selectedDate(), group.marketName);
     }
 
     async adjustReport(group: MarketPrepGroup) {

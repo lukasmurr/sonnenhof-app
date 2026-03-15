@@ -26,13 +26,7 @@
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-        } @else {
-            <p class="today-hint">Es werden nur Berichte von heute angezeigt.</p>
         }
-
-        <mat-checkbox [ngModel]="showAllPositions()" (ngModelChange)="showAllPositions.set($event)">
-            Zeige alle Positionen
-        </mat-checkbox>
     </div>
 
     <div class="prep-content">
