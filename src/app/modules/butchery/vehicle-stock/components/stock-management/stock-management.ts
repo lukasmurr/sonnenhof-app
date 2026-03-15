@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -60,7 +60,14 @@ export class StockManagementComponent implements OnInit {
 
     // Config Tab
     selectedConfigMarketId = signal<string | null>(null);
+    selectedCopySourceMarketId = signal<string | null>(null);
     configItems = signal<any[]>([]); // { id, name, type, target, unit }
+    copiedPrintOrderIds = signal<string[] | null>(null);
+
+    availableCopySourceMarkets = computed(() => {
+        const targetId = this.selectedConfigMarketId();
+        return this.markets().filter(m => m._id && m._id !== targetId);
+    });
 
     // Add Item State
     selectedProductToAdd = signal<Product | null>(null);
@@ -77,20 +84,57 @@ export class StockManagementComponent implements OnInit {
     // Config Logic
     async onConfigMarketChange(marketId: string) {
         this.selectedConfigMarketId.set(marketId);
+        this.selectedCopySourceMarketId.set(null);
+        this.copiedPrintOrderIds.set(null);
         const config = await this._stockService.getConfigByMarket(marketId);
 
         const items: any[] = [];
         if (config && config.targets) {
             for (const t of config.targets) {
-                let name = 'Unbekannt';
-                if (t.itemType === 'product') {
-                    const p = this.products().find(p => p._id === t.itemId);
-                    if (p) name = p.name;
-                }
+                const name = this.getItemName(t.itemType, t.itemId);
                 items.push({ id: t.itemId, name, type: t.itemType, target: t.targetQuantity, unit: t.unit || '' });
             }
         }
         this.configItems.set(items);
+    }
+
+    async copyConfigFromMarket(sourceMarketId: string | null) {
+        const targetMarketId = this.selectedConfigMarketId();
+        if (!sourceMarketId || !targetMarketId) return;
+
+        if (sourceMarketId === targetMarketId) {
+            this._snackBar.open('Quell- und Zielmarkt dürfen nicht identisch sein', 'OK', { duration: 3000 });
+            return;
+        }
+
+        const sourceConfig = await this._stockService.getConfigByMarket(sourceMarketId);
+        if (!sourceConfig || !sourceConfig.targets?.length) {
+            this._snackBar.open('Im Quellmarkt ist keine Sollliste vorhanden', 'OK', { duration: 3000 });
+            return;
+        }
+
+        const copiedItems = sourceConfig.targets.map(target => ({
+            id: target.itemId,
+            name: this.getItemName(target.itemType, target.itemId),
+            type: target.itemType,
+            target: target.targetQuantity,
+            unit: target.unit || ''
+        }));
+
+        this.configItems.set(copiedItems);
+        this.copiedPrintOrderIds.set(sourceConfig.preparationPrintOrder ?? null);
+
+        this._snackBar.open('Sollliste kopiert. Bitte speichern, um zu übernehmen.', 'OK', { duration: 3500 });
+    }
+
+    private getItemName(itemType: 'product' | 'offer', itemId: string): string {
+        if (itemType === 'product') {
+            const product = this.products().find(p => p._id === itemId);
+            return product?.name ?? 'Unbekannt';
+        }
+
+        const offer = this.offers().find(o => o._id === itemId);
+        return offer ? `Angebot KW${offer.week}` : 'Unbekannt';
     }
 
     addConfigItem() {
@@ -156,11 +200,16 @@ export class StockManagementComponent implements OnInit {
             }));
 
         const existing = await this._stockService.getConfigByMarket(marketId);
+        const targetIds = new Set(targets.map(t => t.itemId));
+        const copiedPrintOrder = this.copiedPrintOrderIds()?.filter(id => targetIds.has(id));
+        const existingPrintOrder = existing?.preparationPrintOrder?.filter(id => targetIds.has(id));
+
         const config: VehicleStockConfig = {
             ...existing,
             type: 'vehicle-stock-config',
             marketId,
-            targets
+            targets,
+            preparationPrintOrder: copiedPrintOrder ?? existingPrintOrder
         };
 
         try {

@@ -23,6 +23,26 @@
 
         @if (selectedConfigMarketId()) {
 
+        <div class="copy-config-section">
+            <h3>Sollliste von anderem Markt kopieren</h3>
+            <div class="copy-config-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Quellmarkt</mat-label>
+                    <mat-select [ngModel]="selectedCopySourceMarketId()"
+                        (ngModelChange)="selectedCopySourceMarketId.set($event)">
+                        @for (m of availableCopySourceMarkets(); track m._id) {
+                        <mat-option [value]="m._id">{{m.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-stroked-button (click)="copyConfigFromMarket(selectedCopySourceMarketId())"
+                    [disabled]="!selectedCopySourceMarketId()">
+                    Kopieren
+                </button>
+            </div>
+        </div>
+
         <div class="add-item-section">
             <h3>Neues Produkt hinzufügen</h3>
             <div class="add-form-row">

@@ -24,11 +24,13 @@ import { HasPermissionDirective } from "src/app/core/directives/has-permission.d
 import { ConfirmationDialogComponent } from '../../../../../core/components/confirmation-dialog/confirmation-dialog';
 import { StockReportingComponent } from '../stock-reporting/stock-reporting';
 import { StockManagementComponent } from '../stock-management/stock-management';
+import { StockPrintOrderDialogComponent, StockPrintOrderDialogResult } from '../stock-print-order-dialog/stock-print-order-dialog';
 
 interface MarketPrepGroup {
     marketId: string;
     marketName: string;
     stock?: VehicleStock;
+    printOrderIds: string[];
     items: { name: string, totalTarget: number, totalPrep: number, unit: string, itemId: string }[];
 }
 
@@ -113,6 +115,39 @@ export class StockPreparationComponent implements OnInit {
 
     openManagementDialog() {
         this._dialog.open(StockManagementComponent, this.getDialogConfig('1100px'));
+    }
+
+    openPrintOrderDialog(group: MarketPrepGroup) {
+        const dialogRef = this._dialog.open(StockPrintOrderDialogComponent, {
+            ...this.getDialogConfig('860px'),
+            data: {
+                marketId: group.marketId,
+                marketName: group.marketName,
+                printOrderIds: group.printOrderIds,
+                items: group.items.map(item => ({ itemId: item.itemId, name: item.name, unit: item.unit }))
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((result?: StockPrintOrderDialogResult) => {
+            if (result?.saved) {
+                this.loadPrepList();
+            }
+        });
+    }
+
+    private sortItemsByPrintOrder<T extends { itemId: string; name: string }>(items: T[], printOrderIds: string[]): T[] {
+        const orderMap = new Map(printOrderIds.map((itemId, index) => [itemId, index]));
+
+        return [...items].sort((a, b) => {
+            const rankA = orderMap.get(a.itemId);
+            const rankB = orderMap.get(b.itemId);
+
+            if (rankA !== undefined && rankB !== undefined) return rankA - rankB;
+            if (rankA !== undefined) return -1;
+            if (rankB !== undefined) return 1;
+
+            return a.name.localeCompare(b.name);
+        });
     }
 
     ngOnInit() {
@@ -217,6 +252,7 @@ export class StockPreparationComponent implements OnInit {
             const market = allMarkets.find(m => m._id === marketId);
             const marketName = market ? market.name : 'Unbekannter Markt';
             const config = await this._stockService.getConfigByMarket(marketId);
+            const printOrderIds = config?.preparationPrintOrder ?? [];
 
             const itemMap = new Map<string, { name: string, totalTarget: number, totalPrep: number, unit: string, itemId: string }>();
 
@@ -238,11 +274,12 @@ export class StockPreparationComponent implements OnInit {
                 }
             }
 
-            const sortedItems = Array.from(itemMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+            const sortedItems = this.sortItemsByPrintOrder(Array.from(itemMap.values()), printOrderIds);
             groups.push({
                 marketId,
                 marketName,
                 stock: marketStocks[0],
+                printOrderIds,
                 items: sortedItems
             });
         }
@@ -253,7 +290,8 @@ export class StockPreparationComponent implements OnInit {
     }
 
     generatePdf(group: MarketPrepGroup) {
-        this._pdfService.generateStockPreparationReport(group.items, this.selectedDate(), group.marketName);
+        const sortedForPdf = this.sortItemsByPrintOrder(group.items, group.printOrderIds);
+        this._pdfService.generateStockPreparationReport(sortedForPdf, this.selectedDate(), group.marketName);
     }
 
     async adjustReport(group: MarketPrepGroup) {

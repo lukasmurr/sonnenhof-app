@@ -21,6 +21,30 @@
     }
 }
 
+.copy-config-section {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #eef3f9;
+    border-radius: 8px;
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+    }
+}
+
+.copy-config-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    mat-form-field {
+        min-width: 260px;
+        margin-bottom: -1.25em;
+    }
+}
+
 .add-form-row {
     display: flex;
     align-items: center;
@@ -133,6 +157,10 @@
         background: #333;
     }
 
+    .copy-config-section {
+        background: #37474f;
+    }
+
     .config-item {
         background: #424242;
         border-color: #555;
@@ -142,6 +170,13 @@
 }
 
 @media (max-width: 768px) {
+    .copy-config-row {
+        mat-form-field,
+        button {
+            width: 100%;
+        }
+    }
+
     .config-list {
         .desktop-table-view {
             display: none;
