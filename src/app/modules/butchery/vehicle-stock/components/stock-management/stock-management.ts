@@ -72,7 +72,7 @@ export class StockManagementComponent implements OnInit {
     selectedProductToAdd = signal<Product | null>(null);
     newTargetQuantity = signal<number>(0);
     newTargetUnit = signal<string>('');
-    availableUnits = ['Stück', 'Stange', 'Paar'];
+    availableUnits = ['5 P. VA', '5 St. VA', 'Stück', 'Stange', 'Paar'];
 
     ngOnInit() {
         this._marketService.getMarkets().subscribe(m => this.markets.set(m));
