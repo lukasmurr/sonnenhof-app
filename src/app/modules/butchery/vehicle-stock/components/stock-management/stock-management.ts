@@ -21,6 +21,26 @@ import { ProductService } from '../../../../../core/services/product.service';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
 import { ProductSelectComponent } from '../../../orders/dialog/product-select/product-select';
 
+interface ImportedStockTarget {
+    Artikel?: string;
+    Einheit?: string;
+    Anzahl?: number;
+    itemId?: string;
+    id?: string;
+    itemType?: 'product' | 'offer';
+    type?: 'product' | 'offer';
+    name?: string;
+    targetQuantity?: number;
+    target?: number;
+    unit?: string;
+}
+
+interface StockConfigImportPayload {
+    Sollliste?: ImportedStockTarget[];
+    targets?: ImportedStockTarget[];
+    items?: ImportedStockTarget[];
+}
+
 @Component({
     selector: 'app-stock-management',
     standalone: true,
@@ -122,6 +142,88 @@ export class StockManagementComponent implements OnInit {
         this.configItems.set(copiedItems);
 
         this._snackBar.open('Sollliste kopiert. Bitte speichern, um zu übernehmen.', 'OK', { duration: 3500 });
+    }
+
+    async onJsonFileSelected(event: Event) {
+        const input = event.target as HTMLInputElement | null;
+        const file = input?.files?.[0];
+        if (!file) return;
+
+        try {
+            const text = await file.text();
+            const parsed = JSON.parse(text) as StockConfigImportPayload | ImportedStockTarget[];
+            const rawItems = Array.isArray(parsed)
+                ? parsed
+                : (parsed.Sollliste ?? parsed.targets ?? parsed.items ?? []);
+
+            if (!Array.isArray(rawItems) || rawItems.length === 0) {
+                this._snackBar.open('Keine gültigen Einträge in der JSON-Datei gefunden', 'OK', { duration: 3500 });
+                return;
+            }
+
+            const importedItems: { id: string; name: string; type: 'product' | 'offer'; target: number; unit: string }[] = [];
+            const seen = new Set<string>();
+
+            for (const entry of rawItems) {
+                const resolvedType = entry.itemType ?? entry.type ?? 'product';
+                if (resolvedType !== 'product' && resolvedType !== 'offer') continue;
+
+                const resolvedId = this.resolveImportItemId(entry, resolvedType);
+                if (!resolvedId || seen.has(resolvedId)) continue;
+
+                const resolvedTarget = Number(entry.Anzahl ?? entry.targetQuantity ?? entry.target ?? 0);
+                if (!Number.isFinite(resolvedTarget) || resolvedTarget <= 0) continue;
+
+                const resolvedName = this.getItemName(resolvedType, resolvedId);
+                const resolvedUnit = entry.Einheit ?? entry.unit ?? this.getDefaultUnitForType(resolvedType, resolvedId);
+
+                importedItems.push({
+                    id: resolvedId,
+                    name: resolvedName,
+                    type: resolvedType,
+                    target: resolvedTarget,
+                    unit: resolvedUnit
+                });
+                seen.add(resolvedId);
+            }
+
+            if (importedItems.length === 0) {
+                this._snackBar.open('JSON konnte nicht importiert werden: Bitte Struktur prüfen', 'OK', { duration: 4000 });
+                return;
+            }
+
+            this.configItems.set(importedItems);
+            this._snackBar.open(`${importedItems.length} Positionen aus JSON importiert`, 'OK', { duration: 3500 });
+        } catch {
+            this._snackBar.open('Ungültige JSON-Datei', 'OK', { duration: 3500 });
+        } finally {
+            if (input) {
+                input.value = '';
+            }
+        }
+    }
+
+    private resolveImportItemId(entry: ImportedStockTarget, itemType: 'product' | 'offer'): string | null {
+        const directId = (entry.itemId ?? entry.id)?.trim();
+        if (directId) return directId;
+
+        const name = (entry.Artikel ?? entry.name)?.trim();
+        if (!name) return null;
+
+        if (itemType === 'product') {
+            const product = this.products().find(p => p.name.toLowerCase() === name.toLowerCase());
+            return product?._id ?? null;
+        }
+
+        const offer = this.offers().find(o => `Angebot KW${o.week}`.toLowerCase() === name.toLowerCase());
+        return offer?._id ?? null;
+    }
+
+    private getDefaultUnitForType(itemType: 'product' | 'offer', itemId: string): string {
+        if (itemType === 'offer') return 'Stk';
+
+        const product = this.products().find(p => p._id === itemId);
+        return product?.stockUnit || product?.unit || 'Stück';
     }
 
     private getItemName(itemType: 'product' | 'offer', itemId: string): string {

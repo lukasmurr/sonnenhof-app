@@ -42,6 +42,10 @@
     gap: 12px;
     flex-wrap: wrap;
 
+    .hidden-file-input {
+        display: none;
+    }
+
     mat-form-field {
         min-width: 260px;
         margin-bottom: -1.25em;

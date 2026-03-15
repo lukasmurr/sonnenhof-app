@@ -40,6 +40,12 @@
                     [disabled]="!selectedCopySourceMarketId()">
                     Kopieren
                 </button>
+
+                <input #jsonFileInput type="file" accept=".json,application/json" class="hidden-file-input"
+                    (change)="onJsonFileSelected($event)">
+                <button mat-stroked-button color="primary" (click)="jsonFileInput.click()">
+                    JSON importieren
+                </button>
             </div>
         </div>
 
