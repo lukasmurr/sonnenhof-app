@@ -18,6 +18,7 @@ import { VehicleStock } from '../../../../../core/models/vehicle-stock.model';
 import { MarketService } from '../../../../../core/services/market.service';
 import { PdfService } from '../../../../../core/services/pdf.service';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
+import { AuthService } from '../../../../../core/services/auth.service';
 import { StockAdjustmentDialogComponent, StockAdjustmentDialogResult } from '../stock-adjustment-dialog/stock-adjustment-dialog';
 import { HasPermissionDirective } from "src/app/core/directives/has-permission.directive";
 import { ConfirmationDialogComponent } from '../../../../../core/components/confirmation-dialog/confirmation-dialog';
@@ -58,6 +59,7 @@ export class StockPreparationComponent implements OnInit {
     private _pdfService = inject(PdfService);
     private _marketService = inject(MarketService);
     private _dialog = inject(MatDialog);
+    private _authService = inject(AuthService);
 
     selectedDate = signal<Date>(new Date());
     isArchiveView = signal<boolean>(false);
@@ -65,6 +67,7 @@ export class StockPreparationComponent implements OnInit {
     availableYears = signal<number[]>([]);
 
     private marketGroups = signal<MarketPrepGroup[]>([]);
+    private _autoReportingDialogOpened = false;
 
     filteredMarketGroups = computed(() => this.marketGroups());
 
@@ -116,6 +119,22 @@ export class StockPreparationComponent implements OnInit {
         // Default view always shows only today's reports.
         this.selectedDate.set(new Date());
         this.loadPrepList();
+
+        // Verkaufsauto accounts should land directly in the reporting flow.
+        if (this.shouldAutoOpenReportingDialog()) {
+            setTimeout(() => {
+                if (this._autoReportingDialogOpened) return;
+                this._autoReportingDialogOpened = true;
+                this.openReportingDialog();
+            });
+        }
+    }
+
+    private shouldAutoOpenReportingDialog(): boolean {
+        const email = this._authService.getCurrentUser();
+        if (!email) return false;
+
+        return /^auto\d+@/i.test(email);
     }
 
     onDateChange(date: Date | null) {
