@@ -3,6 +3,10 @@
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     background: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
 }
 
 .tab-content {
@@ -74,7 +78,8 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 24px;
-    max-height: min(52vh, 560px);
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
     padding-right: 4px;
 
@@ -137,6 +142,11 @@
 .actions {
     display: flex;
     justify-content: flex-end;
+    position: sticky;
+    bottom: 0;
+    padding-top: 12px;
+    background: inherit;
+    z-index: 1;
 }
 
 .full-width-table {
@@ -180,10 +190,6 @@
 }
 
 @media (max-width: 768px) {
-    .config-list {
-        max-height: min(48vh, 440px);
-    }
-
     .copy-config-row {
         mat-form-field,
         button {
