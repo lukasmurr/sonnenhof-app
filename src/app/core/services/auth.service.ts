@@ -146,13 +146,6 @@ export class AuthService {
       this.updateAuthStatus();
       return true;
     }
-    localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', "test@example.com");
-      localStorage.setItem('userName', "test");
-      localStorage.setItem('userGroup', "admin");
-      localStorage.setItem('loginTimestamp', new Date().toISOString());
-      this.updateAuthStatus();
-    return true;
   }
 
   public logout(): void {
