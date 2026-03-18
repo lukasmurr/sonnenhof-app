@@ -146,6 +146,7 @@ export class AuthService {
       this.updateAuthStatus();
       return true;
     }
+    return false
   }
 
   public logout(): void {
