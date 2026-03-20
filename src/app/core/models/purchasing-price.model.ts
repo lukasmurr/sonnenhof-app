@@ -9,7 +9,7 @@ export interface Supplier {
     updatedAt?: string;
 }
 
-export type PurchaseProductCategory = 'Fleisch' | 'Gewürze' | 'Verpackung' | 'Sonstiges';
+export type PurchaseProductCategory = 'Fleisch' | 'Gewürze' | 'Verpackung' | 'Futtermittel' | 'Sonstiges';
 
 export interface PurchaseProduct {
     _id?: string;
@@ -19,7 +19,7 @@ export interface PurchaseProduct {
     category: PurchaseProductCategory;
     supplierId: string;
     supplierName?: string;
-    unit: 'kg' | 'Stück' | 'Liter' | 'Packung';
+    unit: 'dt' | 'kg' | 'Stück' | 'Liter' | 'Packung';
     comment?: string;
     createdAt?: string;
     updatedAt?: string;
