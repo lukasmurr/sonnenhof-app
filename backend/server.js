@@ -24,6 +24,27 @@ const orderNotificationRecipients = [
     'direktverkauf@bauernshop.de'
 ];
 
+const formatDateForGermanMail = (value) => {
+    if (!value) {
+        return '-';
+    }
+
+    // Keep date-only values timezone-agnostic to avoid off-by-one day shifts in mails.
+    const asString = String(value);
+    const match = asString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (match) {
+        const [, year, month, day] = match;
+        return `${day}.${month}.${year}`;
+    }
+
+    const parsed = new Date(asString);
+    if (Number.isNaN(parsed.getTime())) {
+        return asString;
+    }
+
+    return parsed.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' });
+};
+
 app.post('/api/mail/account-created', async (req, res) => {
     const { email, password, name } = req.body;
 
@@ -64,7 +85,7 @@ app.post('/api/mail/order-created', async (req, res) => {
         return res.status(400).json({ error: 'Invalid order data' });
     }
 
-    const formattedDate = new Date(orderDate).toLocaleDateString('de-DE');
+    const formattedDate = formatDateForGermanMail(orderDate);
     const itemsText = items
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
@@ -105,7 +126,7 @@ app.post('/api/mail/order-updated', async (req, res) => {
         return res.status(400).json({ error: 'Invalid order data' });
     }
 
-    const formattedDate = new Date(orderDate).toLocaleDateString('de-DE');
+    const formattedDate = formatDateForGermanMail(orderDate);
     const itemsText = items
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
