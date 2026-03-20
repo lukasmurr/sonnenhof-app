@@ -31,8 +31,8 @@ export class PurchaseProductDialogComponent implements OnInit {
     form: FormGroup;
     suppliers = signal<Supplier[]>([]);
     
-    categories: PurchaseProductCategory[] = ['Fleisch', 'Gewürze', 'Verpackung', 'Sonstiges'];
-    units: PurchaseProduct['unit'][] = ['kg', 'Stück', 'Liter', 'Packung'];
+    categories: PurchaseProductCategory[] = ['Fleisch', 'Gewürze', 'Verpackung', 'Futtermittel', 'Sonstiges'];
+    units: PurchaseProduct['unit'][] = ['dt', 'kg', 'Stück', 'Liter', 'Packung'];
 
     showNewSupplierForm = signal(false);
     newSupplierForm: FormGroup;
