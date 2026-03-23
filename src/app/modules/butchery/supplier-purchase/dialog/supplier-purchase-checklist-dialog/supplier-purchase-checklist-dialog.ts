@@ -13,6 +13,7 @@ type ChecklistItemFormGroup = FormGroup<{
     productName: FormControl<string>;
     unit: FormControl<'kg' | 'Stück' | 'Liter' | 'Packung'>;
     targetQuantity: FormControl<number>;
+    currentStock: FormControl<number>;
     orderedQuantity: FormControl<number>;
     note: FormControl<string>;
     done: FormControl<boolean>;
@@ -53,14 +54,22 @@ export class SupplierPurchaseChecklistDialogComponent {
 
     constructor() {
         for (const item of this.data.list.items) {
-            this.items.push(this.fb.group({
+            const formGroup = this.fb.group({
                 productName: this.fb.nonNullable.control(item.productName),
                 unit: this.fb.nonNullable.control(item.unit),
                 targetQuantity: this.fb.nonNullable.control(item.targetQuantity),
+                currentStock: this.fb.nonNullable.control(0, [Validators.min(0)]),
                 orderedQuantity: this.fb.nonNullable.control(item.targetQuantity, [Validators.min(0)]),
                 note: this.fb.nonNullable.control(item.note ?? ''),
                 done: this.fb.nonNullable.control(false)
-            }));
+            });
+
+            formGroup.controls.currentStock.valueChanges.subscribe(stock => {
+                this.updateOrderedQuantity(formGroup, stock);
+            });
+            this.updateOrderedQuantity(formGroup, formGroup.controls.currentStock.value);
+
+            this.items.push(formGroup);
         }
     }
 
@@ -84,6 +93,10 @@ export class SupplierPurchaseChecklistDialogComponent {
     next(): void {
         this.markCurrentDone();
         this.currentIndex.update(value => Math.min(this.items.length - 1, value + 1));
+    }
+
+    calculatedOrderedQuantity(item: ChecklistItemFormGroup): number {
+        return item.controls.orderedQuantity.value;
     }
 
     exportPdf(): void {
@@ -111,8 +124,26 @@ export class SupplierPurchaseChecklistDialogComponent {
 
     private markCurrentDone(): void {
         const item = this.currentItem();
+        if (item) {
+            this.updateOrderedQuantity(item, item.controls.currentStock.value);
+        }
+
         if (item && !item.controls.done.value) {
             item.controls.done.setValue(true);
         }
+    }
+
+    private updateOrderedQuantity(item: ChecklistItemFormGroup, currentStock: number): void {
+        const target = this.normalizeNumber(item.controls.targetQuantity.value);
+        const stock = Math.max(0, this.normalizeNumber(currentStock));
+        const orderedQuantity = Math.max(0, target - stock);
+
+        if (orderedQuantity !== item.controls.orderedQuantity.value) {
+            item.controls.orderedQuantity.setValue(orderedQuantity, { emitEvent: false });
+        }
+    }
+
+    private normalizeNumber(value: number): number {
+        return Number.isFinite(value) ? value : 0;
     }
 }

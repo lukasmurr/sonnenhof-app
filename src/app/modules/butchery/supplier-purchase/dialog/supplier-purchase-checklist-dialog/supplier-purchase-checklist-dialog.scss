@@ -39,6 +39,18 @@ mat-dialog-content {
     color: #5f6368;
 }
 
+.calculated-order-quantity {
+    margin: 0 0 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(63, 81, 181, 0.08);
+    font-weight: 500;
+
+    strong {
+        font-size: 1.05rem;
+    }
+}
+
 .guided-actions {
     display: flex;
     justify-content: space-between;
@@ -85,5 +97,9 @@ mat-dialog-actions {
 
     .auto-done-hint {
         color: #c3c7d1;
+    }
+
+    .calculated-order-quantity {
+        background: rgba(144, 164, 255, 0.18);
     }
 }
