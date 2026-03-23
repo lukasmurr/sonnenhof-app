@@ -62,6 +62,20 @@ export class OrderService {
         }));
     }
 
+    private async sendOrderDeletedEmail(order: Order, market?: Market): Promise<void> {
+        const apiUrl = `${environment.mailApiBaseUrl}/order-deleted`;
+
+        await firstValueFrom(this.http.post(apiUrl, {
+            customerName: order.customerName,
+            customerEmail: order.customerEmail,
+            customerPhone: order.customerPhone,
+            market: order.market,
+            orderDate: order.orderDate,
+            orderNumber: order.orderNumber,
+            items: order.items
+        }));
+    }
+
     updateOrder(order: Order, options?: { sendUpdateEmail?: boolean; market?: Market }): Promise<any> {
         const sendUpdateEmail = options?.sendUpdateEmail ?? true;
 
@@ -74,7 +88,13 @@ export class OrderService {
         });
     }
 
-    deleteOrder(id: string): Promise<any> {
-        return this.dbService.deleteDoc(id);
+    deleteOrder(order: Order, market?: Market): Promise<any> {
+        return this.dbService.deleteDoc(order._id).then(result => {
+            if (result && result.ok) {
+                this.sendOrderDeletedEmail(order, market).catch(err => console.error('Failed to send order delete email', err));
+            }
+
+            return result;
+        });
     }
 }

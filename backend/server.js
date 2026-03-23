@@ -152,6 +152,47 @@ app.post('/api/mail/order-updated', async (req, res) => {
     }
 });
 
+app.post('/api/mail/order-deleted', async (req, res) => {
+    const {
+        customerName,
+        customerEmail,
+        customerPhone,
+        market,
+        orderDate,
+        orderNumber,
+        items
+    } = req.body;
+
+    if (!customerName || !market || !orderDate || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: 'Invalid order data' });
+    }
+
+    const formattedDate = formatDateForGermanMail(orderDate);
+    const itemsText = items
+        .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
+        .join('\n');
+    const itemsHtml = items
+        .map(item => `<li>${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</li>`)
+        .join('');
+
+    const mailOptions = {
+        from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
+        to: orderNotificationRecipients,
+        subject: `Bestellung gelöscht: ${customerName} (${market})`,
+        headers: buildSystemMailHeaders(),
+        text: `Eine bestehende Bestellung wurde gelöscht.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
+        html: `<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Order delete email sent successfully' });
+    } catch (error) {
+        console.error('Error sending order delete email:', error);
+        res.status(500).json({ error: 'Failed to send order delete email' });
+    }
+});
+
 app.post('/api/mail/tuev-reminder', async (req, res) => {
     const {
         vehicleName,

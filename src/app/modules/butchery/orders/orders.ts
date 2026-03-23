@@ -219,7 +219,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && order._id) {
-                this.orderService.deleteOrder(order._id);
+                this.orderService.deleteOrder(order);
             }
         });
     }
