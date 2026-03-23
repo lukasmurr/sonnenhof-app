@@ -34,6 +34,20 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
+      <mat-label>Arbeitstage pro Woche</mat-label>
+      <mat-select formControlName="workingDays" multiple>
+        @for (day of weekdayOptions; track day.value) {
+          <mat-option [value]="day.value">{{ day.label }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('workingDays')?.hasError('required') || form.get('workingDays')?.hasError('minlength')) {
+        <mat-error>
+          Bitte mindestens einen Arbeitstag auswählen
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
       <mat-label>Festnetz</mat-label>
       <input matInput formControlName="landline" placeholder="01234 56789">
     </mat-form-field>

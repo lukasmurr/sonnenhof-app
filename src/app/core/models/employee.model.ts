@@ -8,6 +8,8 @@ export interface Employee {
     mobile?: string;
     email: string;
     vacationDays: number;
+    // Weekdays as JS day numbers: 1 = Monday ... 5 = Friday
+    workingDays?: number[];
     createdAt?: string;
     updatedAt?: string;
 }

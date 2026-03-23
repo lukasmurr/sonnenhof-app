@@ -75,9 +75,10 @@ export class VacationDialogComponent implements OnInit {
             if (formValue.leaveType === 'vacation' && selectedEmployee) {
                 const totalVacationDays = selectedEmployee.vacationDays || 0;
                 const year = startDate.getFullYear();
+                const employeeWorkingDays = this.getEffectiveWorkingDays(selectedEmployee.workingDays);
 
-                const usedDays = this.calculateUsedVacationDays(selectedEmployee._id!, year, this.data.vacation?._id);
-                const newDays = this.calculateWorkingDays(startDate, endDate);
+                const usedDays = this.calculateUsedVacationDays(selectedEmployee._id!, year, employeeWorkingDays, this.data.vacation?._id);
+                const newDays = this.calculateWorkingDays(startDate, endDate, employeeWorkingDays);
 
                 if (usedDays + newDays > totalVacationDays) {
                     alert(`Der Mitarbeiter hat nur ${totalVacationDays} Urlaubstage. Bereits verplant: ${usedDays}. Neuer Urlaub: ${newDays}. Gesamt: ${usedDays + newDays}`);
@@ -96,25 +97,37 @@ export class VacationDialogComponent implements OnInit {
         }
     }
 
-    calculateUsedVacationDays(employeeId: string, year: number, excludeVacationId?: string): number {
+    calculateUsedVacationDays(employeeId: string, year: number, workingDays: number[], excludeVacationId?: string): number {
         return this.allVacations
             .filter(v => v.employeeId === employeeId &&
                 v.leaveType === 'vacation' &&
                 v._id !== excludeVacationId &&
                 new Date(v.startDate).getFullYear() === year)
-            .reduce((acc, v) => acc + this.calculateWorkingDays(new Date(v.startDate), new Date(v.endDate)), 0);
+            .reduce((acc, v) => acc + this.calculateWorkingDays(new Date(v.startDate), new Date(v.endDate), workingDays), 0);
     }
 
-    calculateWorkingDays(startDate: Date, endDate: Date): number {
+    calculateWorkingDays(startDate: Date, endDate: Date, workingDays: number[]): number {
         let count = 0;
         const curDate = new Date(startDate);
         const end = new Date(endDate);
+        const workingDaySet = new Set(workingDays);
 
         while (curDate <= end) {
             const dayOfWeek = curDate.getDay();
-            if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+            if (workingDaySet.has(dayOfWeek)) count++;
             curDate.setDate(curDate.getDate() + 1);
         }
         return count;
+    }
+
+    private getEffectiveWorkingDays(workingDays?: number[]): number[] {
+        if (!workingDays?.length) {
+            return [1, 2, 3, 4, 5];
+        }
+
+        return [...new Set(workingDays)]
+            .map(day => Number(day))
+            .filter(day => day >= 1 && day <= 5)
+            .sort((a, b) => a - b);
     }
 }
