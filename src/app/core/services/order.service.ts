@@ -89,6 +89,10 @@ export class OrderService {
     }
 
     deleteOrder(order: Order, market?: Market): Promise<any> {
+        if (!order._id) {
+            return Promise.reject(new Error('Order cannot be deleted without an _id.'));
+        }
+
         return this.dbService.deleteDoc(order._id).then(result => {
             if (result && result.ok) {
                 this.sendOrderDeletedEmail(order, market).catch(err => console.error('Failed to send order delete email', err));
