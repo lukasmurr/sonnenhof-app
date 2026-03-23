@@ -1,9 +1,14 @@
 .calculation-controls {
     display: grid;
-    grid-template-columns: minmax(220px, 280px) auto;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 12px;
     align-items: center;
     margin-bottom: 16px;
+}
+
+.total-text {
+    font-weight: 600;
+    color: #2e7d32;
 }
 
 .factor-text {
@@ -19,7 +24,7 @@
 
 .result-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
     padding: 10px 12px;
     border-top: 1px solid rgba(63, 81, 181, 0.08);
 
@@ -78,6 +83,10 @@
 }
 
 :host-context(.dark-theme) {
+    .total-text {
+        color: #a5d6a7;
+    }
+
     .factor-text {
         color: #90caf9;
     }

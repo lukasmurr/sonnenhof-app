@@ -40,6 +40,34 @@
     </div>
 
     <div class="positions-header">
+        <h3>Rechner-Basisdefinitionen</h3>
+        <button type="button" mat-stroked-button (click)="addCalculationBase()">
+            <mat-icon>add</mat-icon>
+            Basis
+        </button>
+    </div>
+
+    <div class="positions-list" formArrayName="calculationBases">
+        @for (baseControl of calculationBases.controls; track $index; let i = $index) {
+            <div class="calculation-base-row" [formGroupName]="i">
+                <mat-form-field appearance="outline">
+                    <mat-label>Bezeichnung</mat-label>
+                    <input matInput formControlName="label" placeholder="z. B. Paar">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Bezug auf 1 kg</mat-label>
+                    <input matInput type="number" min="0.001" step="0.001" formControlName="amount" placeholder="140">
+                </mat-form-field>
+
+                <button type="button" mat-icon-button color="warn" class="position-remove-button" (click)="removeCalculationBase(i)" [disabled]="calculationBases.length <= 1" aria-label="Basis entfernen">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        }
+    </div>
+
+    <div class="positions-header">
         <h3>Positionen</h3>
         <button type="button" mat-stroked-button (click)="addPosition()">
             <mat-icon>add</mat-icon>
@@ -56,13 +84,18 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label>Menge</mat-label>
-                    <input matInput type="number" min="0.001" step="0.001" formControlName="quantity" placeholder="0.0">
+                    <mat-label>Anteil (%)</mat-label>
+                    <input matInput type="number" min="0.001" max="100" step="0.001" formControlName="percentage" placeholder="0.0">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label>Einheit</mat-label>
                     <input matInput formControlName="unit" placeholder="kg">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Anmerkung (optional)</mat-label>
+                    <input matInput formControlName="note" placeholder="z. B. erst am Ende untermischen">
                 </mat-form-field>
 
                 <button type="button" mat-icon-button color="warn" class="position-remove-button" (click)="removePosition(i)" [disabled]="positions.length <= 1" aria-label="Position entfernen">

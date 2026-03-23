@@ -35,9 +35,16 @@ mat-dialog-content {
     margin-top: 8px;
 }
 
+.calculation-base-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 8px;
+    align-items: start;
+}
+
 .position-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
+    grid-template-columns: 2fr 1fr 1fr 2fr auto;
     gap: 8px;
     align-items: start;
 }
@@ -66,6 +73,11 @@ mat-dialog-actions {
     }
 
     .position-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .calculation-base-row {
         grid-template-columns: 1fr;
         gap: 0;
     }

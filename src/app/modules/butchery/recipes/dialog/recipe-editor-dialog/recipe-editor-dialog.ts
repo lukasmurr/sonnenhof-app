@@ -10,11 +10,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Observable, map, startWith } from 'rxjs';
 import { Product } from '../../../../../core/models/product.model';
-import { Recipe, RecipePosition } from '../../../../../core/models/recipe.model';
+import { Recipe, RecipeCalculationBase, RecipePosition } from '../../../../../core/models/recipe.model';
 
 type RecipePositionFormGroup = FormGroup<{
     ingredientName: FormControl<string>;
-    quantity: FormControl<number | null>;
+    percentage: FormControl<number | null>;
+    unit: FormControl<string>;
+    note: FormControl<string>;
+}>;
+
+type RecipeCalculationBaseFormGroup = FormGroup<{
+    label: FormControl<string>;
+    amount: FormControl<number | null>;
     unit: FormControl<string>;
 }>;
 
@@ -24,6 +31,7 @@ type RecipeFormGroup = FormGroup<{
     description: FormControl<string>;
     baseAmount: FormControl<number | null>;
     baseUnit: FormControl<string>;
+    calculationBases: FormArray<RecipeCalculationBaseFormGroup>;
     positions: FormArray<RecipePositionFormGroup>;
 }>;
 
@@ -57,6 +65,7 @@ export class RecipeEditorDialogComponent {
         description: this.fb.nonNullable.control(this.data.recipe?.description ?? ''),
         baseAmount: this.fb.control<number | null>(this.data.recipe?.baseAmount ?? 1, [Validators.required, Validators.min(0.001)]),
         baseUnit: this.fb.nonNullable.control(this.data.recipe?.baseUnit ?? 'kg', [Validators.required]),
+        calculationBases: this.fb.array<RecipeCalculationBaseFormGroup>([]),
         positions: this.fb.array<RecipePositionFormGroup>([])
     });
 
@@ -81,10 +90,23 @@ export class RecipeEditorDialogComponent {
         } else {
             this.addPosition();
         }
+
+        const existingCalculationBases = this.data.recipe?.calculationBases;
+        if (existingCalculationBases?.length) {
+            for (const calculationBase of existingCalculationBases) {
+                this.calculationBases.push(this.createCalculationBaseFormGroup(calculationBase));
+            }
+        } else {
+            this.addCalculationBase(this.form.controls.baseUnit.value, 1);
+        }
     }
 
     get positions(): FormArray<RecipePositionFormGroup> {
         return this.form.controls.positions;
+    }
+
+    get calculationBases(): FormArray<RecipeCalculationBaseFormGroup> {
+        return this.form.controls.calculationBases;
     }
 
     addPosition(): void {
@@ -99,6 +121,22 @@ export class RecipeEditorDialogComponent {
         this.positions.removeAt(index);
     }
 
+    addCalculationBase(defaultLabel = '', defaultAmount: number | null = null): void {
+        this.calculationBases.push(this.createCalculationBaseFormGroup({
+            label: defaultLabel,
+            amount: defaultAmount ?? 1,
+            unit: this.form.controls.baseUnit.value
+        }));
+    }
+
+    removeCalculationBase(index: number): void {
+        if (this.calculationBases.length <= 1) {
+            return;
+        }
+
+        this.calculationBases.removeAt(index);
+    }
+
     save(): void {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
@@ -110,14 +148,32 @@ export class RecipeEditorDialogComponent {
                 const raw = positionGroup.getRawValue();
                 return {
                     ingredientName: raw.ingredientName.trim(),
-                    quantity: raw.quantity ?? 0,
-                    unit: raw.unit.trim()
+                    percentage: raw.percentage ?? 0,
+                    unit: raw.unit.trim(),
+                    note: raw.note.trim() || undefined
                 };
             })
-            .filter(position => position.ingredientName.length > 0 && position.quantity > 0 && position.unit.length > 0);
+            .filter(position => position.ingredientName.length > 0 && position.percentage > 0 && position.percentage <= 100 && position.unit.length > 0);
+
+        const recipeBaseUnit = this.form.controls.baseUnit.value.trim();
+        const cleanedCalculationBases = this.calculationBases.controls
+            .map(baseGroup => {
+                const raw = baseGroup.getRawValue();
+                return {
+                    label: raw.label.trim(),
+                    amount: raw.amount ?? 0,
+                    unit: recipeBaseUnit
+                };
+            })
+            .filter(base => base.label.length > 0 && base.amount > 0 && base.unit.length > 0);
 
         if (cleanedPositions.length === 0) {
             this.positions.markAllAsTouched();
+            return;
+        }
+
+        if (cleanedCalculationBases.length === 0) {
+            this.calculationBases.markAllAsTouched();
             return;
         }
 
@@ -135,6 +191,7 @@ export class RecipeEditorDialogComponent {
             description: formValue.description.trim() || undefined,
             baseAmount: formValue.baseAmount ?? 1,
             baseUnit: formValue.baseUnit.trim(),
+            calculationBases: cleanedCalculationBases,
             positions: cleanedPositions
         } as Omit<Recipe, '_id' | '_rev' | 'type' | 'createdAt' | 'updatedAt'>);
     }
@@ -160,10 +217,24 @@ export class RecipeEditorDialogComponent {
     }
 
     private createPositionFormGroup(position?: RecipePosition): RecipePositionFormGroup {
+        const legacyPercentage = typeof position?.percentage === 'number'
+            ? position.percentage
+            : position?.quantity;
+
         return this.fb.group({
             ingredientName: this.fb.nonNullable.control(position?.ingredientName ?? '', [Validators.required]),
-            quantity: this.fb.control<number | null>(position?.quantity ?? null, [Validators.required, Validators.min(0.001)]),
-            unit: this.fb.nonNullable.control(position?.unit ?? '', [Validators.required])
+            percentage: this.fb.control<number | null>(legacyPercentage ?? null, [Validators.required, Validators.min(0.001), Validators.max(100)]),
+            unit: this.fb.nonNullable.control(position?.unit ?? this.data.recipe?.baseUnit ?? '', [Validators.required]),
+            note: this.fb.nonNullable.control(position?.note ?? '', [Validators.maxLength(250)])
+        });
+    }
+
+    private createCalculationBaseFormGroup(base?: RecipeCalculationBase): RecipeCalculationBaseFormGroup {
+        const currentBaseUnit = this.form.controls.baseUnit.value;
+        return this.fb.group({
+            label: this.fb.nonNullable.control(base?.label ?? '', [Validators.required]),
+            amount: this.fb.control<number | null>(base?.amount ?? null, [Validators.required, Validators.min(0.001)]),
+            unit: this.fb.nonNullable.control(base?.unit ?? currentBaseUnit, [Validators.required])
         });
     }
 }
