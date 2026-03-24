@@ -217,7 +217,7 @@ app.post('/api/mail/tuev-reminder', async (req, res) => {
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
-        to: 'ulrich.murr@bauernshop.de',
+        to: 'info@bauernshop.de',
         subject: `TÜV Erinnerung (${reminderTypeText}): ${vehicleName} (${licensePlate})`,
         text: `TÜV-Erinnerung\n\nFahrzeug: ${vehicleName}\nKennzeichen: ${licensePlate}\nTÜV-Ablaufdatum: ${formattedDate}\nErinnerung: ${reminderTypeText}`,
         html: `<p><strong>TÜV-Erinnerung</strong></p><p><strong>Fahrzeug:</strong> ${vehicleName}<br><strong>Kennzeichen:</strong> ${licensePlate}<br><strong>TÜV-Ablaufdatum:</strong> ${formattedDate}<br><strong>Erinnerung:</strong> ${reminderTypeText}</p>`
