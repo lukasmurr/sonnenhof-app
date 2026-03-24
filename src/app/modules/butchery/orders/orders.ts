@@ -245,7 +245,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
                 orderNumber: orderNumber,
                 status: 'prepared'
             };
-            this.orderService.updateOrder(updatedOrder);
+            this.orderService.updateOrder(updatedOrder, { sendUpdateEmail: false });
         }
     }
 
