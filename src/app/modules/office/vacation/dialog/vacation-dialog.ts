@@ -127,7 +127,7 @@ export class VacationDialogComponent implements OnInit {
 
         return [...new Set(workingDays)]
             .map(day => Number(day))
-            .filter(day => day >= 1 && day <= 5)
+            .filter(day => day >= 1 && day <= 6)
             .sort((a, b) => a - b);
     }
 }

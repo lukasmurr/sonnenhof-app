@@ -37,7 +37,8 @@ export class EmployeeDialogComponent {
         { value: 2, label: 'Dienstag' },
         { value: 3, label: 'Mittwoch' },
         { value: 4, label: 'Donnerstag' },
-        { value: 5, label: 'Freitag' }
+        { value: 5, label: 'Freitag' },
+        { value: 6, label: 'Samstag' }
     ];
 
     constructor(
@@ -62,7 +63,7 @@ export class EmployeeDialogComponent {
             const rawWorkingDays: unknown[] = Array.isArray(formValue.workingDays) ? formValue.workingDays : [];
             const normalizedWorkingDays = rawWorkingDays
                 .map((day: unknown): number => Number(day))
-                .filter((day: number): boolean => Number.isInteger(day) && day >= 1 && day <= 5)
+                .filter((day: number): boolean => Number.isInteger(day) && day >= 1 && day <= 6)
                 .filter((day: number, index: number, arr: number[]): boolean => arr.indexOf(day) === index)
                 .sort((a: number, b: number): number => a - b);
 
