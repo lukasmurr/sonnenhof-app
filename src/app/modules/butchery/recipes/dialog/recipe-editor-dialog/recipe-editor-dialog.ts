@@ -111,6 +111,7 @@ export class RecipeEditorDialogComponent {
 
     addPosition(): void {
         this.positions.push(this.createPositionFormGroup());
+        this.form.markAsDirty();
     }
 
     removePosition(index: number): void {
@@ -119,6 +120,7 @@ export class RecipeEditorDialogComponent {
         }
 
         this.positions.removeAt(index);
+        this.form.markAsDirty();
     }
 
     addCalculationBase(defaultLabel = '', defaultAmount: number | null = null): void {
@@ -127,6 +129,7 @@ export class RecipeEditorDialogComponent {
             amount: defaultAmount ?? 1,
             unit: this.form.controls.baseUnit.value
         }));
+        this.form.markAsDirty();
     }
 
     removeCalculationBase(index: number): void {
@@ -135,6 +138,7 @@ export class RecipeEditorDialogComponent {
         }
 
         this.calculationBases.removeAt(index);
+        this.form.markAsDirty();
     }
 
     save(): void {
