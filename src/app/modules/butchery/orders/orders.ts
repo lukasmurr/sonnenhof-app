@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +45,7 @@ import { ConfirmationDialogComponent } from '../../../core/components/confirmati
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
+        MatSnackBarModule,
         HasPermissionDirective
     ],
     templateUrl: './orders.html',
@@ -69,7 +71,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         private router: Router,
         private route: ActivatedRoute,
         private pdfService: PdfService,
-        private authService: AuthService
+        private authService: AuthService,
+        private snackBar: MatSnackBar
     ) {
         this.dataSource = new MatTableDataSource<Order>([]);
     }
@@ -203,7 +206,24 @@ export class OrdersComponent implements OnInit, AfterViewInit {
                 } else {
                     // Create
                     const selectedMarket = this.markets.find(m => m.name === result.market);
-                    this.orderService.addOrder(result, selectedMarket);
+                    this.orderService.addOrder(result, selectedMarket)
+                        .then(saveResult => {
+                            if (saveResult?.ok) {
+                                this.snackBar.open('Bestellung erfolgreich gespeichert', 'OK', { duration: 5000 });
+                                return;
+                            }
+
+                            this.snackBar.open('Fehler beim Speichern der Bestellung', 'OK', {
+                                duration: 5000,
+                                panelClass: ['error-snackbar']
+                            });
+                        })
+                        .catch(() => {
+                            this.snackBar.open('Fehler beim Speichern der Bestellung', 'OK', {
+                                duration: 5000,
+                                panelClass: ['error-snackbar']
+                            });
+                        });
                 }
             }
         });
