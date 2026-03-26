@@ -553,6 +553,7 @@ export class PdfService {
 
   private buildOrderPdf(order: Order, market?: Market, isUpdate: boolean = false): jsPDF {
     const doc = new jsPDF();
+    const orderDate = moment(order.orderDate).locale('de');
 
     // Header
     doc.setFontSize(20);
@@ -585,7 +586,7 @@ export class PdfService {
     doc.setFontSize(14);
     doc.text('Bestelldaten', 120, 35);
     doc.setFontSize(11);
-    doc.text(`Datum: ${moment(order.orderDate).format('DD.MM.YYYY')}`, 120, 42);
+    doc.text(`Datum: ${orderDate.format('DD.MM.YYYY (dddd)')}`, 120, 42);
     if (order.orderNumber) {
       doc.text(`Bestell-Nr.: ${order.orderNumber}`, 120, 49);
     }
