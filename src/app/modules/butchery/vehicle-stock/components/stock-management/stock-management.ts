@@ -3,10 +3,10 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -41,6 +41,14 @@ interface StockConfigImportPayload {
     items?: ImportedStockTarget[];
 }
 
+interface ConfigItem {
+    id: string;
+    name: string;
+    type: 'product' | 'offer';
+    target: number;
+    unit: string;
+}
+
 @Component({
     selector: 'app-stock-management',
     standalone: true,
@@ -56,6 +64,7 @@ interface StockConfigImportPayload {
         MatIconModule,
         MatSnackBarModule,
         MatCardModule,
+        MatDialogModule,
         MatTableModule,
         ProductSelectComponent
     ],
@@ -76,12 +85,13 @@ export class StockManagementComponent implements OnInit {
     products = signal<Product[]>([]);
     offers = signal<Offer[]>([]);
 
-    displayedColumns: string[] = ['name', 'unit', 'target', 'actions'];
+    displayedColumns: string[] = ['position', 'name', 'unit', 'target', 'actions'];
 
     // Config Tab
     selectedConfigMarketId = signal<string | null>(null);
     selectedCopySourceMarketId = signal<string | null>(null);
-    configItems = signal<any[]>([]); // { id, name, type, target, unit }
+    showImportSection = signal<boolean>(false);
+    configItems = signal<ConfigItem[]>([]);
 
     availableCopySourceMarkets = computed(() => {
         const targetId = this.selectedConfigMarketId();
@@ -104,9 +114,10 @@ export class StockManagementComponent implements OnInit {
     async onConfigMarketChange(marketId: string) {
         this.selectedConfigMarketId.set(marketId);
         this.selectedCopySourceMarketId.set(null);
+        this.showImportSection.set(false);
         const config = await this._stockService.getConfigByMarket(marketId);
 
-        const items: any[] = [];
+        const items: ConfigItem[] = [];
         if (config && config.targets) {
             for (const t of config.targets) {
                 const name = this.getItemName(t.itemType, t.itemId);
@@ -142,6 +153,10 @@ export class StockManagementComponent implements OnInit {
         this.configItems.set(copiedItems);
 
         this._snackBar.open('Sollliste kopiert. Bitte speichern, um zu übernehmen.', 'OK', { duration: 3500 });
+    }
+
+    toggleImportSection(): void {
+        this.showImportSection.update(value => !value);
     }
 
     async onJsonFileSelected(event: Event) {
@@ -250,7 +265,7 @@ export class StockManagementComponent implements OnInit {
             return;
         }
 
-        const newItem = {
+        const newItem: ConfigItem = {
             id: product._id,
             name: product.name,
             type: 'product',
@@ -270,20 +285,40 @@ export class StockManagementComponent implements OnInit {
         this.configItems.set(this.configItems().filter(i => i.id !== itemId));
     }
 
-    moveConfigItemUp(index: number) {
-        if (index <= 0) return;
+    // Moves one product to a specific index and keeps the array order as source of truth.
+    moveProduct(oldIndex: number, newIndex: number): void {
+        const items = this.configItems();
+        const itemCount = items.length;
+        if (itemCount === 0 || oldIndex < 0 || oldIndex >= itemCount) return;
 
-        const items = [...this.configItems()];
-        [items[index - 1], items[index]] = [items[index], items[index - 1]];
-        this.configItems.set(items);
+        const boundedNewIndex = Math.max(0, Math.min(newIndex, itemCount - 1));
+        if (boundedNewIndex === oldIndex) return;
+
+        const next = [...items];
+        const [movedItem] = next.splice(oldIndex, 1);
+        if (!movedItem) return;
+
+        next.splice(boundedNewIndex, 0, movedItem);
+        this.configItems.set(next);
     }
 
-    moveConfigItemDown(index: number) {
-        const items = [...this.configItems()];
-        if (index < 0 || index >= items.length - 1) return;
+    setPositionFromInput(index: number, rawPosition: string | number | null): void {
+        const parsedPosition = Number(rawPosition);
+        if (!Number.isInteger(parsedPosition)) return;
 
-        [items[index], items[index + 1]] = [items[index + 1], items[index]];
-        this.configItems.set(items);
+        this.moveProduct(index, parsedPosition - 1);
+    }
+
+    moveConfigItemBy(index: number, delta: number): void {
+        this.moveProduct(index, index + delta);
+    }
+
+    moveConfigItemToTop(index: number): void {
+        this.moveProduct(index, 0);
+    }
+
+    moveConfigItemToBottom(index: number): void {
+        this.moveProduct(index, this.configItems().length - 1);
     }
 
     async saveConfig(): Promise<boolean> {

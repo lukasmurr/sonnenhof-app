@@ -1,4 +1,14 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
 .stock-card {
+    --copy-control-surface: #ffffff;
+    --copy-control-surface-open: #ffffff;
+    --copy-control-border: #111111;
+    --copy-control-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
     padding: 24px;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -7,17 +17,82 @@
     flex-direction: column;
     min-height: 0;
     height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-top: 2px;
+
+    h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
 }
 
 .tab-content {
-    padding-top: 24px;
+    padding-top: 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+/* Scrollable middle content; header and footer stay fixed. */
+.content-scroll {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.top-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 0 0 auto;
+}
+
+/* Compact top row: market selector plus copy toggle button. */
+.controls-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    min-height: 64px;
+    padding-top: 8px;
+}
+
+.market-select {
+    width: 100%;
+    min-width: 220px;
+    max-width: none;
+}
+
+/* Button + panel are treated as one visual control block. */
+.copy-control {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.toggle-import-button {
+    min-height: 56px;
+    width: 100%;
+    justify-content: space-between;
+    border-radius: 4px;
 }
 
 .add-item-section {
-    margin-bottom: 32px;
+    margin-bottom: 8px;
     padding: 16px;
     background: #f5f5f5;
     border-radius: 8px;
@@ -29,20 +104,39 @@
 }
 
 .copy-config-section {
-    margin-bottom: 20px;
-    padding: 16px;
-    background: #eef3f9;
-    border-radius: 8px;
+    margin-top: 0;
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
 
-    h3 {
-        margin-top: 0;
-        margin-bottom: 12px;
-    }
+    /* Smooth collapse/expand while keeping layout stable. */
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    box-shadow: none;
+    pointer-events: none;
+    transition: max-height 240ms ease, opacity 180ms ease, transform 180ms ease, padding 180ms ease, border-width 180ms ease;
+}
+
+.copy-config-section.is-open {
+    max-height: 260px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .copy-config-row {
     display: flex;
-    align-items: center;
+    align-items: stretch;
+    justify-content: flex-end;
     gap: 12px;
     flex-wrap: wrap;
 
@@ -52,7 +146,13 @@
 
     mat-form-field {
         min-width: 260px;
-        margin-bottom: -1.25em;
+        margin-bottom: 0;
+    }
+
+    > button {
+        min-height: 56px;
+        height: 56px;
+        --mdc-outlined-button-container-height: 56px;
     }
 }
 
@@ -77,11 +177,17 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 24px;
+    margin-top: 8px;
+    margin-bottom: 12px;
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
     padding-right: 4px;
+
+    .config-list-title {
+        margin: 0;
+        padding-top: 4px;
+    }
 
     .mobile-list-view {
         display: none;
@@ -98,12 +204,36 @@
         .qty-input {
             width: 100px;
             margin-bottom: 0;
+            --mat-form-field-container-height: 44px;
+            --mat-form-field-container-vertical-padding: 10px;
+        }
+
+        .position-input {
+            width: 90px;
+            margin-bottom: 0;
+            --mat-form-field-container-height: 44px;
+            --mat-form-field-container-vertical-padding: 10px;
+        }
+
+        .action-buttons {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 2px;
+            vertical-align: middle;
+            white-space: nowrap;
         }
 
         .mat-column-actions {
-            width: 48px;
+            width: 1%;
+            min-width: max-content;
             text-align: right;
             padding-right: 0;
+            white-space: nowrap;
+        }
+
+        .mat-column-position {
+            width: 110px;
         }
     }
 
@@ -132,21 +262,59 @@
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
+
+        .qty-input {
+            --mat-form-field-container-height: 44px;
+            --mat-form-field-container-vertical-padding: 10px;
+        }
     }
 
     .mobile-item-actions {
         margin-top: 8px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+
+        button {
+            min-height: 42px;
+            justify-content: flex-start;
+        }
+
+        button:last-child {
+            grid-column: 1 / -1;
+        }
     }
 }
 
 .actions {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    flex: 0 0 auto;
     position: sticky;
     bottom: 0;
     padding-top: 12px;
-    background: inherit;
+    padding-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    background: white;
     z-index: 1;
+
+    button {
+        min-height: 44px;
+        min-width: 132px;
+    }
+}
+
+.dialog-footer-actions {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 12px 0 0;
+    border-top: none;
+    background: white;
+
+    button {
+        min-height: 44px;
+    }
 }
 
 .full-width-table {
@@ -181,6 +349,21 @@
         background: #37474f;
     }
 
+    .toggle-import-button {
+        background: #eceff1;
+        border-color: #111111;
+    }
+
+    .actions {
+        background: #424242;
+        border-top-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .dialog-footer-actions {
+        background: #424242;
+        border-top-color: rgba(255, 255, 255, 0.14);
+    }
+
     .config-item {
         background: #424242;
         border-color: #555;
@@ -190,6 +373,50 @@
 }
 
 @media (max-width: 768px) {
+    .stock-card {
+        padding: 14px;
+        max-height: 100%;
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .header-actions {
+        gap: 10px;
+        margin-bottom: 10px;
+
+        h2 {
+            font-size: 1.2rem;
+        }
+    }
+
+    .tab-content {
+        padding-top: 0;
+    }
+
+    .content-scroll {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 2px;
+    }
+
+    .controls-row {
+        grid-template-columns: 1fr;
+    }
+
+    .market-select,
+    .copy-control,
+    .toggle-import-button {
+        flex: 0 0 auto;
+        min-width: 0;
+        max-width: none;
+        width: 100%;
+    }
+
+    .toggle-import-button {
+        min-height: 44px;
+    }
+
     .copy-config-row {
         mat-form-field,
         button {
@@ -198,12 +425,31 @@
     }
 
     .config-list {
+        flex: 0 0 auto;
+        min-height: auto;
+        overflow: visible;
+        padding-right: 0;
+
         .desktop-table-view {
             display: none;
         }
 
         .mobile-list-view {
             display: block;
+        }
+
+        .mobile-item-fields {
+            .qty-input {
+                width: 100%;
+            }
+        }
+    }
+
+    .actions {
+        padding-top: 10px;
+
+        button {
+            width: 100%;
         }
     }
 }

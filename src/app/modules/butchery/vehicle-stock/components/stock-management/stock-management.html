@@ -1,5 +1,5 @@
 <mat-card class="stock-card">
-    <div class="header-actions" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+    <div class="header-actions">
         @if (isDialog) {
         <button mat-icon-button (click)="closeDialog()" aria-label="Dialog schließen">
             <mat-icon>close</mat-icon>
@@ -9,79 +9,125 @@
             <mat-icon>arrow_back</mat-icon>
         </button>
         }
-        <h2 style="margin: 0;">Sollbestände verwalten</h2>
+        <h2>Sollbestände verwalten</h2>
     </div>
     <div class="tab-content">
-        <mat-form-field appearance="outline">
-            <mat-label>Markt wählen</mat-label>
-            <mat-select (selectionChange)="onConfigMarketChange($event.value)">
-                @for (m of markets(); track m._id) {
-                <mat-option [value]="m._id">{{m.name}}</mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
+        <div class="content-scroll" aria-label="Scrollbereich Dialoginhalt">
+            <div class="top-sections">
+                <div class="controls-row">
+                    <mat-form-field appearance="outline" class="market-select" subscriptSizing="dynamic">
+                        <mat-label>Markt wählen</mat-label>
+                        <mat-select (selectionChange)="onConfigMarketChange($event.value)">
+                            @for (m of markets(); track m._id) {
+                            <mat-option [value]="m._id">{{m.name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
 
-        @if (selectedConfigMarketId()) {
-
-        <div class="copy-config-section">
-            <h3>Sollliste von anderem Markt kopieren</h3>
-            <div class="copy-config-row">
-                <mat-form-field appearance="outline">
-                    <mat-label>Quellmarkt</mat-label>
-                    <mat-select [ngModel]="selectedCopySourceMarketId()"
-                        (ngModelChange)="selectedCopySourceMarketId.set($event)">
-                        @for (m of availableCopySourceMarkets(); track m._id) {
-                        <mat-option [value]="m._id">{{m.name}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
-
-                <button mat-stroked-button (click)="copyConfigFromMarket(selectedCopySourceMarketId())"
-                    [disabled]="!selectedCopySourceMarketId()">
-                    Kopieren
-                </button>
-
-                <input #jsonFileInput type="file" accept=".json,application/json" class="hidden-file-input"
-                    (change)="onJsonFileSelected($event)">
-                <button mat-stroked-button color="primary" (click)="jsonFileInput.click()">
-                    JSON importieren
-                </button>
-            </div>
-        </div>
-
-        <div class="add-item-section">
-            <h3>Neues Produkt hinzufügen</h3>
-            <div class="add-form-row">
-                <div class="product-select">
-                    <app-product-select [products]="products()" [ngModel]="selectedProductToAdd()"
-                        (ngModelChange)="selectedProductToAdd.set($event)"></app-product-select>
+                    <div class="copy-control" [class.is-open]="showImportSection()">
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            class="toggle-import-button"
+                            (click)="toggleImportSection()"
+                            [disabled]="!selectedConfigMarketId()"
+                            [attr.aria-expanded]="showImportSection()"
+                            aria-controls="copy-config-content">
+                            <mat-icon>{{ showImportSection() ? 'expand_less' : 'expand_more' }}</mat-icon>
+                            {{ showImportSection() ? 'Kopieren schließen' : 'Kopieren öffnen' }}
+                        </button>
+                    </div>
                 </div>
 
-                <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
-                    <mat-label>Einheit</mat-label>
-                    <mat-select [ngModel]="newTargetUnit()" (ngModelChange)="newTargetUnit.set($event)">
-                        @for (unit of availableUnits; track unit) {
-                            <mat-option [value]="unit">{{unit}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+                @if (selectedConfigMarketId()) {
+                <section
+                    id="copy-config-content"
+                    class="copy-config-section"
+                    [class.is-open]="showImportSection()"
+                    [attr.aria-hidden]="!showImportSection()"
+                    [attr.inert]="showImportSection() ? null : ''"
+                    aria-label="Sollliste von anderem Markt kopieren">
+                    <div class="copy-config-row">
+                        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Quellmarkt</mat-label>
+                            <mat-select [ngModel]="selectedCopySourceMarketId()"
+                                (ngModelChange)="selectedCopySourceMarketId.set($event)">
+                                @for (m of availableCopySourceMarkets(); track m._id) {
+                                <mat-option [value]="m._id">{{m.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
-                    <mat-label>Sollmenge</mat-label>
-                    <input matInput type="number" [ngModel]="newTargetQuantity()"
-                        (ngModelChange)="newTargetQuantity.set($event)" min="0">
-                </mat-form-field>
+                        <button mat-stroked-button (click)="copyConfigFromMarket(selectedCopySourceMarketId())"
+                            [disabled]="!selectedCopySourceMarketId()">
+                            Kopieren
+                        </button>
 
-                <button mat-mini-fab color="primary" (click)="addConfigItem()"
-                    [disabled]="!selectedProductToAdd() || !newTargetUnit() || newTargetQuantity() <= 0">
-                    <mat-icon>add</mat-icon>
-                </button>
+                        <input #jsonFileInput type="file" accept=".json,application/json" class="hidden-file-input"
+                            (change)="onJsonFileSelected($event)">
+                        <button mat-stroked-button color="primary" (click)="jsonFileInput.click()">
+                            JSON importieren
+                        </button>
+                    </div>
+                </section>
+                }
+
+                @if (selectedConfigMarketId()) {
+                <div class="add-item-section">
+                    <h3>Neues Produkt hinzufügen</h3>
+                    <div class="add-form-row">
+                        <div class="product-select">
+                            <app-product-select [products]="products()" [ngModel]="selectedProductToAdd()"
+                                (ngModelChange)="selectedProductToAdd.set($event)"></app-product-select>
+                        </div>
+
+                        <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
+                            <mat-label>Einheit</mat-label>
+                            <mat-select [ngModel]="newTargetUnit()" (ngModelChange)="newTargetUnit.set($event)">
+                                @for (unit of availableUnits; track unit) {
+                                    <mat-option [value]="unit">{{unit}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="small-input" subscriptSizing="dynamic">
+                            <mat-label>Sollmenge</mat-label>
+                            <input matInput type="number" [ngModel]="newTargetQuantity()"
+                                (ngModelChange)="newTargetQuantity.set($event)" min="0">
+                        </mat-form-field>
+
+                        <button mat-mini-fab color="primary" (click)="addConfigItem()"
+                            [disabled]="!selectedProductToAdd() || !newTargetUnit() || newTargetQuantity() <= 0">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                }
             </div>
-        </div>
 
-        <div class="config-list">
-            <h3>Konfigurierte Produkte</h3>
-            <table mat-table [dataSource]="configItems()" class="full-width-table desktop-table-view">
+            @if (selectedConfigMarketId()) {
+            <!-- Main list area gets remaining height and scrolls internally. -->
+            <div class="config-list" aria-label="Konfigurierte Produkte Bereich">
+                <h3 class="config-list-title">Konfigurierte Produkte</h3>
+                <table mat-table [dataSource]="configItems()" class="full-width-table desktop-table-view">
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef> Position </th>
+                    <td mat-cell *matCellDef="let item; let i = index">
+                        <mat-form-field appearance="outline" class="position-input" subscriptSizing="dynamic">
+                            <input
+                                #desktopPositionInput
+                                matInput
+                                type="number"
+                                inputmode="numeric"
+                                min="1"
+                                [max]="configItems().length"
+                                [value]="i + 1"
+                                (change)="setPositionFromInput(i, desktopPositionInput.value)"
+                                [attr.aria-label]="'Position für ' + item.name">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Produkt </th>
                     <td mat-cell *matCellDef="let item"> {{item.name}} </td>
@@ -110,28 +156,50 @@
                 </ng-container>
 
                 <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <th mat-header-cell *matHeaderCellDef> Aktionen </th>
                     <td mat-cell *matCellDef="let item; let i = index">
-                        <button mat-icon-button (click)="moveConfigItemUp(i)" [disabled]="i === 0"
-                            aria-label="Produkt nach oben verschieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="moveConfigItemDown(i)" [disabled]="i === configItems().length - 1"
-                            aria-label="Produkt nach unten verschieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="removeConfigItem(item.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                        <div class="action-buttons" role="group" [attr.aria-label]="'Sortierung fuer ' + item.name">
+                            <button
+                                mat-icon-button
+                                (click)="moveConfigItemBy(i, -10)"
+                                [disabled]="i === 0"
+                                [attr.aria-label]="item.name + ' zehn Positionen nach oben verschieben'">
+                                <mat-icon>keyboard_double_arrow_up</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                (click)="moveConfigItemBy(i, -1)"
+                                [disabled]="i === 0"
+                                [attr.aria-label]="item.name + ' eine Position nach oben verschieben'">
+                                <mat-icon>keyboard_arrow_up</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                (click)="moveConfigItemBy(i, 1)"
+                                [disabled]="i === configItems().length - 1"
+                                [attr.aria-label]="item.name + ' eine Position nach unten verschieben'">
+                                <mat-icon>keyboard_arrow_down</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                (click)="moveConfigItemBy(i, 10)"
+                                [disabled]="i === configItems().length - 1"
+                                [attr.aria-label]="item.name + ' zehn Positionen nach unten verschieben'">
+                                <mat-icon>keyboard_double_arrow_down</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="removeConfigItem(item.id)" [attr.aria-label]="item.name + ' entfernen'">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
                     </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+                </table>
 
-            <div class="mobile-list-view" aria-label="Konfigurierte Produkte als Kartenansicht">
-                @if (configItems().length > 0) {
+                <div class="mobile-list-view" aria-label="Konfigurierte Produkte als Kartenansicht">
+                    @if (configItems().length > 0) {
                     <div class="mobile-cards-grid">
                         @for (item of configItems(); track item.id || $index; let i = $index) {
                             <article class="mobile-item-card">
@@ -139,6 +207,19 @@
                                     <h3>{{ item.name }}</h3>
                                 </div>
                                 <div class="mobile-item-fields">
+                                    <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
+                                        <mat-label>Position</mat-label>
+                                        <input
+                                            #mobilePositionInput
+                                            matInput
+                                            type="number"
+                                            inputmode="numeric"
+                                            min="1"
+                                            [max]="configItems().length"
+                                            [value]="i + 1"
+                                            (change)="setPositionFromInput(i, mobilePositionInput.value)"
+                                            [attr.aria-label]="'Position fuer ' + item.name">
+                                    </mat-form-field>
                                     <mat-form-field appearance="outline" class="qty-input" subscriptSizing="dynamic">
                                         <mat-label>Einheit</mat-label>
                                         <mat-select [(ngModel)]="item.unit">
@@ -153,13 +234,21 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="mobile-item-actions">
-                                    <button mat-stroked-button (click)="moveConfigItemUp(i)" [disabled]="i === 0">
-                                        <mat-icon>arrow_upward</mat-icon>
-                                        Nach oben
+                                    <button mat-stroked-button (click)="moveConfigItemBy(i, -10)" [disabled]="i === 0" [attr.aria-label]="item.name + ' zehn Positionen nach oben verschieben'">
+                                        <mat-icon>keyboard_double_arrow_up</mat-icon>
+                                        10 nach oben
                                     </button>
-                                    <button mat-stroked-button (click)="moveConfigItemDown(i)" [disabled]="i === configItems().length - 1">
-                                        <mat-icon>arrow_downward</mat-icon>
-                                        Nach unten
+                                    <button mat-stroked-button (click)="moveConfigItemBy(i, -1)" [disabled]="i === 0" [attr.aria-label]="item.name + ' eine Position nach oben verschieben'">
+                                        <mat-icon>keyboard_arrow_up</mat-icon>
+                                        1 nach oben
+                                    </button>
+                                    <button mat-stroked-button (click)="moveConfigItemBy(i, 1)" [disabled]="i === configItems().length - 1" [attr.aria-label]="item.name + ' eine Position nach unten verschieben'">
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                        1 nach unten
+                                    </button>
+                                    <button mat-stroked-button (click)="moveConfigItemBy(i, 10)" [disabled]="i === configItems().length - 1" [attr.aria-label]="item.name + ' zehn Positionen nach unten verschieben'">
+                                        <mat-icon>keyboard_double_arrow_down</mat-icon>
+                                        10 nach unten
                                     </button>
                                     <button mat-stroked-button color="warn" (click)="removeConfigItem(item.id)">
                                         <mat-icon>delete</mat-icon>
@@ -169,21 +258,27 @@
                             </article>
                         }
                     </div>
+                    }
+                </div>
+
+                @if (configItems().length === 0) {
+                <p class="no-data">Keine Produkte konfiguriert.</p>
                 }
             </div>
-
-            @if (configItems().length === 0) {
-            <p class="no-data">Keine Produkte konfiguriert.</p>
             }
         </div>
-        <div class="actions">
-            @if (isDialog) {
+
+        @if (isDialog) {
+        <!-- Official dialog actions/footer keeps save action anchored at the bottom. -->
+        <div mat-dialog-actions align="end" class="dialog-footer-actions">
+            <button mat-button type="button" (click)="closeDialog()">Abbrechen</button>
             <button mat-raised-button color="primary" (click)="saveAndClose()"
-                [disabled]="configItems().length === 0">Speichern</button>
-            } @else {
+                [disabled]="!selectedConfigMarketId() || configItems().length === 0">Speichern</button>
+        </div>
+        } @else {
+        <div class="actions">
             <button mat-raised-button color="primary" (click)="saveConfig()"
-                [disabled]="configItems().length === 0">Speichern</button>
-            }
+                [disabled]="!selectedConfigMarketId() || configItems().length === 0">Speichern</button>
         </div>
         }
     </div>
