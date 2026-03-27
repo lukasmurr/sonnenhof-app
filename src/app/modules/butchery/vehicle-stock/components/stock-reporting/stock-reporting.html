@@ -1,5 +1,5 @@
 <mat-card class="stock-card">
-    <div class="header-actions" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+    <div class="header-actions">
         @if (isDialog) {
         <button mat-icon-button (click)="closeDialog()" aria-label="Dialog schließen">
             <mat-icon>close</mat-icon>
@@ -9,9 +9,9 @@
             <mat-icon>arrow_back</mat-icon>
         </button>
         }
-        <h2 style="margin: 0;">Neue Meldung erfassen</h2>
+        <h2>Neue Meldung erfassen</h2>
     </div>
-    <mat-stepper [linear]="true" #stepper (selectionChange)="onStepperSelectionChange($event)">
+    <mat-stepper class="reporting-stepper" [linear]="true" #stepper (selectionChange)="onStepperSelectionChange($event)">
         <mat-step [stepControl]="firstFormGroup">
             <form [formGroup]="firstFormGroup" (ngSubmit)="continueFromStep1()">
                 <ng-template matStepLabel>Markt & Datum</ng-template>
