@@ -4,7 +4,7 @@
     "main": "server.js",
     "dependencies": {
         "express": "^5.2.1",
-        "nodemailer": "8.0.2",
+        "nodemailer": "8.0.4",
         "cors": "^2.8.5"
     }
 }
