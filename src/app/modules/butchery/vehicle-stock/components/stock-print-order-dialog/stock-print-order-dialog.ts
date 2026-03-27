@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { VehicleStockService } from '../../../../../core/services/vehicle-stock.service';
@@ -23,7 +25,9 @@ export interface StockPrintOrderDialogResult {
         CommonModule,
         MatDialogModule,
         MatButtonModule,
+        MatFormFieldModule,
         MatIconModule,
+        MatInputModule,
         MatListModule,
         MatSnackBarModule
     ],
@@ -53,20 +57,32 @@ export class StockPrintOrderDialogComponent {
         this.items.set([...orderedByConfig, ...notConfigured]);
     }
 
-    moveUp(index: number) {
-        if (index <= 0) return;
+    // Keeps the array order as source of truth for persisted print order.
+    moveProduct(oldIndex: number, newIndex: number): void {
+        const currentItems = this.items();
+        const itemCount = currentItems.length;
+        if (itemCount === 0 || oldIndex < 0 || oldIndex >= itemCount) return;
 
-        const next = [...this.items()];
-        [next[index - 1], next[index]] = [next[index], next[index - 1]];
+        const boundedNewIndex = Math.max(0, Math.min(newIndex, itemCount - 1));
+        if (boundedNewIndex === oldIndex) return;
+
+        const next = [...currentItems];
+        const [movedItem] = next.splice(oldIndex, 1);
+        if (!movedItem) return;
+
+        next.splice(boundedNewIndex, 0, movedItem);
         this.items.set(next);
     }
 
-    moveDown(index: number) {
-        const next = [...this.items()];
-        if (index < 0 || index >= next.length - 1) return;
+    setPositionFromInput(index: number, rawPosition: string | number | null): void {
+        const parsedPosition = Number(rawPosition);
+        if (!Number.isInteger(parsedPosition)) return;
 
-        [next[index], next[index + 1]] = [next[index + 1], next[index]];
-        this.items.set(next);
+        this.moveProduct(index, parsedPosition - 1);
+    }
+
+    moveBy(index: number, delta: number): void {
+        this.moveProduct(index, index + delta);
     }
 
     async save() {

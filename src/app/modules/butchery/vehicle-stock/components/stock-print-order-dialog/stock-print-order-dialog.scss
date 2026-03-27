@@ -3,6 +3,17 @@
     color: #546e7a;
 }
 
+.order-item {
+    height: auto !important;
+    min-height: 0;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.order-item:last-child {
+    margin-bottom: 0;
+}
+
 .item-row {
     width: 100%;
     display: flex;
@@ -15,6 +26,8 @@
     display: flex;
     align-items: baseline;
     gap: 6px;
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
 .item-index {
@@ -29,8 +42,25 @@
 
 .item-actions {
     display: flex;
-    align-items: center;
+    align-items: centernd;
     gap: 4px;
+    flex-wrap: nowrap;
+    padding-top: 4px;
+}
+
+.position-input {
+    width: 112px;
+    margin-bottom: 0;
+    --mat-form-field-container-height: 44px;
+    --mat-form-field-container-vertical-padding: 10px;
+}
+
+.move-btn {
+    min-height: 44px;
+
+    .mat-icon {
+        margin-right: 2px;
+    }
 }
 
 :host-context(.dark-theme) {
@@ -41,6 +71,19 @@
 }
 
 @media (max-width: 768px) {
+    .print-order-content {
+        padding-inline: 12px;
+    }
+
+    .order-list {
+        padding-top: 0;
+    }
+
+    .order-item {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
     .item-row {
         align-items: flex-start;
         flex-direction: column;
@@ -48,6 +91,18 @@
 
     .item-actions {
         width: 100%;
-        justify-content: flex-end;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+
+        .position-input {
+            grid-column: 1 / -1;
+            width: 100%;
+        }
+
+        button {
+            justify-self: stretch;
+            width: 100%;
+        }
     }
 }

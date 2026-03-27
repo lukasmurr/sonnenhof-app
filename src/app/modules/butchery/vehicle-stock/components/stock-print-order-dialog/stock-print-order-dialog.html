@@ -1,11 +1,11 @@
 <h2 mat-dialog-title>Globale Lagerreihenfolge</h2>
-<mat-dialog-content>
+<mat-dialog-content class="print-order-content">
     <p class="hint">Diese Reihenfolge wird beim PDF-Export der Sollliste verwendet.</p>
 
     @if (items().length > 0) {
-    <mat-list>
+    <mat-list class="order-list">
         @for (item of items(); track item.itemId; let i = $index) {
-        <mat-list-item>
+        <mat-list-item class="order-item">
             <div class="item-row">
                 <div class="item-label">
                     <span class="item-index">{{ i + 1 }}.</span>
@@ -13,11 +13,35 @@
                     <span class="item-unit">({{ item.unit }})</span>
                 </div>
                 <div class="item-actions">
-                    <button mat-icon-button (click)="moveUp(i)" [disabled]="i === 0" aria-label="Nach oben verschieben">
-                        <mat-icon>arrow_upward</mat-icon>
+                    <mat-form-field appearance="outline" class="position-input" subscriptSizing="dynamic">
+                        <mat-label>Position</mat-label>
+                        <input
+                            #positionInput
+                            matInput
+                            type="number"
+                            inputmode="numeric"
+                            min="1"
+                            [max]="items().length"
+                            [value]="i + 1"
+                            (change)="setPositionFromInput(i, positionInput.value)"
+                            [attr.aria-label]="'Position fuer ' + item.name">
+                    </mat-form-field>
+
+                    <button mat-stroked-button class="move-btn" (click)="moveBy(i, -10)" [disabled]="i === 0" [attr.aria-label]="item.name + ' zehn Positionen nach oben verschieben'">
+                        <mat-icon>keyboard_double_arrow_up</mat-icon>
+                        -10
                     </button>
-                    <button mat-icon-button (click)="moveDown(i)" [disabled]="i === items().length - 1" aria-label="Nach unten verschieben">
-                        <mat-icon>arrow_downward</mat-icon>
+                    <button mat-stroked-button class="move-btn" (click)="moveBy(i, -1)" [disabled]="i === 0" [attr.aria-label]="item.name + ' eine Position nach oben verschieben'">
+                        <mat-icon>keyboard_arrow_up</mat-icon>
+                        -1
+                    </button>
+                    <button mat-stroked-button class="move-btn" (click)="moveBy(i, 1)" [disabled]="i === items().length - 1" [attr.aria-label]="item.name + ' eine Position nach unten verschieben'">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                        +1
+                    </button>
+                    <button mat-stroked-button class="move-btn" (click)="moveBy(i, 10)" [disabled]="i === items().length - 1" [attr.aria-label]="item.name + ' zehn Positionen nach unten verschieben'">
+                        <mat-icon>keyboard_double_arrow_down</mat-icon>
+                        +10
                     </button>
                 </div>
             </div>
