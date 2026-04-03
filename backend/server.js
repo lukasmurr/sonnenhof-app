@@ -24,7 +24,47 @@ const orderNotificationRecipients = [
     'lukas.murr@bauernshop.de'
 ];
 
-const wrapMailHtml = (content) => `<div style="font-size: 18px; line-height: 1.5; font-family: Arial, sans-serif;">${content}</div>`;
+const wrapMailHtml = (content) => `<div style="font-size: 20px; line-height: 1.5; font-family: Arial, sans-serif;">${content}</div>`;
+
+const buildOrderMetaTableHtml = (rows) => {
+    const rowsHtml = rows
+        .map(({ label, value }) => `
+            <tr>
+                <td style="padding: 6px 12px 6px 0; vertical-align: top; width: 180px; white-space: nowrap;"><strong>${label}</strong></td>
+                <td style="padding: 6px 0; vertical-align: top;">${value}</td>
+            </tr>
+        `)
+        .join('');
+
+    return `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+            <tbody>${rowsHtml}</tbody>
+        </table>
+    `;
+};
+
+const buildOrderItemsTableHtml = (items) => {
+    const rowsHtml = items
+        .map(item => `
+            <tr>
+                <td style="padding: 6px 12px 6px 0; vertical-align: top;">${item.productName}</td>
+                <td style="padding: 6px 0; vertical-align: top; white-space: nowrap;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
+            </tr>
+        `)
+        .join('');
+
+    return `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 4px;">
+            <thead>
+                <tr>
+                    <th align="left" style="padding: 6px 12px 6px 0; border-bottom: 1px solid #ddd;">Produkt</th>
+                    <th align="left" style="padding: 6px 0; border-bottom: 1px solid #ddd;">Menge</th>
+                </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+        </table>
+    `;
+};
 
 const formatDateForGermanMail = (value) => {
     if (!value) {
@@ -99,9 +139,15 @@ app.post('/api/mail/order-created', async (req, res) => {
     const itemsText = items
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
-    const itemsHtml = items
-        .map(item => `<li>${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</li>`)
-        .join('');
+    const orderMetaHtml = buildOrderMetaTableHtml([
+        { label: 'Kunde:', value: customerName },
+        { label: 'E-Mail:', value: customerEmail || '-' },
+        { label: 'Telefon:', value: customerPhone || '-' },
+        { label: 'Markt:', value: market },
+        { label: 'Datum:', value: formattedDate },
+        { label: 'Bestell-Nr.:', value: orderNumber || '-' }
+    ]);
+    const orderItemsTableHtml = buildOrderItemsTableHtml(items);
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
@@ -109,7 +155,7 @@ app.post('/api/mail/order-created', async (req, res) => {
         subject: `Neue Bestellung: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: wrapMailHtml(`<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`)
+        html: wrapMailHtml(`<p style="margin: 0 0 14px 0;">Es wurde eine neue Bestellung angelegt.</p>${orderMetaHtml}<p style="margin: 16px 0 6px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
     };
 
     try {
@@ -140,9 +186,15 @@ app.post('/api/mail/order-updated', async (req, res) => {
     const itemsText = items
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
-    const itemsHtml = items
-        .map(item => `<li>${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</li>`)
-        .join('');
+    const orderMetaHtml = buildOrderMetaTableHtml([
+        { label: 'Kunde:', value: customerName },
+        { label: 'E-Mail:', value: customerEmail || '-' },
+        { label: 'Telefon:', value: customerPhone || '-' },
+        { label: 'Markt:', value: market },
+        { label: 'Datum:', value: formattedDate },
+        { label: 'Bestell-Nr.:', value: orderNumber || '-' }
+    ]);
+    const orderItemsTableHtml = buildOrderItemsTableHtml(items);
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
@@ -150,7 +202,7 @@ app.post('/api/mail/order-updated', async (req, res) => {
         subject: `Bestellung aktualisiert: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: wrapMailHtml(`<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`)
+        html: wrapMailHtml(`<p style="margin: 0 0 14px 0;"><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p>${orderMetaHtml}<p style="margin: 16px 0 6px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
     };
 
     try {
@@ -181,9 +233,15 @@ app.post('/api/mail/order-deleted', async (req, res) => {
     const itemsText = items
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
-    const itemsHtml = items
-        .map(item => `<li>${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</li>`)
-        .join('');
+    const orderMetaHtml = buildOrderMetaTableHtml([
+        { label: 'Kunde:', value: customerName },
+        { label: 'E-Mail:', value: customerEmail || '-' },
+        { label: 'Telefon:', value: customerPhone || '-' },
+        { label: 'Markt:', value: market },
+        { label: 'Datum:', value: formattedDate },
+        { label: 'Bestell-Nr.:', value: orderNumber || '-' }
+    ]);
+    const orderItemsTableHtml = buildOrderItemsTableHtml(items);
 
     const mailOptions = {
         from: '"Sonnenhof App" <noreply@sonnenhof-app.de>',
@@ -191,7 +249,7 @@ app.post('/api/mail/order-deleted', async (req, res) => {
         subject: `Bestellung gelöscht: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde gelöscht.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: wrapMailHtml(`<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`)
+        html: wrapMailHtml(`<p style="margin: 0 0 14px 0;"><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p>${orderMetaHtml}<p style="margin: 16px 0 6px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
     };
 
     try {
