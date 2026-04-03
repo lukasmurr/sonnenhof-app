@@ -30,8 +30,8 @@ const buildOrderMetaTableHtml = (rows) => {
     const rowsHtml = rows
         .map(({ label, value }) => `
             <tr>
-                <td style="padding: 6px 12px 6px 0; vertical-align: top; width: 180px; white-space: nowrap;"><strong>${label}</strong></td>
-                <td style="padding: 6px 0; vertical-align: top;">${value}</td>
+                <td style="padding: 6px 8px 6px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px;"><strong>${label}</strong></td>
+                <td style="padding: 6px 0; vertical-align: top; font-size: 22px;">${value}</td>
             </tr>
         `)
         .join('');
@@ -47,8 +47,8 @@ const buildOrderItemsTableHtml = (items) => {
     const rowsHtml = items
         .map(item => `
             <tr>
-                <td style="padding: 6px 12px 6px 0; vertical-align: top;">${item.productName}</td>
-                <td style="padding: 6px 0; vertical-align: top; white-space: nowrap;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
+                <td style="padding: 6px 8px 6px 0; vertical-align: top; font-size: 22px;">${item.productName}</td>
+                <td style="padding: 6px 0; vertical-align: top; white-space: nowrap; font-size: 22px;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
             </tr>
         `)
         .join('');
@@ -57,8 +57,8 @@ const buildOrderItemsTableHtml = (items) => {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 4px;">
             <thead>
                 <tr>
-                    <th align="left" style="padding: 6px 12px 6px 0; border-bottom: 1px solid #ddd;">Produkt</th>
-                    <th align="left" style="padding: 6px 0; border-bottom: 1px solid #ddd;">Menge</th>
+                    <th align="left" style="padding: 6px 8px 6px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Produkt</th>
+                    <th align="left" style="padding: 6px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Menge</th>
                 </tr>
             </thead>
             <tbody>${rowsHtml}</tbody>
