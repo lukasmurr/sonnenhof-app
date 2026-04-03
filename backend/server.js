@@ -21,8 +21,10 @@ const buildSystemMailHeaders = () => ({
 });
 
 const orderNotificationRecipients = [
-    'direktverkauf@bauernshop.de'
+    'lukas.murr@bauernshop.de'
 ];
+
+const wrapMailHtml = (content) => `<div style="font-size: 18px; line-height: 1.5; font-family: Arial, sans-serif;">${content}</div>`;
 
 const formatDateForGermanMail = (value) => {
     if (!value) {
@@ -34,7 +36,9 @@ const formatDateForGermanMail = (value) => {
     const match = asString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (match) {
         const [, year, month, day] = match;
-        return `${day}.${month}.${year}`;
+        const weekdayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+        const weekdayIndex = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day))).getUTCDay();
+        return `${weekdayNames[weekdayIndex]}, ${day}.${month}.${year}`;
     }
 
     const parsed = new Date(asString);
@@ -42,7 +46,13 @@ const formatDateForGermanMail = (value) => {
         return asString;
     }
 
-    return parsed.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' });
+    return parsed.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'Europe/Berlin'
+    });
 };
 
 app.post('/api/mail/account-created', async (req, res) => {
@@ -58,7 +68,7 @@ app.post('/api/mail/account-created', async (req, res) => {
         subject: 'Ihr Account wurde erstellt',
         headers: buildSystemMailHeaders(),
         text: `Hallo ${name || 'User'},\n\nDein Account für die Sonnenhof App wurde erstellt.\n\nDein initiales Passwort lautet: ${password}\n\nBitte ändere dieses Passwort nach dem ersten Login.\n\nViele Grüße,\nDein Sonnenhof Team`,
-        html: `<p>Hallo ${name || 'User'},</p><p>Dein Account für die Sonnenhof App wurde erstellt.</p><p>Dein initiales Passwort lautet: <strong>${password}</strong></p><p>Bitte ändere dieses Passwort nach dem ersten Login.</p><p>Viele Grüße,<br>Dein Sonnenhof Team</p>`
+        html: wrapMailHtml(`<p>Hallo ${name || 'User'},</p><p>Dein Account für die Sonnenhof App wurde erstellt.</p><p>Dein initiales Passwort lautet: <strong>${password}</strong></p><p>Bitte ändere dieses Passwort nach dem ersten Login.</p><p>Viele Grüße,<br>Dein Sonnenhof Team</p>`)
     };
 
     try {
@@ -99,7 +109,7 @@ app.post('/api/mail/order-created', async (req, res) => {
         subject: `Neue Bestellung: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: `<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`
+        html: wrapMailHtml(`<p>Es wurde eine neue Bestellung angelegt.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`)
     };
 
     try {
@@ -140,7 +150,7 @@ app.post('/api/mail/order-updated', async (req, res) => {
         subject: `Bestellung aktualisiert: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: `<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`
+        html: wrapMailHtml(`<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`)
     };
 
     try {
@@ -181,7 +191,7 @@ app.post('/api/mail/order-deleted', async (req, res) => {
         subject: `Bestellung gelöscht: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde gelöscht.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: `<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`
+        html: wrapMailHtml(`<p><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p><p><strong>Kunde:</strong> ${customerName}<br><strong>E-Mail:</strong> ${customerEmail || '-'}<br><strong>Telefon:</strong> ${customerPhone || '-'}<br><strong>Markt:</strong> ${market}<br><strong>Datum:</strong> ${formattedDate}<br><strong>Bestell-Nr.:</strong> ${orderNumber || '-'}</p><p><strong>Positionen:</strong></p><ul>${itemsHtml}</ul>`)
     };
 
     try {
@@ -220,7 +230,7 @@ app.post('/api/mail/tuev-reminder', async (req, res) => {
         to: 'info@bauernshop.de',
         subject: `TÜV Erinnerung (${reminderTypeText}): ${vehicleName} (${licensePlate})`,
         text: `TÜV-Erinnerung\n\nFahrzeug: ${vehicleName}\nKennzeichen: ${licensePlate}\nTÜV-Ablaufdatum: ${formattedDate}\nErinnerung: ${reminderTypeText}`,
-        html: `<p><strong>TÜV-Erinnerung</strong></p><p><strong>Fahrzeug:</strong> ${vehicleName}<br><strong>Kennzeichen:</strong> ${licensePlate}<br><strong>TÜV-Ablaufdatum:</strong> ${formattedDate}<br><strong>Erinnerung:</strong> ${reminderTypeText}</p>`
+        html: wrapMailHtml(`<p><strong>TÜV-Erinnerung</strong></p><p><strong>Fahrzeug:</strong> ${vehicleName}<br><strong>Kennzeichen:</strong> ${licensePlate}<br><strong>TÜV-Ablaufdatum:</strong> ${formattedDate}<br><strong>Erinnerung:</strong> ${reminderTypeText}</p>`)
     };
 
     try {

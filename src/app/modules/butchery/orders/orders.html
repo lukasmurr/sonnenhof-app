@@ -60,7 +60,7 @@
                 <!-- Date Column -->
                 <ng-container matColumnDef="orderDate">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum </th>
-                  <td mat-cell *matCellDef="let row"> {{row.orderDate | date:'dd.MM.yyyy'}} </td>
+                  <td mat-cell *matCellDef="let row"> {{row.orderDate | date:'EEEE, dd.MM.yyyy':'':'de-DE'}} </td>
                 </ng-container>
 
                 <!-- Customer Column -->
@@ -151,7 +151,7 @@
                     <article class="mobile-item-card" [class.prepared-order]="row.status === 'prepared'">
                       <div class="mobile-item-head">
                         <h3>{{ row.customerName }}</h3>
-                        <span class="chip">{{ row.orderDate | date:'dd.MM.yyyy' }}</span>
+                        <span class="chip">{{ row.orderDate | date:'EEEE, dd.MM.yyyy':'':'de-DE' }}</span>
                       </div>
                       <p class="meta">Markt: {{ row.market }}</p>
                       @if (row.customerPhone) {
