@@ -140,11 +140,11 @@ app.post('/api/mail/order-created', async (req, res) => {
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
     const orderMetaHtml = buildOrderMetaTableHtml([
+        { label: 'Datum:', value: formattedDate },
+        { label: 'Markt:', value: market },
         { label: 'Kunde:', value: customerName },
         { label: 'E-Mail:', value: customerEmail || '-' },
         { label: 'Telefon:', value: customerPhone || '-' },
-        { label: 'Markt:', value: market },
-        { label: 'Datum:', value: formattedDate },
         { label: 'Bestell-Nr.:', value: orderNumber || '-' }
     ]);
     const orderItemsTableHtml = buildOrderItemsTableHtml(items);
@@ -187,11 +187,11 @@ app.post('/api/mail/order-updated', async (req, res) => {
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
     const orderMetaHtml = buildOrderMetaTableHtml([
+        { label: 'Datum:', value: formattedDate },
+        { label: 'Markt:', value: market },
         { label: 'Kunde:', value: customerName },
         { label: 'E-Mail:', value: customerEmail || '-' },
         { label: 'Telefon:', value: customerPhone || '-' },
-        { label: 'Markt:', value: market },
-        { label: 'Datum:', value: formattedDate },
         { label: 'Bestell-Nr.:', value: orderNumber || '-' }
     ]);
     const orderItemsTableHtml = buildOrderItemsTableHtml(items);
@@ -234,11 +234,11 @@ app.post('/api/mail/order-deleted', async (req, res) => {
         .map(item => `- ${item.productName}: ${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}`)
         .join('\n');
     const orderMetaHtml = buildOrderMetaTableHtml([
+        { label: 'Datum:', value: formattedDate },
+        { label: 'Markt:', value: market },
         { label: 'Kunde:', value: customerName },
         { label: 'E-Mail:', value: customerEmail || '-' },
         { label: 'Telefon:', value: customerPhone || '-' },
-        { label: 'Markt:', value: market },
-        { label: 'Datum:', value: formattedDate },
         { label: 'Bestell-Nr.:', value: orderNumber || '-' }
     ]);
     const orderItemsTableHtml = buildOrderItemsTableHtml(items);
