@@ -24,7 +24,7 @@ const orderNotificationRecipients = [
     'direktverkauf@bauernshop.de'
 ];
 
-const wrapMailHtml = (content) => `<div style="font-size: 20px; line-height: 1.5; font-family: Arial, sans-serif;">${content}</div>`;
+const wrapMailHtml = (content) => `<div style="font-size: 20px; line-height: 1; font-family: Arial, sans-serif;">${content}</div>`;
 
 const buildOrderMetaTableHtml = (rows) => {
     const rowsHtml = rows
