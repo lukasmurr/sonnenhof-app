@@ -30,8 +30,8 @@ const buildOrderMetaTableHtml = (rows) => {
     const rowsHtml = rows
         .map(({ label, value }) => `
             <tr>
-                <td style="padding: 6px 8px 6px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px;"><strong>${label}</strong></td>
-                <td style="padding: 6px 0; vertical-align: top; font-size: 22px;">${value}</td>
+                <td style="padding: 3px 8px 3px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px;"><strong>${label}</strong></td>
+                <td style="padding: 3px 0; vertical-align: top; font-size: 22px;">${value}</td>
             </tr>
         `)
         .join('');
@@ -47,8 +47,8 @@ const buildOrderItemsTableHtml = (items) => {
     const rowsHtml = items
         .map(item => `
             <tr>
-                <td style="padding: 6px 8px 6px 0; vertical-align: top; font-size: 22px;">${item.productName}</td>
-                <td style="padding: 6px 0; vertical-align: top; white-space: nowrap; font-size: 22px;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
+                <td style="padding: 3px 8px 3px 0; vertical-align: top; font-size: 22px;">${item.productName}</td>
+                <td style="padding: 3px 0; vertical-align: top; white-space: nowrap; font-size: 22px;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
             </tr>
         `)
         .join('');
@@ -57,8 +57,8 @@ const buildOrderItemsTableHtml = (items) => {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 4px;">
             <thead>
                 <tr>
-                    <th align="left" style="padding: 6px 8px 6px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Produkt</th>
-                    <th align="left" style="padding: 6px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Menge</th>
+                    <th align="left" style="padding: 4px 8px 4px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Produkt</th>
+                    <th align="left" style="padding: 4px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Menge</th>
                 </tr>
             </thead>
             <tbody>${rowsHtml}</tbody>
@@ -155,7 +155,7 @@ app.post('/api/mail/order-created', async (req, res) => {
         subject: `Neue Bestellung: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Es wurde eine neue Bestellung angelegt.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: wrapMailHtml(`<p style="margin: 0 0 14px 0;">Es wurde eine neue Bestellung angelegt.</p>${orderMetaHtml}<p style="margin: 16px 0 6px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
+        html: wrapMailHtml(`<p style="margin: 0 0 8px 0;">Es wurde eine neue Bestellung angelegt.</p>${orderMetaHtml}<p style="margin: 10px 0 4px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
     };
 
     try {
@@ -202,7 +202,7 @@ app.post('/api/mail/order-updated', async (req, res) => {
         subject: `Bestellung aktualisiert: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde aktualisiert.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: wrapMailHtml(`<p style="margin: 0 0 14px 0;"><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p>${orderMetaHtml}<p style="margin: 16px 0 6px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
+        html: wrapMailHtml(`<p style="margin: 0 0 8px 0;"><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>aktualisiert</strong>.</p>${orderMetaHtml}<p style="margin: 10px 0 4px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
     };
 
     try {
@@ -249,7 +249,7 @@ app.post('/api/mail/order-deleted', async (req, res) => {
         subject: `Bestellung gelöscht: ${customerName} (${market})`,
         headers: buildSystemMailHeaders(),
         text: `Eine bestehende Bestellung wurde gelöscht.\n\nKunde: ${customerName}\nE-Mail: ${customerEmail || '-'}\nTelefon: ${customerPhone || '-'}\nMarkt: ${market}\nDatum: ${formattedDate}\nBestell-Nr.: ${orderNumber || '-'}\n\nPositionen:\n${itemsText}`,
-        html: wrapMailHtml(`<p style="margin: 0 0 14px 0;"><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p>${orderMetaHtml}<p style="margin: 16px 0 6px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
+        html: wrapMailHtml(`<p style="margin: 0 0 8px 0;"><strong>Hinweis:</strong> Eine bestehende Bestellung wurde <strong>gelöscht</strong>.</p>${orderMetaHtml}<p style="margin: 10px 0 4px 0;"><strong>Positionen:</strong></p>${orderItemsTableHtml}`)
     };
 
     try {
