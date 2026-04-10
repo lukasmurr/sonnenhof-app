@@ -21,7 +21,7 @@ const buildSystemMailHeaders = () => ({
 });
 
 const orderNotificationRecipients = [
-    'direktverkauf@bauernshop.de'
+    'lukas.murr@bauernshop.de', 'direktverkauf@bauernshop.de'
 ];
 
 const wrapMailHtml = (content) => `<div style="font-size: 20px; line-height: 1; font-family: Arial, sans-serif;">${content}</div>`;
@@ -30,8 +30,8 @@ const buildOrderMetaTableHtml = (rows) => {
     const rowsHtml = rows
         .map(({ label, value }) => `
             <tr>
-                <td style="padding: 3px 8px 3px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px;"><strong>${label}</strong></td>
-                <td style="padding: 3px 0; vertical-align: top; font-size: 22px;">${value}</td>
+                <td style="padding: 3px 8px 3px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;"><strong>${label}</strong></td>
+                <td style="padding: 3px 0; vertical-align: top; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${value}</td>
             </tr>
         `)
         .join('');
@@ -47,8 +47,8 @@ const buildOrderItemsTableHtml = (items) => {
     const rowsHtml = items
         .map(item => `
             <tr>
-                <td style="padding: 3px 8px 3px 0; vertical-align: top; font-size: 22px;">${item.productName}</td>
-                <td style="padding: 3px 0; vertical-align: top; white-space: nowrap; font-size: 22px;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
+                <td style="padding: 3px 8px 3px 0; vertical-align: top; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${item.productName}</td>
+                <td style="padding: 3px 0; vertical-align: top; white-space: nowrap; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
             </tr>
         `)
         .join('');
@@ -57,8 +57,8 @@ const buildOrderItemsTableHtml = (items) => {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 4px;">
             <thead>
                 <tr>
-                    <th align="left" style="padding: 4px 8px 4px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Produkt</th>
-                    <th align="left" style="padding: 4px 0; border-bottom: 1px solid #ddd; font-size: 22px;">Menge</th>
+                    <th align="left" style="padding: 4px 8px 4px 0; border-bottom: 1px solid #ddd; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">Produkt</th>
+                    <th align="left" style="padding: 4px 0; border-bottom: 1px solid #ddd; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">Menge</th>
                 </tr>
             </thead>
             <tbody>${rowsHtml}</tbody>
