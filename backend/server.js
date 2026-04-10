@@ -21,7 +21,7 @@ const buildSystemMailHeaders = () => ({
 });
 
 const orderNotificationRecipients = [
-    'lukas.murr@bauernshop.de', 'direktverkauf@bauernshop.de'
+    'direktverkauf@bauernshop.de'
 ];
 
 const wrapMailHtml = (content) => `<div style="font-size: 20px; line-height: 1; font-family: Arial, sans-serif;">${content}</div>`;
