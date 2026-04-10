@@ -49,7 +49,7 @@ export const GROUP_PERMISSIONS: Record<UserGroup, Permission[]> = {
         'office.view',
         'butchery.view',
         'product.view',
-        'order.view',
+        'order.view', 'order.create', 'order.update',
         'vacation.view', 'vacation.create_own', 'vacation.update_own',
         'crate.view',
         'offer.view',
