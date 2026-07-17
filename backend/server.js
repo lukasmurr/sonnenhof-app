@@ -24,14 +24,21 @@ const orderNotificationRecipients = [
     'direktverkauf@bauernshop.de'
 ];
 
+const escapeHtml = (value) => String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 const wrapMailHtml = (content) => `<div style="font-size: 20px; line-height: 1; font-family: Arial, sans-serif;">${content}</div>`;
 
 const buildOrderMetaTableHtml = (rows) => {
     const rowsHtml = rows
         .map(({ label, value }) => `
             <tr>
-                <td style="padding: 3px 8px 3px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;"><strong>${label}</strong></td>
-                <td style="padding: 3px 0; vertical-align: top; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${value}</td>
+                <td style="padding: 3px 8px 3px 0; vertical-align: top; width: 130px; white-space: nowrap; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;"><strong>${escapeHtml(label)}</strong></td>
+                <td style="padding: 3px 0; vertical-align: top; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${escapeHtml(value)}</td>
             </tr>
         `)
         .join('');
@@ -47,8 +54,8 @@ const buildOrderItemsTableHtml = (items) => {
     const rowsHtml = items
         .map(item => `
             <tr>
-                <td style="padding: 3px 8px 3px 0; vertical-align: top; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${item.productName}</td>
-                <td style="padding: 3px 0; vertical-align: top; white-space: nowrap; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${item.quantity} ${item.unit}${item.notes ? ` (${item.notes})` : ''}</td>
+                <td style="padding: 3px 8px 3px 0; vertical-align: top; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${escapeHtml(item.productName)}</td>
+                <td style="padding: 3px 0; vertical-align: top; white-space: nowrap; font-size: 22px; line-height: 1; mso-line-height-rule: exactly;">${escapeHtml(item.quantity)} ${escapeHtml(item.unit)}${item.notes ? ` (${escapeHtml(item.notes)})` : ''}</td>
             </tr>
         `)
         .join('');
@@ -108,7 +115,7 @@ app.post('/api/mail/account-created', async (req, res) => {
         subject: 'Ihr Account wurde erstellt',
         headers: buildSystemMailHeaders(),
         text: `Hallo ${name || 'User'},\n\nDein Account für die Sonnenhof App wurde erstellt.\n\nDein initiales Passwort lautet: ${password}\n\nBitte ändere dieses Passwort nach dem ersten Login.\n\nViele Grüße,\nDein Sonnenhof Team`,
-        html: wrapMailHtml(`<p>Hallo ${name || 'User'},</p><p>Dein Account für die Sonnenhof App wurde erstellt.</p><p>Dein initiales Passwort lautet: <strong>${password}</strong></p><p>Bitte ändere dieses Passwort nach dem ersten Login.</p><p>Viele Grüße,<br>Dein Sonnenhof Team</p>`)
+        html: wrapMailHtml(`<p>Hallo ${escapeHtml(name || 'User')},</p><p>Dein Account für die Sonnenhof App wurde erstellt.</p><p>Dein initiales Passwort lautet: <strong>${escapeHtml(password)}</strong></p><p>Bitte ändere dieses Passwort nach dem ersten Login.</p><p>Viele Grüße,<br>Dein Sonnenhof Team</p>`)
     };
 
     try {
@@ -288,7 +295,7 @@ app.post('/api/mail/tuev-reminder', async (req, res) => {
         to: 'info@bauernshop.de',
         subject: `TÜV Erinnerung (${reminderTypeText}): ${vehicleName} (${licensePlate})`,
         text: `TÜV-Erinnerung\n\nFahrzeug: ${vehicleName}\nKennzeichen: ${licensePlate}\nTÜV-Ablaufdatum: ${formattedDate}\nErinnerung: ${reminderTypeText}`,
-        html: wrapMailHtml(`<p><strong>TÜV-Erinnerung</strong></p><p><strong>Fahrzeug:</strong> ${vehicleName}<br><strong>Kennzeichen:</strong> ${licensePlate}<br><strong>TÜV-Ablaufdatum:</strong> ${formattedDate}<br><strong>Erinnerung:</strong> ${reminderTypeText}</p>`)
+        html: wrapMailHtml(`<p><strong>TÜV-Erinnerung</strong></p><p><strong>Fahrzeug:</strong> ${escapeHtml(vehicleName)}<br><strong>Kennzeichen:</strong> ${escapeHtml(licensePlate)}<br><strong>TÜV-Ablaufdatum:</strong> ${escapeHtml(formattedDate)}<br><strong>Erinnerung:</strong> ${escapeHtml(reminderTypeText)}</p>`)
     };
 
     try {
