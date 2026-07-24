@@ -40,7 +40,7 @@
     "@angular/router": "^22.0.8",
     "@auth0/angular-jwt": "^5.2.0",
     "@daypilot/daypilot-lite-angular": "^5.10.0",
-    "@types/bcryptjs": "^2.4.6",
+    "@types/bcryptjs": "^3.0.0",
     "@types/pouchdb": "^6.4.2",
     "bcryptjs": "^3.0.3",
     "events": "^3.3.0",
@@ -66,6 +66,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.2.0",
     "sass": "^1.101.7",
-    "typescript": "~6.0.3"
+    "typescript": "~7.0.2"
   }
 }
