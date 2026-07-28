@@ -193,6 +193,7 @@ export class PurchasingPriceDetailComponent implements OnInit {
                 this.formGroupDirective?.resetForm(resetValue);
                 this.priceForm.reset(resetValue);
             });
+            this.goBack();
         }
     }
 

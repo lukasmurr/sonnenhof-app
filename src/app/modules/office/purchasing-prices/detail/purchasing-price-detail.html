@@ -66,6 +66,50 @@
         </mat-card-content>
       </mat-card>
 
+      <!-- Add Price Entry Card -->
+      <mat-card class="add-price-card" *appHasPermission="'purchasing-price.create'">
+        <mat-card-header>
+          <mat-card-title>Neuen Preis erfassen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="priceForm" class="price-form" (ngSubmit)="addPriceEntry()">
+            <mat-form-field appearance="outline">
+              <mat-label>Menge ({{ product()?.unit }})</mat-label>
+              <input matInput type="number" formControlName="quantity" placeholder="0" step="0.1">
+              @if (priceForm.get('quantity')?.hasError('required')) {
+                <mat-error>Menge ist erforderlich</mat-error>
+              }
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Preis (€)</mat-label>
+              <input matInput type="number" formControlName="price" placeholder="0.00" step="0.01">
+              @if (priceForm.get('price')?.hasError('required')) {
+                <mat-error>Preis ist erforderlich</mat-error>
+              }
+              @if (priceForm.get('price')?.hasError('min')) {
+                <mat-error>Preis muss größer als 0 sein</mat-error>
+              }
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Datum</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (priceForm.get('date')?.hasError('required')) {
+                <mat-error>Datum ist erforderlich</mat-error>
+              }
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" type="submit" [disabled]="priceForm.invalid">
+              <mat-icon>add</mat-icon>
+              Preis hinzufügen
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+      
       <!-- Chart Card -->
       <mat-card class="chart-card">
         <mat-card-header>
@@ -101,50 +145,6 @@
               <p>Mindestens 2 Preiseinträge für die Darstellung erforderlich</p>
             </div>
           }
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Add Price Entry Card -->
-      <mat-card class="add-price-card" *appHasPermission="'purchasing-price.create'">
-        <mat-card-header>
-          <mat-card-title>Neuen Preis erfassen</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <form [formGroup]="priceForm" class="price-form" (ngSubmit)="addPriceEntry()">
-            <mat-form-field appearance="outline">
-              <mat-label>Preis (€)</mat-label>
-              <input matInput type="number" formControlName="price" placeholder="0.00" step="0.01">
-              @if (priceForm.get('price')?.hasError('required')) {
-                <mat-error>Preis ist erforderlich</mat-error>
-              }
-              @if (priceForm.get('price')?.hasError('min')) {
-                <mat-error>Preis muss größer als 0 sein</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Menge ({{ product()?.unit }})</mat-label>
-              <input matInput type="number" formControlName="quantity" placeholder="0" step="0.1">
-              @if (priceForm.get('quantity')?.hasError('required')) {
-                <mat-error>Menge ist erforderlich</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Datum</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="date">
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-              @if (priceForm.get('date')?.hasError('required')) {
-                <mat-error>Datum ist erforderlich</mat-error>
-              }
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" type="submit" [disabled]="priceForm.invalid">
-              <mat-icon>add</mat-icon>
-              Preis hinzufügen
-            </button>
-          </form>
         </mat-card-content>
       </mat-card>
 
